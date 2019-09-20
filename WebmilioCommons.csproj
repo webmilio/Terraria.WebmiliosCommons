@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\references\tModLoader.targets" />
+  <PropertyGroup>
+    <AssemblyName>WebmilioCommons</AssemblyName>
+    <TargetFramework>net45</TargetFramework>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>WebmilioCommons</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Commons\" />
+  </ItemGroup>
+  <Target Name="BuildMod" AfterTargets="Build">
+    <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mods\WebmilioCommons.tmod&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.tmod&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.dll&quot;" />
+  </Target>
+</Project>

@@ -1,0 +1,7 @@
+displayName = Webmilio's Commons Library
+author = Webmilio
+version = 0.1.7.0
+Side = Both
+hideCode = false
+includeSource = false
+buildIgnore = *.csproj, *.user, *.bin, *.vs, *.exe, *.force, *.cache, *.FileListAbsolute.txt, *.xml, *.suo, obj\*, bin\*, .vs\*, .idea\*, .git\*, packages\*

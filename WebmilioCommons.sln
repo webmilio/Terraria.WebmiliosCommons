@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebmilioCommons", "WebmilioCommons.csproj", "{5FE56E08-36E5-4BBF-A5BB-FBABDFBEAC58}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebmilioCommonsTest", "..\WebmilioCommonsTest\WebmilioCommonsTest.csproj", "{20DB889E-7420-4782-8526-5AF66BA764F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5FE56E08-36E5-4BBF-A5BB-FBABDFBEAC58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FE56E08-36E5-4BBF-A5BB-FBABDFBEAC58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FE56E08-36E5-4BBF-A5BB-FBABDFBEAC58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FE56E08-36E5-4BBF-A5BB-FBABDFBEAC58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20DB889E-7420-4782-8526-5AF66BA764F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20DB889E-7420-4782-8526-5AF66BA764F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20DB889E-7420-4782-8526-5AF66BA764F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20DB889E-7420-4782-8526-5AF66BA764F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2D22B3E-454C-441E-B7EF-120632325091}
+	EndGlobalSection
+EndGlobal

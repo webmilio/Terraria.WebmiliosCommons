@@ -1,0 +1,10 @@
+Webmilio's Commons Library adds a couple of things I use in all of my mods. You can extract the DLL from the Mod. 
+
+Things this adds:
+- Better Networking (in my opinion, at least).
+- Full managers (singletons that handle classes that could be seen as static, but need inheritance)
+- Identity Manager (WIP): a way to get Steam ID from the user (if the user is using Steam)
+- A bunch of extensions
+- Keyboard Manager: get the state of any keys (NotPressed, JustPressed, Pressed, JustReleased), regardless of Mod Hotkey.
+
+If you want an example mod that uses this better networking, check out the JoJo mod by HellGoesOn on https://github.com/ruskies/TerrarianBizzareAdventure or https://github.com/ruskies/TLoZ and search for ModPlayerNetworkPacket.
