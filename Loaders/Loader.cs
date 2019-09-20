@@ -76,7 +76,7 @@ namespace WebmilioCommons.Loaders
 
         public T New(ushort id) => New(typeById[id]);
         public T New(Type type) => Activator.CreateInstance(type) as T;
-        public T New<TType>() where TType : class, T => New(typeof(T)) as TType;
+        public T New<TType>() where TType : class, T => New(typeof(TType)) as TType;
 
 
         public Mod GetMod(ushort id) => modByType[typeById[id]];

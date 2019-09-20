@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Packets;
@@ -7,6 +8,30 @@ namespace WebmilioCommons.Extensions
 {
     public static class PlayerExtensions
     {
+        public static Player GetNearestMiningPlayer(this Vector2 position)
+        {
+            Player nearestPlayer = null;
+            float nearestDistance = float.MaxValue;
+
+            foreach (Player player in Main.player)
+            {
+                if (!player.active || player.itemAnimation == 0 || player.HeldItem == null || player.HeldItem.pick == 0 || player.hitTile != null) continue;
+
+                float distance = Vector2.Distance(position, player.position);
+
+                if (distance < nearestDistance)
+                {
+                    nearestPlayer = player;
+                    nearestDistance = distance;
+                }
+            }
+
+            return nearestPlayer;
+        }
+
+
+        #region Packets
+
         public static void SendIfLocal(this Player player, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null)
         {
             if (player == Main.LocalPlayer)
@@ -25,5 +50,7 @@ namespace WebmilioCommons.Extensions
 
         public static void SendIfLocal<T>(this ModPlayer modPlayer, int? fromWho = null, int? toWho = null) where T : NetworkPacket =>
             SendIfLocal<T>(modPlayer.player, fromWho, toWho);
+
+        #endregion
     }
 }

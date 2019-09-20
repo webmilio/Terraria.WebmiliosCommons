@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Players
 {
@@ -10,8 +11,7 @@ namespace WebmilioCommons.Players
     {
         public override void OnEnterWorld(Player player)
         {
-            /*if (player.whoAmI == Main.myPlayer)
-                new PlayerSynchronizationPacket(this).Send();*/
+            this.SendIfLocal<WCPlayerOnJoinWorld>();
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
