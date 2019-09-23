@@ -9,6 +9,11 @@ namespace WebmilioCommons.Players
 {
     public sealed class WCPlayer : ModPlayer
     {
+        public WCPlayer Get() => Get(Main.LocalPlayer);
+        public WCPlayer Get(Player player) => player.GetModPlayer<WCPlayer>();
+        public WCPlayer Get(ModPlayer modPlayer) => Get(modPlayer.player);
+
+
         public override void OnEnterWorld(Player player)
         {
             this.SendIfLocal<WCPlayerOnJoinWorld>();
