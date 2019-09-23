@@ -13,6 +13,7 @@ namespace WebmilioCommons.Players
         }
 
 
-        public override NetworkPacketBehavior Behavior { get; } = NetworkPacketBehavior.SendToServer;
+        // TODO Find a more secure way to handle unique identifiers.
+        public override NetworkPacketBehavior Behavior { get; } = NetworkPacketBehavior.SendToAll;
     }
 }
