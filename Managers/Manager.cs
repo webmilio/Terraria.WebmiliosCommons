@@ -17,9 +17,9 @@ namespace WebmilioCommons.Managers
         }
 
 
-        public virtual T Add(T item)
+        public virtual TSub Add<TSub>(TSub item) where TSub : T
         {
-            if (byIndex.Contains(item) || byNames.ContainsKey(item.UnlocalizedName)) return byNames[item.UnlocalizedName];
+            if (byIndex.Contains(item) || byNames.ContainsKey(item.UnlocalizedName)) return (TSub) byNames[item.UnlocalizedName];
 
             byIndex.Add(item);
             byNames.Add(item.UnlocalizedName, item);

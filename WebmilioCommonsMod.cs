@@ -20,13 +20,16 @@ namespace WebmilioCommons
         {
             KeyboardManager.Load();
 
-            IdentityManager.Load();
+            if (!Main.dedServ)
+                IdentityManager.Load();
+
             NetworkPacketLoader.Instance.Load();
         }
 
         public override void PostSetupContent()
         {
-            IdentityManager.PostSetupContent();
+            if (!Main.dedServ)
+                IdentityManager.PostSetupContent();
 
             //PlayerSynchronizationPacket.Construct();
         }

@@ -7,6 +7,8 @@ namespace WebmilioCommons.Inputs
 {
     public static class KeyboardManager
     {
+        private static bool _loaded;
+
         public delegate void KeyStateChanged(Keys key);
 
         private static Keys[] _allKeys;
@@ -21,16 +23,23 @@ namespace WebmilioCommons.Inputs
 
         internal static void Load()
         {
+            _loaded = false;
+
             _allKeys = (Keys[])Enum.GetValues(typeof(Keys));
             keyStates.Clear();
 
             for (int i = 0; i < _allKeys.Length; i++)
                 keyStates.Add(_allKeys[i], KeyStates.NotPressed);
+
+            _loaded = true;
         }
 
 
         internal static void Update()
         {
+            if (!_loaded)
+                return;
+
             foreach (KeyValuePair<Keys, KeyStates> kvp in new Dictionary<Keys, KeyStates>(keyStates))
             {
                 Keys key = kvp.Key;

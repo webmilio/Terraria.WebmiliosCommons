@@ -15,9 +15,9 @@ namespace WebmilioCommons.Extensions
 
             foreach (Player player in Main.player)
             {
-                if (!player.active || player.itemAnimation == 0 || player.HeldItem == null || player.HeldItem.pick == 0 || player.hitTile != null) continue;
+                if (!player.active || player.itemAnimation == 0 || player.HeldItem == null || player.hitTile != null || !IsHoldingMiningItem(player)) continue;
 
-                float distance = Vector2.Distance(position, player.position);
+                float distance = Vector2.Distance(position, player.position / 16);
 
                 if (distance < nearestDistance)
                 {
@@ -27,6 +27,16 @@ namespace WebmilioCommons.Extensions
             }
 
             return nearestPlayer;
+        }
+
+        public static bool IsHoldingMiningItem(this Player player)
+        {
+            Item item = player.HeldItem;
+
+            if (item == null || !item.active)
+                return false;
+
+            return item.pick > 0 || item.axe > 0 || item.hammer > 0;
         }
 
 

@@ -12,6 +12,7 @@ namespace WebmilioCommons.Extensions
             return string.Join("/", segments, 1, segments.Length - 1) + '/' + type.Name;
         }
 
+        [Obsolete("Replaced by GetPath()")]
         public static string GetTexturePath(this Type type) => GetPath(type);
 
         public static string GetRootPath(this Type type)
@@ -20,6 +21,7 @@ namespace WebmilioCommons.Extensions
             return string.Join("/", segments, 1, segments.Length - 1);
         }
 
+        [Obsolete("Replaced by GetRootPath()")]
         public static string GetTexturePathRoot(this Type type) => GetRootPath(type);
 
         /// <summary>Finds the appropriate texture based solely on the type and its associated mod.</summary>

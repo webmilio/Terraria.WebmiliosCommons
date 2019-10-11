@@ -5,6 +5,6 @@ namespace WebmilioCommons.Extensions
 {
     public static class ProjectileExtensions
     {
-        public static Vector2 GetProjectilePosition(this Projectile projectile) => projectile.position - Main.screenPosition;
+        public static Vector2 GetProjectileScreenPosition(this Projectile projectile) => projectile.position - Main.screenPosition;
     }
 }
