@@ -8,6 +8,10 @@ namespace WebmilioCommons.Extensions
 {
     public static class PlayerExtensions
     {
+        public static bool IsLocalPlayer(this Player player) => player == Main.LocalPlayer;
+        public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.player);
+
+
         public static Player GetNearestMiningPlayer(this Vector2 position)
         {
             Player nearestPlayer = null;
