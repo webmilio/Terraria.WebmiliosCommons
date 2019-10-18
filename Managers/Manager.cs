@@ -26,6 +26,8 @@ namespace WebmilioCommons.Managers
             return item;
         }
 
+        public virtual TSub Add<TSub>() where TSub : T, new() => Add<TSub>(new TSub());
+
         public virtual bool Remove(T item)
         {
             if (!byIndex.Contains(item)) return false;
