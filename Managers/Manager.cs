@@ -51,10 +51,22 @@ namespace WebmilioCommons.Managers
 
         public virtual T GetRandom() => Main.rand.Next(byIndex);
 
-        public void ForAllItems(Action<T> action)
+        [Obsolete("Use ForAll.")]
+        public void ForAllItems(Action<T> action) => ForAll(action);
+
+        public void ForAll(Action<T> action)
         {
             for (int i = 0; i < byIndex.Count; i++)
                 action(byIndex[i]);
+        }
+
+        [Obsolete("Use ForAll.")]
+        public void ForAllItems(Action<int, T> action) => ForAll(action);
+
+        public void ForAll(Action<int, T> action)
+        {
+            for (int i = 0; i < byIndex.Count; i++)
+                action(i, byIndex[i]);
         }
 
 
