@@ -30,7 +30,8 @@ namespace WebmilioCommons.Loaders
                 if (instance == null)
                     instance = new TLoader();
 
-                instance.Load();
+                if (!instance.Loaded)
+                    instance.Load();
 
                 return instance;
             }
