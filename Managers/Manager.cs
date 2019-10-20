@@ -16,6 +16,12 @@ namespace WebmilioCommons.Managers
             Initialized = true;
         }
 
+        public virtual void Unload()
+        {
+            byIndex.Clear();
+            byNames.Clear();
+        }
+
 
         public virtual TSub Add<TSub>(TSub item) where TSub : T
         {
@@ -37,6 +43,16 @@ namespace WebmilioCommons.Managers
             return true;
         }
 
+
+        public virtual bool Contains(T item) => byIndex.Contains(item);
+
+        public virtual bool Contains(string unlocalizedName) => byNames.ContainsKey(unlocalizedName);
+
+
+        public int GetIndex(T item) => byIndex.IndexOf(item);
+        public int GetIndex(string unlocalizedName) => GetIndex(byNames[unlocalizedName]);
+
+
         public List<T> Where(Predicate<T> predicate)
         {
             List<T> found = new List<T>();
@@ -47,7 +63,6 @@ namespace WebmilioCommons.Managers
 
             return found;
         }
-
 
         public virtual T GetRandom() => Main.rand.Next(byIndex);
 
@@ -70,18 +85,18 @@ namespace WebmilioCommons.Managers
         }
 
 
-        public virtual bool Contains(T item) => byIndex.Contains(item);
-
-        public virtual bool Contains(string unlocalizedName) => byNames.ContainsKey(unlocalizedName);
-
-        public int GetIndex(T item) => byIndex.IndexOf(item);
-        public int GetIndex(string unlocalizedName) => GetIndex(byNames[unlocalizedName]);
-
-        public virtual void Unload()
+        public bool TryGet(string key, out T result)
         {
-            byIndex.Clear();
-            byNames.Clear();
+            if (!byNames.ContainsKey(key))
+            {
+                result = default;
+                return false;
+            }
+
+            result = byNames[key];
+            return true;
         }
+
 
         public IEnumerator<KeyValuePair<string, T>> GetEnumerator() => byNames.GetEnumerator();
 
@@ -100,5 +115,13 @@ namespace WebmilioCommons.Managers
         public ICollection<T> Values => byNames.Values;
 
         public bool IsReadOnly => true; // Behaves like a Read-Only dictionary when it comes to the interface.
+
+
+        public class ManagerEqualityComparer : IEqualityComparer<string>
+        {
+            public bool Equals(string x, string y) => x.Equals(y, StringComparison.CurrentCultureIgnoreCase);
+
+            public int GetHashCode(string obj) => obj.GetHashCode();
+        }
     }
 }
