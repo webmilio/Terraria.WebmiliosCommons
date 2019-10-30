@@ -5,6 +5,7 @@ using WebmilioCommons.Managers;
 
 namespace WebmilioCommons.Animations
 {
+    [Obsolete("Work-in-progress, doesn't do anything right now.")]
     public abstract class PlayerAnimation : IHasUnlocalizedName
     {
         public delegate void UpdateMethod();

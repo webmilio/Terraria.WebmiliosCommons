@@ -44,6 +44,13 @@ namespace WebmilioCommons.Extensions
         }
 
 
+        public static Tile GetTileOnCenter(this ModPlayer modPlayer) => GetTileOnCenter(modPlayer.player);
+        public static Tile GetTileOnCenter(this ModNPC modNPC) => GetTileOnCenter(modNPC.npc);
+        public static Tile GetTileOnCenter(this ModProjectile modProjectile) => GetTileOnCenter(modProjectile.projectile);
+
+        public static Tile GetTileOnCenter(this Entity entity) => Main.tile[(int) (entity.Center.X / 16), (int) (entity.Center.Y / 16)];
+
+
         #region Packets
 
         public static void SendIfLocal(this Player player, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null)

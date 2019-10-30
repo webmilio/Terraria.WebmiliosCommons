@@ -5,6 +5,7 @@ using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Time
 {
+    [Obsolete("Work-in-progress, doesn't do anything right now.")]
     public static class TimeManagement
     {
         private static List<int> 
