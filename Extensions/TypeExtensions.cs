@@ -34,5 +34,11 @@ namespace WebmilioCommons.Extensions
         public static Texture2D GetTexture(this Type type, Mod mod) => mod.GetTexture(type);
 
         public static Mod GetModFromType(this Type type) => ModLoader.GetMod(type.Namespace.Split('.')[0]);
+
+
+        public static bool IsTypeFromMod(this Type type, string modName) =>
+            type.GetModFromType().Name.Equals(modName, StringComparison.CurrentCultureIgnoreCase);
+
+        public static bool IsTypeFromMod(this object obj, string modName) => IsTypeFromMod(obj.GetType(), modName);
     }
 }

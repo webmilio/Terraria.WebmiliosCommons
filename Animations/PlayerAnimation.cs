@@ -10,18 +10,22 @@ namespace WebmilioCommons.Animations
         public delegate void UpdateMethod();
 
 
-        protected PlayerAnimation(string unlocalizedName, ModPlayer modPlayer, bool unique = false, int preUpdateTickRate = 0, int preUpdateBuffsTickRate = 0, int preUpdateMovementTickRate = 0, int updateEquipsTickRate = 0)
+        protected PlayerAnimation(string unlocalizedName, ModPlayer modPlayer, bool unique = false, int preUpdateTickRate = 0, int preUpdateBuffsTickRate = 0, int preUpdateMovementTickRate = 0, int updateEquipsTickRate = 0, int postUpdateTickRate = 0)
         {
             UnlocalizedName = unlocalizedName;
 
             Player = modPlayer.player;
             ModPlayer = modPlayer;
 
+            Unique = unique;
+
             PreUpdateTickRate = preUpdateTickRate;
             PreUpdateBuffsTickRate = preUpdateBuffsTickRate;
             PreUpdateMovementTickRate = preUpdateMovementTickRate;
 
             UpdateEquipsTickRate = updateEquipsTickRate;
+
+            PostUpdateTickRate = postUpdateTickRate;
         }
 
 
@@ -112,6 +116,27 @@ namespace WebmilioCommons.Animations
         public int UpdateEquipsTickRate { get; }
         public int CurrentUpdateEquipsFrames { get; private set; }
         public int CurrentUpdateEquipsTicks { get; private set; }
+
+        #endregion
+
+        #region PostUpdate
+
+        internal void HandlePostUpdate()
+        {
+            CurrentPostUpdateFrames++;
+
+            if (CurrentPostUpdateFrames % PostUpdateTickRate == 0)
+            {
+                CurrentPostUpdatesTicks++;
+                PostUpdate();
+            }
+        }
+
+        public virtual void PostUpdate() { }
+
+        public int PostUpdateTickRate { get; }
+        public int CurrentPostUpdateFrames { get; private set; }
+        public int CurrentPostUpdatesTicks { get; private set; }
 
         #endregion
 

@@ -16,47 +16,6 @@ namespace WebmilioCommons.Players
         public static WCPlayer Get(ModPlayer modPlayer) => Get(modPlayer.player);
 
 
-        private List<PlayerAnimation> _currentAnimations;
-
-
-        #region Animations
-
-        public bool BeginAnimation(PlayerAnimation animation)
-        {
-            if (_currentAnimations.Find(a => a.UnlocalizedName == animation.UnlocalizedName && a.Unique) == null)
-                return false;
-
-            _currentAnimations.Add(animation);
-            animation.Begin();
-
-            return true;
-        }
-
-        public bool EndAnimation(PlayerAnimation animation)
-        {
-            if (!_currentAnimations.Contains(animation))
-                return false;
-
-            animation.End();
-            _currentAnimations.Remove(animation);
-
-            return true;
-        }
-
-        public void EndAllAnimations() => ForAllAnimations(animation => EndAnimation(animation));
-
-
-        public bool HasAnimation(PlayerAnimation animation) => _currentAnimations.Contains(animation);
-
-        public void ForAllAnimations(Action<PlayerAnimation> action)
-        {
-            for (int i = 0; i < _currentAnimations.Count; i++)
-                action(_currentAnimations[i]);
-        }
-
-        #endregion
-
-
         #region Hooks
 
         #region Save/Load
@@ -78,7 +37,7 @@ namespace WebmilioCommons.Players
 
         public override void Initialize()
         {
-            _currentAnimations = new List<PlayerAnimation>();
+            InitializeAnimations();
         }
 
         public override void OnEnterWorld(Player player)
@@ -108,6 +67,8 @@ namespace WebmilioCommons.Players
 
             ForAllAnimations(animation => animation.HandleUpdateEquips(wallSpeedBuffs2, tileSpeedBuffs2, tileRangeBuff2));
         }
+
+        public override void PostUpdate() => ForAllAnimations(animation => animation.HandlePostUpdate());
 
         #endregion
 
