@@ -8,7 +8,7 @@ using WebmilioCommons.Networking.Packets;
 
 namespace WebmilioCommons
 {
-	public class WebmilioCommonsMod : Mod
+    public sealed partial class WebmilioCommonsMod : Mod
 	{
 		public WebmilioCommonsMod()
         {
