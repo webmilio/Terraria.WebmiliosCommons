@@ -53,20 +53,17 @@ namespace WebmilioCommons.Time
 
 
         #region Immunity Banning
-
+        [Obsolete("Work-in-progress", false)]
         public static void RequestImmunityModBan(Mod mod) => RequestImmunityModBan(mod.Name);
 
+        [Obsolete("Work-in-progress", false)]
         public static void RequestImmunityModBan(string modName)
         {
             if (!bannedMods.Contains(modName))
                 bannedMods.Add(modName);
 
-            StackTrace stackTrace = new StackTrace();
-
-            for (int i = 0; i )
-
-            WebmilioCommonsMod.Instance.Logger.InfoFormat("Mod `{0}` requested mod {1} to be banned from requesting NPC immunity.", 
-                null, modName);
+            WebmilioCommonsMod.Instance.Logger.InfoFormat("Mod `{0}` requested mod {1} to be banned from requesting NPC immunity.",
+                new StackTrace().GetFirstDifferentAssembly().GetModFromAssembly().Name, modName);
         }
 
         private static bool IsModBanned<T>() => IsModBanned(typeof(T));
