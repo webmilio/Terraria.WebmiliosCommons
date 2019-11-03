@@ -5,7 +5,7 @@ using WebmilioCommons.Players;
 
 namespace WebmilioCommons.Items
 {
-    public class WCGlobalItem : GlobalItem
+    public sealed class WCGlobalItem : GlobalItem
     {
         public override bool UseItem(Item item, Player player)
         {

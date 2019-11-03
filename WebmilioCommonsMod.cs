@@ -5,6 +5,7 @@ using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Packets;
+using WebmilioCommons.Time;
 
 namespace WebmilioCommons
 {
@@ -24,6 +25,8 @@ namespace WebmilioCommons
                 IdentityManager.Load();
 
             NetworkPacketLoader.Instance.Load();
+
+            TimeManagement.Load();
         }
 
         public override void PostSetupContent()
@@ -36,6 +39,8 @@ namespace WebmilioCommons
 
         public override void Unload()
         {
+            TimeManagement.Unload();
+
             NetworkPacketLoader.Instance.Unload();
             IdentityManager.Unload();
 

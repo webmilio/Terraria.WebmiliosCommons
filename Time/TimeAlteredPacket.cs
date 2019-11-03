@@ -4,8 +4,11 @@ using WebmilioCommons.Players;
 
 namespace WebmilioCommons.Time
 {
-    public sealed class TimeStateChangedPacket : ModPlayerNetworkPacket<WCPlayer>
+    public sealed class TimeAlteredPacket : ModPlayerNetworkPacket<WCPlayer>
     {
+        private TimeAlterationRequest.Sources _source;
+
+
         public override bool PostReceive(BinaryReader reader, int fromWho)
         {
             if (Stopped)
@@ -17,7 +20,16 @@ namespace WebmilioCommons.Time
         }
 
 
-        public bool Stopped { get; set; }
+        public string Source
+        {
+            get => _source.ToString();
+            set => TimeAlterationRequest.Sources.TryParse(value, true, out _source);
+        }
+
+        public int SourceEntity { get; set; }
+
+
+        public int TickRate { get; set; }
 
         public int Duration { get; set; }
     }
