@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
+using WebmilioCommons.States;
 using WebmilioCommons.Time;
 
 namespace WebmilioCommons.NPCs
@@ -35,7 +36,7 @@ namespace WebmilioCommons.NPCs
 
         public void ModifyHitByPlayer(NPC npc, Player player, int hitDirection, ref int damage, ref float knockback, ref bool crit)
         {
-            if (IsTimeAltered && TimeManagement.TimeStopped)
+            if (IsTimeAltered && ElapsedPreAI % TimeManagement.CurrentRequest.TickRate == 0)
             {
                 NPCInstantState state = TimeManagement.npcStates[npc];
 
@@ -50,6 +51,8 @@ namespace WebmilioCommons.NPCs
 
 
         public bool IsTimeAltered { get; private set; }
+
+        public int ElapsedPreAI { get; private set; }
 
         public override bool InstancePerEntity => true;
     }
