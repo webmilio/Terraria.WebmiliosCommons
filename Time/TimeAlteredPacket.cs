@@ -11,10 +11,10 @@ namespace WebmilioCommons.Time
 
         public override bool PostReceive(BinaryReader reader, int fromWho)
         {
-            if (Stopped)
+            /*if (Stopped)
                 TimeManagement.TryStopTime(ModPlayer, Duration, false);
             else
-                TimeManagement.TryResumeTime(ModPlayer, false);
+                TimeManagement.TryResumeTime(ModPlayer, false);*/
 
             return true;
         }

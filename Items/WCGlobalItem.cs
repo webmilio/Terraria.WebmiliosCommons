@@ -7,22 +7,19 @@ namespace WebmilioCommons.Items
 {
     public sealed class WCGlobalItem : GlobalItem
     {
+        public override bool ConsumeItem(Item item, Player player) => item.type != ItemID.LifeCrystal || TryConsumeLifeCrystal(WCPlayer.Get(player));
+
         public override bool UseItem(Item item, Player player)
         {
-            WCPlayer wcPlayer = WCPlayer.Get(player);
-
-            if (item.type == ItemID.LifeCrystal)
-                return TryConsumeLifeCrystal(wcPlayer);
-
             return true;
         }
 
         private bool TryConsumeLifeCrystal(WCPlayer wcPlayer)
         {
-            if (WCPlayer.LifeCrystalLimiting && wcPlayer.LifeCrystalsConsumed == 15)
+            if (WCPlayer.LifeCrystalLimiting && wcPlayer.HasReachedLifeCrystalLimit)
                 return false;
 
-            if (wcPlayer.LifeCrystalsConsumed < 15)
+            if (wcPlayer.LifeCrystalsConsumed < WCPlayer.LifeCrystalLimit)
                 wcPlayer.LifeCrystalsConsumed++;
 
             return true;
