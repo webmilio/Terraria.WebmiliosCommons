@@ -8,7 +8,7 @@ namespace WebmilioCommons.Extensions
 {
     public static class PlayerExtensions
     {
-        public static bool IsLocalPlayer(this Player player) => player == Main.LocalPlayer;
+        public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.LocalPlayer.whoAmI;
         public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.player);
 
 
@@ -42,7 +42,7 @@ namespace WebmilioCommons.Extensions
 
             return item.pick > 0 || item.axe > 0 || item.hammer > 0;
         }
-
+        
 
         public static Tile GetTileOnCenter(this ModPlayer modPlayer) => GetTileOnCenter(modPlayer.player);
         public static Tile GetTileOnCenter(this ModNPC modNPC) => GetTileOnCenter(modNPC.npc);
@@ -55,7 +55,7 @@ namespace WebmilioCommons.Extensions
 
         public static void SendIfLocal(this Player player, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null)
         {
-            if (player == Main.LocalPlayer)
+            if (player.IsLocalPlayer())
                 networkPacket.Send(fromWho, toWho);
         }
 
@@ -65,7 +65,7 @@ namespace WebmilioCommons.Extensions
 
         public static void SendIfLocal<T>(this Player player, int? fromWho = null, int? toWho = null) where T : NetworkPacket
         {
-            if (player == Main.LocalPlayer)
+            if (player.IsLocalPlayer())
                 NetworkPacketLoader.Instance.SendPacket<T>(fromWho, toWho);
         }
 
