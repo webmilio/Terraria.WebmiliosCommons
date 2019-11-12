@@ -8,7 +8,7 @@ namespace WebmilioCommons.Extensions
 {
     public static class PlayerExtensions
     {
-        public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.LocalPlayer.whoAmI;
+        public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
         public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.player);
 
 

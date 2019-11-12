@@ -10,11 +10,26 @@ namespace WebmilioCommons.Managers
         protected readonly Dictionary<string, T> byNames = new Dictionary<string, T>();
 
 
+        [Obsolete("Override Initialize() instead.")]
         /// <summary>Called when trying to access the <see cref="Manager{T}"/>'s singleton. Since this method is internal, it is imperative to implement the method in every manager. Always call base.DefaultInitialize() at the end.</summary>
         public virtual void DefaultInitialize()
         {
             Initialized = true;
         }
+
+        protected virtual void Initialize() { }
+
+        public void InitializeIfNot()
+        {
+            if (Initialized)
+                return;
+
+            DefaultInitialize();
+            Initialize();
+
+            Initialized = true;
+        }
+
 
         public virtual void Unload()
         {
