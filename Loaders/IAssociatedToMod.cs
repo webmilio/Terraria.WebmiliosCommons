@@ -4,6 +4,6 @@ namespace WebmilioCommons.Loaders
 {
     public interface IAssociatedToMod
     {
-        Mod Mod { get; }
+        Mod Mod { get; set; }
     }
 }
