@@ -24,7 +24,7 @@ namespace WebmilioCommons
             if (!Main.dedServ)
                 IdentityManager.Load();
 
-            NetworkPacketLoader.Instance.Load();
+            NetworkPacketLoader.Instance.TryLoad();
 
             TimeManagement.Load();
         }

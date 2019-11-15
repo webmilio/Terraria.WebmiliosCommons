@@ -23,9 +23,14 @@ namespace WebmilioCommons.Loaders
         }
 
 
-        public void Load()
+        [Obsolete("Use " + nameof(TryLoad) + ".")]
+        public void Load() => TryLoad();
+
+        public void TryLoad()
         {
             if (Loaded) return;
+
+            PreLoad();
 
             idByType = new Dictionary<Type, ushort>();
             typeById = new Dictionary<ushort, Type>();
@@ -49,6 +54,7 @@ namespace WebmilioCommons.Loaders
             PostLoad();
         }
 
+        public virtual void PreLoad() { }
         public virtual void PostLoad() { }
 
 

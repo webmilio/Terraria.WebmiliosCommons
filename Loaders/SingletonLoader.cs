@@ -31,7 +31,7 @@ namespace WebmilioCommons.Loaders
                     instance = new TLoader();
 
                 if (!instance.Loaded)
-                    instance.Load();
+                    instance.TryLoad();
 
                 return instance;
             }
