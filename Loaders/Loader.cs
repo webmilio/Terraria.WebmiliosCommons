@@ -10,9 +10,9 @@ namespace WebmilioCommons.Loaders
     {
         private ushort _latestTypeId = 1;
 
-        protected Dictionary<Type, ushort> idByType = new Dictionary<Type, ushort>();
-        protected Dictionary<ushort, Type> typeById = new Dictionary<ushort, Type>();
-        protected Dictionary<Type, Mod> modByType = new Dictionary<Type, Mod>();
+        protected Dictionary<Type, ushort> idByType;
+        protected Dictionary<ushort, Type> typeById;
+        protected Dictionary<Type, Mod> modByType;
 
 
         protected Loader() : this(typeInfo => true) { }
@@ -26,6 +26,10 @@ namespace WebmilioCommons.Loaders
         public void Load()
         {
             if (Loaded) return;
+
+            idByType = new Dictionary<Type, ushort>();
+            typeById = new Dictionary<ushort, Type>();
+            modByType = new Dictionary<Type, Mod>();
 
             foreach (Mod mod in ModLoader.Mods)
             {
