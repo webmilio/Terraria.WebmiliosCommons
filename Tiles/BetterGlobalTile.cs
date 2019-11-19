@@ -15,8 +15,10 @@ namespace WebmilioCommons.Tiles
             if (Vector2.Distance(position, player.position / 16) > MiningLookupRange)
                 return false;
 
-            return CanPlayerKillTile(player, i, j, type, ref blockDamaged);
+            return CanAnythingKillTile(i, j, type, ref blockDamaged) && CanPlayerKillTile(player, i, j, type, ref blockDamaged);
         }
+
+        public virtual bool CanAnythingKillTile(int i, int j, int type, ref bool blockDamaged) => true;
 
         public virtual bool CanPlayerKillTile(Player player, int i, int j, int type, ref bool blockDamaged) => true;
 
