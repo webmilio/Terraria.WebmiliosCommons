@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WebmilioCommons.Networking
+﻿namespace WebmilioCommons.Networking
 {
     public enum NetworkPacketBehavior
     {
