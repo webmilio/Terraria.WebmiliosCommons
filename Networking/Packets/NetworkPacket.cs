@@ -11,17 +11,16 @@ namespace WebmilioCommons.Networking.Packets
 {
     public abstract class NetworkPacket
     {
-        protected readonly List<PropertyInfo> reflectedPropertyInfos;
-        protected readonly Dictionary<PropertyInfo, Action<ModPacket, object>> packetWriters = new Dictionary<PropertyInfo, Action<ModPacket, object>>();
-        protected readonly Dictionary<PropertyInfo, Func<BinaryReader, object>> packetReaders = new Dictionary<PropertyInfo, Func<BinaryReader, object>>();
+        internal static Dictionary<Type, List<PropertyInfo>> GlobalReflectedPropertyInfos { get; set; }
+
+        internal static Dictionary<Type, Dictionary<PropertyInfo, Action<ModPacket, object>>> GlobalPacketWriters { get; set; }
+        internal static Dictionary<Type, Dictionary<PropertyInfo, Func<BinaryReader, object>>> GlobalPacketReaders { get; set; }
 
 
         protected NetworkPacket() : this(true) { }
 
         protected NetworkPacket(bool autoGetProperties)
         {
-            reflectedPropertyInfos = new List<PropertyInfo>();
-
             if (autoGetProperties)
                 AddAllProperties();
         }
@@ -31,88 +30,103 @@ namespace WebmilioCommons.Networking.Packets
         {
             if (propertyInfo.PropertyType == typeof(bool))
             {
-                packetReaders.Add(propertyInfo, ReadBool);
-                packetWriters.Add(propertyInfo, WriteBool);
+                PacketReaders.Add(propertyInfo, ReadBool);
+                PacketWriters.Add(propertyInfo, WriteBool);
             }
             else if (propertyInfo.PropertyType == typeof(byte))
             {
-                packetReaders.Add(propertyInfo, ReadByte);
-                packetWriters.Add(propertyInfo, WriteByte);
+                PacketReaders.Add(propertyInfo, ReadByte);
+                PacketWriters.Add(propertyInfo, WriteByte);
             }
             else if (propertyInfo.PropertyType == typeof(char))
             {
-                packetReaders.Add(propertyInfo, ReadChar);
-                packetWriters.Add(propertyInfo, WriteChar);
+                PacketReaders.Add(propertyInfo, ReadChar);
+                PacketWriters.Add(propertyInfo, WriteChar);
             }
             else if (propertyInfo.PropertyType == typeof(decimal))
             {
-                packetReaders.Add(propertyInfo, ReadDecimal);
-                packetWriters.Add(propertyInfo, WriteDecimal);
+                PacketReaders.Add(propertyInfo, ReadDecimal);
+                PacketWriters.Add(propertyInfo, WriteDecimal);
             }
             else if (propertyInfo.PropertyType == typeof(double))
             {
-                packetReaders.Add(propertyInfo, ReadDouble);
-                packetWriters.Add(propertyInfo, WriteDouble);
+                PacketReaders.Add(propertyInfo, ReadDouble);
+                PacketWriters.Add(propertyInfo, WriteDouble);
             }
             else if (propertyInfo.PropertyType == typeof(float))
             {
-                packetReaders.Add(propertyInfo, ReadFloat);
-                packetWriters.Add(propertyInfo, WriteFloat);
+                PacketReaders.Add(propertyInfo, ReadFloat);
+                PacketWriters.Add(propertyInfo, WriteFloat);
             }
             else if (propertyInfo.PropertyType == typeof(int))
             {
-                packetReaders.Add(propertyInfo, ReadInt);
-                packetWriters.Add(propertyInfo, WriteInt);
+                PacketReaders.Add(propertyInfo, ReadInt);
+                PacketWriters.Add(propertyInfo, WriteInt);
             }
             else if (propertyInfo.PropertyType == typeof(long))
             {
-                packetReaders.Add(propertyInfo, ReadLong);
-                packetWriters.Add(propertyInfo, WriteLong);
+                PacketReaders.Add(propertyInfo, ReadLong);
+                PacketWriters.Add(propertyInfo, WriteLong);
             }
             else if (propertyInfo.PropertyType == typeof(sbyte))
             {
-                packetReaders.Add(propertyInfo, ReadSByte);
-                packetWriters.Add(propertyInfo, WriteSByte);
+                PacketReaders.Add(propertyInfo, ReadSByte);
+                PacketWriters.Add(propertyInfo, WriteSByte);
             }
             else if (propertyInfo.PropertyType == typeof(short))
             {
-                packetReaders.Add(propertyInfo, ReadShort);
-                packetWriters.Add(propertyInfo, WriteShort);
+                PacketReaders.Add(propertyInfo, ReadShort);
+                PacketWriters.Add(propertyInfo, WriteShort);
             }
             else if (propertyInfo.PropertyType == typeof(string))
             {
-                packetReaders.Add(propertyInfo, ReadString);
-                packetWriters.Add(propertyInfo, WriteString);
+                PacketReaders.Add(propertyInfo, ReadString);
+                PacketWriters.Add(propertyInfo, WriteString);
             }
             else if (propertyInfo.PropertyType == typeof(uint))
             {
-                packetReaders.Add(propertyInfo, ReadUInt);
-                packetWriters.Add(propertyInfo, WriteUInt);
+                PacketReaders.Add(propertyInfo, ReadUInt);
+                PacketWriters.Add(propertyInfo, WriteUInt);
             }
             else if (propertyInfo.PropertyType == typeof(ulong))
             {
-                packetReaders.Add(propertyInfo, ReadULong);
-                packetWriters.Add(propertyInfo, WriteULong);
+                PacketReaders.Add(propertyInfo, ReadULong);
+                PacketWriters.Add(propertyInfo, WriteULong);
             }
             else if (propertyInfo.PropertyType == typeof(ushort))
             {
-                packetReaders.Add(propertyInfo, ReadUShort);
-                packetWriters.Add(propertyInfo, WriteUShort);
+                PacketReaders.Add(propertyInfo, ReadUShort);
+                PacketWriters.Add(propertyInfo, WriteUShort);
             }
             else if (propertyInfo.PropertyType == typeof(INetworkSerializable))
             {
+                PacketReaders.Add(propertyInfo, reader =>
+                {
+                    INetworkSerializable networkSerializable = (INetworkSerializable) propertyInfo.GetValue(this);
 
+                    ReadNetworkSerializable(networkSerializable, reader);
+                    return networkSerializable;
+                });
+
+                PacketWriters.Add(propertyInfo, WriteNetworkSerializable);
             }
         }
 
 
+        /// <summary>
+        /// The entire logic for receiving a packet (including resending from the server) is in this method.
+        /// It is better to override PreReceive or PostReceive, depending on the behavior you want.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="fromWho"></param>
+        /// <returns></returns>
         public virtual bool Receive(BinaryReader reader, int fromWho)
         {
             if (!PreReceive(reader, fromWho))
                 return false;
 
-            for (int i = 0; i < reflectedPropertyInfos.Count; i++)
-                reflectedPropertyInfos[i].SetValue(this, packetReaders[reflectedPropertyInfos[i]](reader));
+            foreach (PropertyInfo propertyInfo in ReflectedPropertyInfos)
+                propertyInfo.SetValue(this, PacketReaders[propertyInfo](reader));
 
             if (Main.dedServ && (Behavior == NetworkPacketBehavior.SendToAllClients || Behavior == NetworkPacketBehavior.SendToAll))
                 this.Send(fromWho, (int)NetworkDestinationType.AllClients);
@@ -147,8 +161,8 @@ namespace WebmilioCommons.Networking.Packets
 
         protected virtual void PopulatePacket(ModPacket modPacket, int? fromWho, int? toWho)
         {
-            for (int i = 0; i < reflectedPropertyInfos.Count; i++)
-                packetWriters[reflectedPropertyInfos[i]](modPacket, reflectedPropertyInfos[i].GetValue(this));
+            foreach (PropertyInfo propertyInfo in ReflectedPropertyInfos)
+                PacketWriters[propertyInfo](modPacket, propertyInfo.GetValue(this));
         }
 
 
@@ -175,42 +189,42 @@ namespace WebmilioCommons.Networking.Packets
 
         #region Packet Writers
 
-        private void WriteBool(ModPacket modPacket, object value) => modPacket.Write((bool)value);
-        private void WriteByte(ModPacket modPacket, object value) => modPacket.Write((byte)value);
-        private void WriteChar(ModPacket modPacket, object value) => modPacket.Write((char)value);
-        private void WriteDecimal(ModPacket modPacket, object value) => modPacket.Write((decimal)value);
-        private void WriteDouble(ModPacket modPacket, object value) => modPacket.Write((double)value);
-        private void WriteFloat(ModPacket modPacket, object value) => modPacket.Write((float)value);
-        private void WriteInt(ModPacket modPacket, object value) => modPacket.Write((int)value);
-        private void WriteLong(ModPacket modPacket, object value) => modPacket.Write((long)value);
-        private void WriteSByte(ModPacket modPacket, object value) => modPacket.Write((sbyte)value);
-        private void WriteShort(ModPacket modPacket, object value) => modPacket.Write((short)value);
-        private void WriteString(ModPacket modPacket, object value) => modPacket.Write((string)value);
-        private void WriteUInt(ModPacket modPacket, object value) => modPacket.Write((uint)value);
-        private void WriteULong(ModPacket modPacket, object value) => modPacket.Write((ulong)value);
-        private void WriteUShort(ModPacket modPacket, object value) => modPacket.Write((ushort)value);
-        private void WriteNetworkSerializable(ModPacket modPacket, object value) => ((INetworkSerializable)value).Send(modPacket);
+        public void WriteBool(ModPacket modPacket, object value) => modPacket.Write((bool)value);
+        public void WriteByte(ModPacket modPacket, object value) => modPacket.Write((byte)value);
+        public void WriteChar(ModPacket modPacket, object value) => modPacket.Write((char)value);
+        public void WriteDecimal(ModPacket modPacket, object value) => modPacket.Write((decimal)value);
+        public void WriteDouble(ModPacket modPacket, object value) => modPacket.Write((double)value);
+        public void WriteFloat(ModPacket modPacket, object value) => modPacket.Write((float)value);
+        public void WriteInt(ModPacket modPacket, object value) => modPacket.Write((int)value);
+        public void WriteLong(ModPacket modPacket, object value) => modPacket.Write((long)value);
+        public void WriteSByte(ModPacket modPacket, object value) => modPacket.Write((sbyte)value);
+        public void WriteShort(ModPacket modPacket, object value) => modPacket.Write((short)value);
+        public void WriteString(ModPacket modPacket, object value) => modPacket.Write((string)value);
+        public void WriteUInt(ModPacket modPacket, object value) => modPacket.Write((uint)value);
+        public void WriteULong(ModPacket modPacket, object value) => modPacket.Write((ulong)value);
+        public void WriteUShort(ModPacket modPacket, object value) => modPacket.Write((ushort)value);
+        public void WriteNetworkSerializable(ModPacket modPacket, object value) => ((INetworkSerializable)value).Send(modPacket);
 
 
         #endregion
 
         #region Packet Readers
 
-        private object ReadBool(BinaryReader reader) => reader.ReadBoolean();
-        private object ReadByte(BinaryReader reader) => reader.ReadByte();
-        private object ReadChar(BinaryReader reader) => reader.ReadChar();
-        private object ReadDecimal(BinaryReader reader) => reader.ReadDecimal();
-        private object ReadDouble(BinaryReader reader) => reader.ReadDouble();
-        private object ReadFloat(BinaryReader reader) => reader.ReadSingle();
-        private object ReadInt(BinaryReader reader) => reader.ReadInt32();
-        private object ReadLong(BinaryReader reader) => reader.ReadInt64();
-        private object ReadSByte(BinaryReader reader) => reader.ReadSByte();
-        private object ReadShort(BinaryReader reader) => reader.ReadInt16();
-        private object ReadString(BinaryReader reader) => reader.ReadString();
-        private object ReadUInt(BinaryReader reader) => reader.ReadUInt32();
-        private object ReadULong(BinaryReader reader) => reader.ReadUInt64();
-        private object ReadUShort(BinaryReader reader) => reader.ReadUInt16();
-        private void ReadNetworkSerializable(INetworkSerializable networkSerializable, BinaryReader reader) => networkSerializable.Receive(reader);
+        public object ReadBool(BinaryReader reader) => reader.ReadBoolean();
+        public object ReadByte(BinaryReader reader) => reader.ReadByte();
+        public object ReadChar(BinaryReader reader) => reader.ReadChar();
+        public object ReadDecimal(BinaryReader reader) => reader.ReadDecimal();
+        public object ReadDouble(BinaryReader reader) => reader.ReadDouble();
+        public object ReadFloat(BinaryReader reader) => reader.ReadSingle();
+        public object ReadInt(BinaryReader reader) => reader.ReadInt32();
+        public object ReadLong(BinaryReader reader) => reader.ReadInt64();
+        public object ReadSByte(BinaryReader reader) => reader.ReadSByte();
+        public object ReadShort(BinaryReader reader) => reader.ReadInt16();
+        public object ReadString(BinaryReader reader) => reader.ReadString();
+        public object ReadUInt(BinaryReader reader) => reader.ReadUInt32();
+        public object ReadULong(BinaryReader reader) => reader.ReadUInt64();
+        public object ReadUShort(BinaryReader reader) => reader.ReadUInt16();
+        public void ReadNetworkSerializable(INetworkSerializable networkSerializable, BinaryReader reader) => networkSerializable.Receive(reader);
 
         #endregion
 
@@ -224,11 +238,15 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
-        protected void AddAllProperties() => AddAllProperties(GetType());
-        protected void AddAllProperties<T>() => AddAllProperties(typeof(T));
+        private void AddAllProperties() => AddAllProperties(GetType());
 
         protected void AddAllProperties(Type type)
         {
+            if (GlobalReflectedPropertyInfos.ContainsKey(type))
+                return;
+
+            List<PropertyInfo> propertyInfos = AddReflectedType(type);
+
             foreach (PropertyInfo propertyInfo in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 NotNetworkField notNetworkField = propertyInfo.GetCustomAttribute<NotNetworkField>();
@@ -236,12 +254,12 @@ namespace WebmilioCommons.Networking.Packets
                 if (notNetworkField != null)
                     continue;
 
-                reflectedPropertyInfos.Add(propertyInfo);
+                propertyInfos.Add(propertyInfo);
                 AddReaderWriter(propertyInfo);
             }
         }
 
-        protected void AddAllPropertiesWithAttribute<T>(Type type) where T : Attribute
+        /*protected void AddAllPropertiesWithAttribute<T>(Type type) where T : Attribute
         {
             foreach (PropertyInfo propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
@@ -250,9 +268,20 @@ namespace WebmilioCommons.Networking.Packets
                 if (attr == null)
                     continue;
 
-                reflectedPropertyInfos.Add(propertyInfo);
+                ReflectedPropertyInfos.Add(propertyInfo);
                 AddReaderWriter(propertyInfo);
             }
+        }*/
+
+
+        private static List<PropertyInfo> AddReflectedType(Type type)
+        {
+            GlobalReflectedPropertyInfos.Add(type, new List<PropertyInfo>());
+
+            GlobalPacketWriters.Add(type, new Dictionary<PropertyInfo, Action<ModPacket, object>>());
+            GlobalPacketReaders.Add(type, new Dictionary<PropertyInfo, Func<BinaryReader, object>>());
+
+            return GlobalReflectedPropertyInfos[type];
         }
 
 
@@ -269,5 +298,15 @@ namespace WebmilioCommons.Networking.Packets
 
         [NotNetworkField]
         public object ContextEntity { get; protected set; }
+
+
+        [NotNetworkField]
+        public List<PropertyInfo> ReflectedPropertyInfos => GlobalReflectedPropertyInfos[GetType()];
+
+        [NotNetworkField]
+        public Dictionary<PropertyInfo, Action<ModPacket, object>> PacketWriters => GlobalPacketWriters[GetType()];
+
+        [NotNetworkField]
+        public Dictionary<PropertyInfo, Func<BinaryReader, object>> PacketReaders => GlobalPacketReaders[GetType()];
     }
 }

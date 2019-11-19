@@ -19,6 +19,24 @@ namespace WebmilioCommons.Networking
         }
 
 
+        public override void PreLoad()
+        {
+            NetworkPacket.GlobalReflectedPropertyInfos = new Dictionary<Type, List<PropertyInfo>>();
+
+            NetworkPacket.GlobalPacketReaders = new Dictionary<Type, Dictionary<PropertyInfo, Func<BinaryReader, object>>>();
+            NetworkPacket.GlobalPacketWriters = new Dictionary<Type, Dictionary<PropertyInfo, Action<ModPacket, object>>>();
+        }
+
+        public override void Unload()
+        {
+            NetworkPacket.GlobalReflectedPropertyInfos = null;
+
+            NetworkPacket.GlobalPacketReaders = null;
+            NetworkPacket.GlobalPacketWriters = null;
+
+            base.Unload();
+        }
+
         public void HandlePacket(BinaryReader reader, int fromWho)
         {
             ushort typeId = reader.ReadUInt16();
