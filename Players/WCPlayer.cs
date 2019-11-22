@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using WebmilioCommons.Animations;
 using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Players

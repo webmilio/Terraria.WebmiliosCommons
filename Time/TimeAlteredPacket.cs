@@ -1,36 +1,50 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Terraria.ModLoader;
+using WebmilioCommons.Networking;
+using WebmilioCommons.Networking.Attributes;
 using WebmilioCommons.Networking.Packets;
 using WebmilioCommons.Players;
 
 namespace WebmilioCommons.Time
 {
-    public sealed class TimeAlteredPacket : ModPlayerNetworkPacket<WCPlayer>
+    public sealed class TimeAlteredPacket : NetworkPacket
     {
-        private TimeAlterationRequest.Sources _source;
-
-
-        public override bool PostReceive(BinaryReader reader, int fromWho)
+        public TimeAlteredPacket()
         {
-            /*if (Stopped)
-                TimeManagement.TryStopTime(ModPlayer, Duration, false);
-            else
-                TimeManagement.TryResumeTime(ModPlayer, false);*/
+        }
 
-            return true;
+        public TimeAlteredPacket(TimeAlterationRequest request)
+        {
+            Request = request;
         }
 
 
-        public string Source
+        protected override void PrePopulatePacket(ModPacket modPacket, ref int fromWho, ref int toWho)
         {
-            get => _source.ToString();
-            set => TimeAlterationRequest.Sources.TryParse(value, true, out _source);
+            modPacket.Write(Request.GetType().FullName);
         }
 
-        public int SourceEntity { get; set; }
+        protected override bool PreReceive(BinaryReader reader, int fromWho)
+        {
+            string requestType = reader.ReadString();
+            Request = Activator.CreateInstance(ExecutingAssembly.GetType(requestType)) as TimeAlterationRequest;
+
+            return base.PreReceive(reader, fromWho);
+        }
+
+        protected override bool PostReceive(BinaryReader reader, int fromWho)
+        {
+            TimeManagement.TryAlterTime(Request, false);
+
+            return base.PostReceive(reader, fromWho);
+        }
 
 
-        public int TickRate { get; set; }
+        public TimeAlterationRequest Request { get; set; }
 
-        public int Duration { get; set; }
+        [NotNetworkField]
+        internal static Assembly ExecutingAssembly { get; set; }
     }
 }

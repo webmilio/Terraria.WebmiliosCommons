@@ -11,7 +11,8 @@ namespace WebmilioCommons.Networking
     public class NetworkPacketLoader : SingletonLoader<NetworkPacketLoader, NetworkPacket>
     {
         public delegate void PacketReceivedDelegate(NetworkPacket packet, BinaryReader reader);
-        
+        public delegate void PacketSentDelegate(NetworkPacket packet);
+
 
         public NetworkPacketLoader() : base(typeInfo => typeInfo.GetCustomAttribute<ObsoleteAttribute>() == null)
         {
@@ -22,7 +23,7 @@ namespace WebmilioCommons.Networking
         {
             NetworkPacket.GlobalReflectedPropertyInfos = new Dictionary<Type, List<PropertyInfo>>();
 
-            NetworkPacket.GlobalPacketReaders = new Dictionary<Type, Dictionary<PropertyInfo, Func<BinaryReader, object>>>();
+            NetworkPacket.GlobalPacketReaders = new Dictionary<Type, Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>>();
             NetworkPacket.GlobalPacketWriters = new Dictionary<Type, Dictionary<PropertyInfo, Action<ModPacket, object>>>();
         }
 
@@ -36,6 +37,9 @@ namespace WebmilioCommons.Networking
             base.Unload();
         }
 
+        /// <summary>Main method to hook into: redirect to this in your Mod's HandlePacket.</summary>
+        /// <param name="reader"></param>
+        /// <param name="fromWho"></param>
         public void HandlePacket(BinaryReader reader, int fromWho)
         {
             ushort typeId = reader.ReadUInt16();
@@ -52,6 +56,9 @@ namespace WebmilioCommons.Networking
         public void SendPacket<T>(int? fromWho = null, int? toWho = null) where T : NetworkPacket => New<T>().Send(fromWho, toWho);
 
 
+        internal static void OnPacketSent(NetworkPacket packet) => PacketSent?.Invoke(packet);
+
         public static event PacketReceivedDelegate PacketReceived;
+        public static event PacketSentDelegate PacketSent;
     }
 }

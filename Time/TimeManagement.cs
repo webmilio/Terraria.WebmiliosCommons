@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -140,6 +141,10 @@ namespace WebmilioCommons.Time
         #endregion
 
 
+        /// <summary></summary>
+        /// <param name="request"></param>
+        /// <param name="local">true if this comes from the local client; false if its from the network.</param>
+        /// <returns></returns>
         public static bool TryAlterTime(TimeAlterationRequest request, bool local = true)
         {
             if (!VerifyModificationLock(request))
@@ -150,26 +155,32 @@ namespace WebmilioCommons.Time
         }
 
 
-        private static bool AlterTime(TimeAlterationRequest request, bool local = true)
+        private static void AlterTime(TimeAlterationRequest request, bool local = true)
         {
-            CurrentRequest = CurrentRequest.Duration == 0 ? null : request;
+            CurrentRequest = CurrentRequest?.Duration == 0 ? null : request;
 
-
-            for (int i = 0; i < Main.npc.Length; i++)
-            {
-                NPC npc = Main.npc[i];
-
-                if (!npc.active || IsNPCImmune(npc) || npc.modNPC is IIsNPCImmune immuneNPC && immuneNPC.IsImmune(npc, request))
-                    continue;
-
-                RegisterStoppedNPC(npc);
-            }
-
+            if (CurrentRequest == null)
+                OnRequestExpire();
+            else
+                OnRequestInitialized(request);
 
             if (local)
                 NotifyTimeAlter(request);
+        }
 
-            return true;
+
+        private static void OnRequestInitialized(TimeAlterationRequest request)
+        {
+            CurrentTick = 0;
+            TimeAlteredFor = request.Duration;
+
+            MainTime = Main.time;
+            MainRainTime = Main.rainTime;
+        }
+
+        private static void OnRequestExpire()
+        {
+            TimeAlteredFor = 0; // Useless, but it never hurts to prepare.
         }
 
 
@@ -188,6 +199,12 @@ namespace WebmilioCommons.Time
             return TryAlterTime(GenerateUnalterRequest(source));
         }
 
+        internal static void ForceUnalter()
+        {
+            AlterTime(new TimeAlterationRequest(TimeAlterationRequest.Sources.World, null, 0, 1));
+            Main.blockInput = false;
+        }
+
 
         public static TimeAlterationRequest GenerateUnalterRequest(Player player) => new TimeAlterationRequest(player, 0, 1);
         public static TimeAlterationRequest GenerateUnalterRequest(NPC npc) => new TimeAlterationRequest(npc, 0, 1);
@@ -199,8 +216,8 @@ namespace WebmilioCommons.Time
         #endregion
 
 
-        public static bool VerifyModificationLock(TimeAlterationRequest request) => 
-            CurrentRequest == null || !CurrentRequest.LockedToSource || 
+        public static bool VerifyModificationLock(TimeAlterationRequest request) =>
+            CurrentRequest == null || !CurrentRequest.LockedToSource ||
             CurrentRequest.SourceType == request.SourceType && CurrentRequest.StoppedByEntity == request.StoppedByEntity;
 
         private static void NotifyTimeAlter(TimeAlterationRequest request)
@@ -208,20 +225,10 @@ namespace WebmilioCommons.Time
             if (Main.netMode != NetmodeID.MultiplayerClient)
                 return;
 
-            TimeAlteredPacket packet = new TimeAlteredPacket()
-            {
-                Source = request.SourceType.ToString(),
-                SourceEntity = request.SourceEntity.whoAmI,
-
-                TickRate = request.TickRate,
-                Duration = request.Duration,
-            };
-
-            packet.Send();
+            new TimeAlteredPacket(request).Send();
         }
 
 
-        public static void RegisterStoppedNPC(NPC npc) => npcStates.Add(npc, new NPCInstantState(npc));
         public static void RegisterStoppedProjectile(Projectile projectile) => projectileStates.Add(projectile, new ProjectileInstantState(projectile));
         public static void RegisterStoppedPlayer(Player player) => playerStates.Add(player, new PlayerInstantState(player));
         public static void RegisterStoppedItem(Item item) => itemStates.Add(item, new ItemInstantState(item));
@@ -230,6 +237,31 @@ namespace WebmilioCommons.Time
         internal static void Update()
         {
             int previousTimer = TimeAlteredFor;
+
+            if (TimeAlteredFor > 0)
+                TimeAlteredFor--;
+
+            if (TimeAlteredFor == 0 && (TimeAlteredFor != previousTimer || CurrentRequest != null))
+                CurrentRequest = null;
+
+            if (!TimeAltered)
+                return;
+
+
+            CurrentTick++;
+
+            if (CurrentRequest.DayRate == 0 || CurrentTick % CurrentRequest.DayRate != 0)
+                Main.dayRate = 0;
+
+            if (CurrentRequest.TimeRate == 0 || CurrentTick % CurrentRequest.TimeRate != 0)
+                Main.time = MainTime;
+
+            MainTime = Main.time;
+
+            if (CurrentRequest.RainRate == 0 || CurrentTick % CurrentRequest.RainRate != 0)
+                Main.rainTime = MainRainTime;
+
+            MainRainTime = Main.rainTime;
         }
 
 
@@ -238,6 +270,13 @@ namespace WebmilioCommons.Time
             _npcs = new List<int>();
             _projectiles = new List<int>();
             _items = new List<int>();
+
+            npcStates = new Dictionary<NPC, NPCInstantState>();
+            projectileStates = new Dictionary<Projectile, ProjectileInstantState>();
+            playerStates = new Dictionary<Player, PlayerInstantState>();
+            itemStates = new Dictionary<Item, ItemInstantState>();
+
+            TimeAlteredPacket.ExecutingAssembly = Assembly.GetExecutingAssembly();
         }
 
         internal static void Unload()
@@ -245,15 +284,24 @@ namespace WebmilioCommons.Time
             _npcs = null;
             _projectiles = null;
             _items = null;
+
+            npcStates = new Dictionary<NPC, NPCInstantState>();
+            projectileStates = new Dictionary<Projectile, ProjectileInstantState>();
+            playerStates = new Dictionary<Player, PlayerInstantState>();
+            itemStates = new Dictionary<Item, ItemInstantState>();
+
+            TimeAlteredPacket.ExecutingAssembly = null;
         }
 
 
         public static TimeAlterationRequest CurrentRequest { get; private set; }
 
+        public static int CurrentTick { get; private set; }
+
         public static int TimeAlteredFor { get; private set; }
-        public static bool TimeAltered => TimeAlteredFor > 0;
+        public static bool TimeAltered => TimeAlteredFor > 0 && CurrentRequest != null;
 
         public static double MainTime { get; internal set; }
-        public static double MainRainTime { get; internal set; }
+        public static int MainRainTime { get; internal set; }
     }
 }

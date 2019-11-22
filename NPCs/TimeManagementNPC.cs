@@ -9,22 +9,39 @@ namespace WebmilioCommons.NPCs
     {
         public override bool PreAI(NPC npc)
         {
-            if (TimeManagement.IsNPCImmune(npc))
-                return true;
+            if (CurrentRequest != TimeManagement.CurrentRequest)
+                CurrentRequest = !TimeManagement.TimeAltered ? null : TimeManagement.CurrentRequest;
 
-            IsTimeAltered = TimeManagement.TimeAltered;
-
-            if (IsTimeAltered)
+            if (CurrentRequest == null || !CurrentRequest.AlterNPCs || TimeManagement.IsNPCImmune(npc))
             {
-                if (!TimeManagement.npcStates.ContainsKey(npc))
-                    TimeManagement.RegisterStoppedNPC(npc);
+                if (State != null)
+                {
+                    State.Restore();
+                    State = null;
+                }
 
-                TimeManagement.npcStates[npc].PreAI(npc);
-                npc.frameCounter = 0;
-                return false;
+                TimeAltered = false;
+                return true;
             }
 
-            return true;
+            TimeAltered = true;
+
+            if (TimeAltered && State == null)
+                State = new NPCInstantState(npc);
+
+            CanRunCurrentTick = CurrentRequest.TickRate != 0 && TimeManagement.CurrentTick % CurrentRequest.TickRate == 0;
+
+            if (CanRunCurrentTick)
+            {
+                State.Restore();
+                State = null;
+
+                return true;
+            }
+
+            State.PreAI(npc);
+            npc.frameCounter = 0;
+            return false;
         }
 
 
@@ -36,23 +53,27 @@ namespace WebmilioCommons.NPCs
 
         public void ModifyHitByPlayer(NPC npc, Player player, int hitDirection, ref int damage, ref float knockback, ref bool crit)
         {
-            if (IsTimeAltered && ElapsedPreAI % TimeManagement.CurrentRequest.TickRate == 0)
+            if (TimeAltered)
             {
-                NPCInstantState state = TimeManagement.npcStates[npc];
+                if (!CanRunCurrentTick)
+                {
+                    State.AccumulatedDamage += damage;
+                    State.AccumulatedKnockback += knockback;
+                    State.AccumulatedHitDirection = hitDirection;
 
-                state.AccumulatedDamage += damage;
-                state.AccumulatedKnockback += knockback;
-                state.AccumulatedHitDirection = hitDirection;
-
-                damage = 0;
-                knockback = 0;
+                    damage = 0;
+                    knockback = 0;
+                }
             }
         }
 
 
-        public bool IsTimeAltered { get; private set; }
+        public TimeAlterationRequest CurrentRequest { get; private set; }
 
-        public int ElapsedPreAI { get; private set; }
+        public bool TimeAltered { get; private set; }
+        public bool CanRunCurrentTick { get; private set; }
+
+        public NPCInstantState State { get; private set; }
 
         public override bool InstancePerEntity => true;
     }

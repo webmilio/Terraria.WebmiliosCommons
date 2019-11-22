@@ -10,13 +10,18 @@ namespace WebmilioCommons.Worlds
         public override void PostDrawTiles()
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                TimeManagement.Update();
+                Update();
         }
 
         public override void PreUpdate()
         {
             if (Main.netMode == NetmodeID.SinglePlayer || Main.dedServ)
-                TimeManagement.Update();
+                Update();
+        }
+
+        private void Update()
+        {
+            TimeManagement.Update();
         }
     }
 }

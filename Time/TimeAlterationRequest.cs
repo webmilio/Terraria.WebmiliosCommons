@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Terraria;
+using Terraria.ModLoader;
+using WebmilioCommons.Networking;
+using WebmilioCommons.Networking.Attributes;
+using WebmilioCommons.Networking.Packets;
+using WebmilioCommons.Tinq;
 
 namespace WebmilioCommons.Time
 {
-    public class TimeAlterationRequest
+    public class TimeAlterationRequest : INetworkSerializable
     {
+        public TimeAlterationRequest() { }
+
         public TimeAlterationRequest(Player player, int duration, int tickRate) : this(Sources.Player, player, duration, tickRate)
         {
         }
@@ -33,7 +42,7 @@ namespace WebmilioCommons.Time
                 throw new ArgumentException("Use a constructor that takes an Entity when creating a request from an entity.");
         }
 
-        private TimeAlterationRequest(Sources sourceType, Entity sourceEntity, int duration, int tickRate)
+        internal TimeAlterationRequest(Sources sourceType, Entity sourceEntity, int duration, int tickRate)
         {
             SourceType = sourceType;
             SourceEntity = sourceEntity;
@@ -43,14 +52,75 @@ namespace WebmilioCommons.Time
         }
 
 
-        public Sources SourceType { get; }
+        public void Send(NetworkPacket networkPacket, ModPacket modPacket)
+        {
+            networkPacket.WriteString(modPacket, SourceType.ToString());
+            networkPacket.WriteInt(modPacket, SourceEntity.whoAmI);
+
+            networkPacket.WriteInt(modPacket, Duration);
+            networkPacket.WriteInt(modPacket, TickRate);
+
+            networkPacket.WriteBool(modPacket, LockedToSource);
+
+            networkPacket.WriteBool(modPacket, AlterPlayers);
+            networkPacket.WriteBool(modPacket, AlterItems);
+            networkPacket.WriteBool(modPacket, AlterNPCs);
+            networkPacket.WriteBool(modPacket, AlterProjectiles);
+
+            networkPacket.WriteInt(modPacket, DayRate);
+            networkPacket.WriteInt(modPacket, TimeRate);
+            networkPacket.WriteInt(modPacket, RainRate);
+        }
+
+        public void Receive(NetworkPacket networkPacket, BinaryReader reader)
+        {
+            SourceType = (Sources) Enum.Parse(typeof(Sources), reader.ReadString());
+
+            IEnumerable<Entity> sourceEntityCollection = null;
+
+            switch (SourceType)
+            {
+                case Sources.Player:
+                    sourceEntityCollection = Main.player;
+                    break;
+                case Sources.NPC:
+                    sourceEntityCollection = Main.npc;
+                    break;
+                case Sources.Projectile:
+                    sourceEntityCollection = Main.projectile;
+                    break;
+                case Sources.Item:
+                    sourceEntityCollection = Main.item;
+                    break;
+            }
+
+            if (sourceEntityCollection != null)
+                SourceEntity = sourceEntityCollection.FirstActive(e => e.whoAmI == reader.ReadInt32());
+
+            Duration = reader.ReadInt32();
+            TickRate = reader.ReadInt32();
+
+            LockedToSource = reader.ReadBoolean();
+
+            AlterPlayers = reader.ReadBoolean();
+            AlterItems = reader.ReadBoolean();
+            AlterNPCs = reader.ReadBoolean();
+            AlterProjectiles = reader.ReadBoolean();
+
+            DayRate = reader.ReadInt32();
+            TimeRate = reader.ReadInt32();
+            RainRate = reader.ReadInt32();
+        }
+
+
+        public Sources SourceType { get; private set; }
 
         public bool StoppedByEntity => SourceEntity != null;
-        public Entity SourceEntity { get; }
+        public Entity SourceEntity { get; private set; }
 
 
-        public int Duration { get; }
-        public int TickRate { get; }
+        public int Duration { get; private set; }
+        public int TickRate { get; private set; }
 
         /// <summary>
         /// If true, the time alteration will only be able to be "toggled" (stopped midway) if the same person executes the required action.
@@ -59,9 +129,28 @@ namespace WebmilioCommons.Time
         public bool LockedToSource { get; set; } = true;
 
 
-        public bool AlterPlayers { get; set; } = true;
-        public bool AlterNPCs { get; set; } = true;
-        public bool AlterProjectiles { get; set; } = true;
+        public virtual bool AlterPlayers { get; set; } = true;
+        public virtual bool AlterItems { get; set; } = true;
+        public virtual bool AlterNPCs { get; set; } = true;
+        public virtual bool AlterProjectiles { get; set; } = true;
+
+        public virtual int DayRate
+        {
+            get => TickRate; 
+            set => TickRate = value;
+        }
+
+        public virtual int TimeRate
+        {
+            get => TickRate;
+            set => TickRate = value;
+        }
+
+        public virtual int RainRate
+        {
+            get => TickRate;
+            set => TickRate = value;
+        }
 
 
         [Flags]

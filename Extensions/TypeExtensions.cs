@@ -27,9 +27,9 @@ namespace WebmilioCommons.Extensions
         /// <summary>Finds the appropriate texture based solely on the type and its associated mod.</summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static Texture2D GetTexture(this Type type) => type.GetModFromType().GetTexture(type.GetTexturePath());
+        public static Texture2D GetTexture(this Type type) => type.GetModFromType().GetTexture(type.GetPath());
 
-        public static Texture2D GetTexture(this Mod mod, Type type) => mod.GetTexture(type.GetTexturePath());
+        public static Texture2D GetTexture(this Mod mod, Type type) => mod.GetTexture(type.GetPath());
 
         public static Texture2D GetTexture(this Type type, Mod mod) => mod.GetTexture(type);
 

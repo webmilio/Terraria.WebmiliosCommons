@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WebmilioCommons.Managers
+﻿namespace WebmilioCommons.Managers
 {
     public abstract class SingletonManager<TManager, TManagerOf> : Manager<TManagerOf> where TManager : Manager<TManagerOf>, new() where TManagerOf : IHasUnlocalizedName
     {
@@ -15,6 +12,7 @@ namespace WebmilioCommons.Managers
         }
 
 
+        /// <summary>Unique TYPE instance (two same <see cref="TManager"/> will have the same instance), instantiated and initialized upon first call.</summary>
         public static TManager Instance
         {
             get
@@ -23,7 +21,7 @@ namespace WebmilioCommons.Managers
                     instance = new TManager();
 
                 if (!instance.Initialized)
-                    instance.DefaultInitialize();
+                    instance.TryInitialize();
 
                 return instance;
             }

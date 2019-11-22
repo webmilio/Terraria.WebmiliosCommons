@@ -22,7 +22,8 @@ namespace WebmilioCommons.Loaders
             instance = null;
         }
 
-
+        
+        /// <summary>Unique TYPE instance (two same <see cref="TLoader"/> will have the same instance), instantiated and loaded upon first call.</summary>
         public static TLoader Instance
         {
             get

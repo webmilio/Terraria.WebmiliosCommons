@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using WebmilioCommons.Players;
+﻿using Terraria.ModLoader;
 
 namespace WebmilioCommons.Items
 {

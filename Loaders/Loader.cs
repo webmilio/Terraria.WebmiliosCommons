@@ -14,9 +14,14 @@ namespace WebmilioCommons.Loaders
         protected Dictionary<ushort, Type> typeById;
         protected Dictionary<Type, Mod> modByType;
 
-
+        /// <summary>Instantiates a new <see cref="Loader{T}"/> and loads all found subtypes of <see cref="T"/> that are not abstract.</summary>
         protected Loader() : this(typeInfo => true) { }
 
+        /// <summary>
+        /// Instantiates a new <see cref="Loader{T}"/> and loads all found subtypes of <see cref="T"/> that are not abstract and
+        /// match the specified <param name="loadCondition">load condition(s)</param>.
+        /// </summary>
+        /// <param name="loadCondition">The condition under which a subclass of <see cref="T"/> should be loaded.</param>
         protected Loader(Func<TypeInfo, bool> loadCondition)
         {
             LoadCondition = loadCondition;
@@ -26,6 +31,7 @@ namespace WebmilioCommons.Loaders
         [Obsolete("Use " + nameof(TryLoad) + ".")]
         public void Load() => TryLoad();
 
+        /// <summary>Tries loading the current loader instance if it has not already been loaded.</summary>
         public void TryLoad()
         {
             if (Loaded) return;
@@ -54,7 +60,10 @@ namespace WebmilioCommons.Loaders
             PostLoad();
         }
 
+        /// <summary>Called directly after the initialization checks during <see cref="TryLoad"/>.</summary>
         public virtual void PreLoad() { }
+
+        /// <summary>Called at the end of <see cref="TryLoad"/>.</summary>
         public virtual void PostLoad() { }
 
 
@@ -81,6 +90,9 @@ namespace WebmilioCommons.Loaders
             return item;
         }
 
+        /// <summary>Called after each time a subclass is added to the generic instances database.</summary>
+        /// <param name="mod">The mod from which the generic instance originates.</param>
+        /// <param name="item">A generic instances created via <see cref="Activator.CreateInstance(System.Type)"/>.</param>
         protected virtual void PostAdd(Mod mod, T item) { }
 
 
@@ -115,6 +127,7 @@ namespace WebmilioCommons.Loaders
         public bool Loaded { get; private set; }
 
 
+        /// <summary>How many subtypes of <see cref="T"/> have been loaded.</summary>
         public int Count => idByType.Count;
     }
 }
