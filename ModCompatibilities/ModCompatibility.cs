@@ -13,7 +13,17 @@ namespace WebmilioCommons.ModCompatibilities
         }
 
 
-        public virtual ModCompatibility TryLoad() => (ModInstance = ModLoader.GetMod(ModName)) == null ? null : this;
+        public ModCompatibility TryLoad()
+        {
+            ModInstance = ModLoader.GetMod(ModName);
+
+            if (ModInstance == null || !Load(ModInstance))
+                return null;
+
+            return this;
+        }
+
+        protected virtual bool Load(Mod mod) => true;
 
 
         public void TryAddRecipes()

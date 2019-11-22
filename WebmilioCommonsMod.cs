@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
-using WebmilioCommons.Achievements;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
