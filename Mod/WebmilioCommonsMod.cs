@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using WebmilioCommons.Achievements;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
@@ -22,7 +23,9 @@ namespace WebmilioCommons
             KeyboardManager.Load();
 
             if (!Main.dedServ)
+            {
                 IdentityManager.Load();
+            }
 
             On.Terraria.WorldGen.SaveAndQuit += WorldGenOnSaveAndQuit;
 
@@ -35,7 +38,11 @@ namespace WebmilioCommons
             // I only put it there to make it obvious.
 
             if (!Main.dedServ)
+            {
                 IdentityManager.PostSetupContent();
+
+                ModAchievementHelper.PostSetupContent();
+            }
 
             NetworkPacketLoader.Instance.TryLoad();
 
@@ -48,8 +55,14 @@ namespace WebmilioCommons
 
             TimeManagement.Unload();
 
+            if (!Main.dedServ)
+            {
+                IdentityManager.Unload();
+
+                ModAchievementHelper.Unload();
+            }
+
             NetworkPacketLoader.Instance.Unload();
-            IdentityManager.Unload();
 
             Instance = null;
         }

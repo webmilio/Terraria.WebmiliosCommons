@@ -2,9 +2,18 @@ Webmilio's Commons Library adds a couple of things I use in all of my mods. You 
 
 Things this adds:
 - Better Networking (in my opinion, at least).
-- Full managers (singletons that handle classes that could be seen as static, but need inheritance)
+- Full Managers (manual or singletons that handle classes that could be seen as static, but need inheritance)
+- Full Loaders (manual or singletons that handle loading all found classes within the Terraria assembly, including mods)
 - Identity Manager (WIP): a way to get Steam ID from the user (if the user is using Steam)
 - A bunch of extensions
 - Keyboard Manager: get the state of any keys (NotPressed, JustPressed, Pressed, JustReleased), regardless of Mod Hotkey.
+- Custom Achievements: you can add custom achievements in a less complex way than without the library.
+
+Other Utilities:
+- Class which allows you to quickly create a tile-placing item once extended.
+
+Credits (Team Members)
+- Webmilio: Networking, Managers, Loaders, Identity, Extensions, Manager
+- Scalie: QuickTileItem, the original AchievementLib mod
 
 If you want an example mod that uses this better networking, check out the JoJo mod by HellGoesOn on https://github.com/ruskies/TerrarianBizzareAdventure or https://github.com/ruskies/TLoZ and search for ModPlayerNetworkPacket.
