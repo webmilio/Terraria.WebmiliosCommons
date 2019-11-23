@@ -1,7 +1,7 @@
 displayName = Webmilio's Commons Library
-author = Webmilio
-version = 0.1.8.3
-Side = Both
+author = Webmilio & The Team
+version = 0.1.8.4
+Side = NoSync
 hideCode = false
 includeSource = false
 buildIgnore = *.csproj, *.user, *.bin, *.vs, *.exe, *.force, *.cache, *.FileListAbsolute.txt, *.xml, *.suo, obj\*, bin\*, .vs\*, .idea\*, .git\*, packages\*

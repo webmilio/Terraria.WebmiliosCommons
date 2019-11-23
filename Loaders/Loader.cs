@@ -80,12 +80,14 @@ namespace WebmilioCommons.Loaders
         protected T Add(Mod mod, T item)
         {
             ushort itemId = _latestTypeId++;
+            Type type = item.GetType();
 
-            idByType.Add(item.GetType(), itemId);
-            typeById.Add(itemId, item.GetType());
-            modByType.Add(item.GetType(), mod);
+            idByType.Add(type, itemId);
+            typeById.Add(itemId, type);
+            modByType.Add(type, mod);
 
             PostAdd(mod, item);
+            PostAdd(mod, item, type);
 
             return item;
         }
@@ -93,7 +95,10 @@ namespace WebmilioCommons.Loaders
         /// <summary>Called after each time a subclass is added to the generic instances database.</summary>
         /// <param name="mod">The mod from which the generic instance originates.</param>
         /// <param name="item">A generic instances created via <see cref="Activator.CreateInstance(System.Type)"/>.</param>
+        [Obsolete("Use PostAdd(Mod mod, T item, Type type).")]
         protected virtual void PostAdd(Mod mod, T item) { }
+
+        protected virtual void PostAdd(Mod mod, T item, Type type) { }
 
 
         public T New(ushort id) => New(typeById[id]);
