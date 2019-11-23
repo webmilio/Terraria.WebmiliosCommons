@@ -1,5 +1,8 @@
-﻿namespace WebmilioCommons.Effects
+﻿using System;
+
+namespace WebmilioCommons.Effects.ScreenShaking
 {
+    [Obsolete("Work-in-progress")]
     public class ScreenShake
     {
         public ScreenShake(int intensity, int duration)
@@ -12,7 +15,7 @@
         {
             ScreenShake screenShake = new ScreenShake(intensity, duration);
 
-
+            return screenShake;
         }
 
 
