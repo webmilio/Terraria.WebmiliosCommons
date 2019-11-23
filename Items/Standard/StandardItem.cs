@@ -1,7 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WebmilioCommons.Items
+namespace WebmilioCommons.Items.Standard
 {
     public abstract class StandardItem : ModItem
     {
