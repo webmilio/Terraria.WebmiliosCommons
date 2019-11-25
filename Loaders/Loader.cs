@@ -69,12 +69,19 @@ namespace WebmilioCommons.Loaders
 
         public virtual void Unload()
         {
+            PreUnload();
+
             _latestTypeId = 1;
 
             idByType.Clear();
             typeById.Clear();
             modByType.Clear();
+
+            PostUnload();
         }
+
+        protected virtual void PreUnload() { }
+        protected virtual void PostUnload() { }
 
 
         protected T Add(Mod mod, T item)
