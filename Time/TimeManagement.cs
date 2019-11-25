@@ -199,9 +199,9 @@ namespace WebmilioCommons.Time
             return TryAlterTime(GenerateUnalterRequest(source));
         }
 
-        internal static void ForceUnalter()
+        internal static void ForceUnalter(bool local)
         {
-            AlterTime(new TimeAlterationRequest(TimeAlterationRequest.Sources.World, null, 0, 1));
+            AlterTime(new TimeAlterationRequest(TimeAlterationRequest.Sources.World, null, 0, 1), local);
             Main.blockInput = false;
         }
 
