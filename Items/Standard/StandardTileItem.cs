@@ -8,9 +8,9 @@ namespace WebmilioCommons.Items.Standard
         private const int USE_TIME = 10;
 
 
-        public StandardTileItem(string displayName, string tooltip, int width, int height, int placedTileType, int rarity = ItemRarityID.White, int maxStack = 999, 
+        public StandardTileItem(string displayName, string tooltip, int width, int height, int placedTileType, int rarity = ItemRarityID.White, int value = 0, int maxStack = 999, 
             int itemUseStyle = ItemUseStyleID.SwingThrow, int itemUseTime = USE_TIME, int useAnimation = USE_TIME, bool autoReuse = true, bool consumable = true) : 
-            base(displayName, tooltip, width, height, rarity: rarity)
+            base(displayName, tooltip, width, height, rarity: rarity, value: value)
         {
             MaxStack = maxStack;
 
