@@ -17,6 +17,7 @@
     <Folder Include="Commons\" />
     <Folder Include="Entities\" />
     <Folder Include="Configurations\" />
+    <Folder Include="Globals\" />
   </ItemGroup>
   <Target Name="BuildMod" AfterTargets="Build">
     <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />
