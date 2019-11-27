@@ -17,10 +17,6 @@ namespace WebmilioCommons.Time
 
         private static List<int> _npcs, _projectiles, _items;
 
-        internal static Dictionary<NPC, NPCInstantState> npcStates;
-        internal static Dictionary<Projectile, ProjectileInstantState> projectileStates;
-        internal static Dictionary<Player, PlayerInstantState> playerStates;
-        internal static Dictionary<Item, ItemInstantState> itemStates;
 
         #region Immunity
 
@@ -229,11 +225,6 @@ namespace WebmilioCommons.Time
         }
 
 
-        public static void RegisterStoppedProjectile(Projectile projectile) => projectileStates.Add(projectile, new ProjectileInstantState(projectile));
-        public static void RegisterStoppedPlayer(Player player) => playerStates.Add(player, new PlayerInstantState(player));
-        public static void RegisterStoppedItem(Item item) => itemStates.Add(item, new ItemInstantState(item));
-
-
         internal static void Update()
         {
             int previousTimer = TimeAlteredFor;
@@ -271,10 +262,6 @@ namespace WebmilioCommons.Time
             _projectiles = new List<int>();
             _items = new List<int>();
 
-            npcStates = new Dictionary<NPC, NPCInstantState>();
-            projectileStates = new Dictionary<Projectile, ProjectileInstantState>();
-            playerStates = new Dictionary<Player, PlayerInstantState>();
-            itemStates = new Dictionary<Item, ItemInstantState>();
 
             TimeAlteredPacket.ExecutingAssembly = Assembly.GetExecutingAssembly();
         }
@@ -285,10 +272,6 @@ namespace WebmilioCommons.Time
             _projectiles = null;
             _items = null;
 
-            npcStates = new Dictionary<NPC, NPCInstantState>();
-            projectileStates = new Dictionary<Projectile, ProjectileInstantState>();
-            playerStates = new Dictionary<Player, PlayerInstantState>();
-            itemStates = new Dictionary<Item, ItemInstantState>();
 
             TimeAlteredPacket.ExecutingAssembly = null;
         }

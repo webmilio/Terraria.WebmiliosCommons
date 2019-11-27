@@ -131,6 +131,7 @@ namespace WebmilioCommons.Time
 
         public virtual bool AlterPlayers { get; set; } = true;
         public virtual bool AlterItems { get; set; } = true;
+        // ReSharper disable once InconsistentNaming
         public virtual bool AlterNPCs { get; set; } = true;
         public virtual bool AlterProjectiles { get; set; } = true;
 

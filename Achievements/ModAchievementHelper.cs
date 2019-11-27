@@ -145,6 +145,12 @@ namespace WebmilioCommons.Achievements
 
         public static void Unload()
         {
+            if (_achievements == null)
+            {
+                WebmilioCommonsMod.Instance.Logger.Error("Achievements getter was found to be null; canceling unload.");
+                return;
+            }
+
             Dictionary<string, Achievement> vanillaAchievementsDictionary = (Dictionary<string, Achievement>)_achievements.GetValue(Main.Achievements);
 
             foreach (KeyValuePair<Achievement, ModAchievement> kvp in _loadedAchievements)
