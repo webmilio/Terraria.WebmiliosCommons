@@ -1,6 +1,6 @@
 displayName = Webmilio's Commons Library
 author = Webmilio & The Team
-version = 0.1.8.10
+version = 0.1.8.11
 Side = NoSync
 hideCode = false
 includeSource = false

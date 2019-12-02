@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Terraria;
 using Terraria.Achievements;
+using Terraria.GameContent.Achievements;
 using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
 
@@ -8,6 +11,7 @@ namespace WebmilioCommons.Achievements
 {
     public class ModAchievement
     {
+        public const string DEFAULT_COMPLETION_FLAG = "Completed";
         internal readonly List<AchievementCondition> conditions = new List<AchievementCondition>();
 
 
@@ -23,6 +27,12 @@ namespace WebmilioCommons.Achievements
         }
 
 
+        public virtual void SetDefaults()
+        {
+
+        }
+
+
         public void AddCondition(AchievementCondition condition)
         {
             conditions.Add(condition);
@@ -35,10 +45,56 @@ namespace WebmilioCommons.Achievements
         }
 
 
+        /// <summary>Adds a default completion flag to be manually trigger with <see cref="CompleteFlag()"/>.</summary>
+        public void AddCompletionFlag() => AddCompletionFlag(DEFAULT_COMPLETION_FLAG);
+        public void AddCompletionFlag(string flag) => AddCondition(CustomFlagCondition.Create(flag));
+
+
+        public void CompleteFlag() => CompleteFlag(DEFAULT_COMPLETION_FLAG);
+
+        public void CompleteFlag(string flag)
+        {
+            AchievementCondition condition = conditions.Find(c => c.Name.Equals(flag, StringComparison.CurrentCultureIgnoreCase));
+
+            if (condition == null)
+            {
+                Debug.WriteLine(new StackTrace().GetFirstDifferentAssembly().FullName);
+
+                WebmilioCommonsMod.Instance.Logger.Warn($"Mod X tried completing condition flag `{flag}` for achievement `{Name}`.");
+                return;
+            }
+
+            condition.Complete();
+        }
+
+        /// <summary>Completes the default completion flag if the given player is the local player.</summary>
+        public void CompleteFlag(Player player) => CompleteFlag(player, DEFAULT_COMPLETION_FLAG);
+
+        /// <summary>Completes the specified flag if the given player is the local player.</summary>
+        /// <param name="player"></param>
+        /// <param name="flag"></param>
+        public void CompleteFlag(Player player, string flag)
+        {
+            if (player.IsLocalPlayer())
+                CompleteFlag(flag);
+        }
+
+
         public void AddTracker()
         {
-
+            
         }
+
+
+        public static void CompleteFlag<T>() where T : ModAchievement => ModAchievementHelper.GetModAchievement<T>().CompleteFlag();
+        public static void CompleteFlag<T>(Player player) where T : ModAchievement => ModAchievementHelper.GetModAchievement<T>().CompleteFlag(player);
+        public static void CompleteFlag<T>(string flag) where T : ModAchievement => ModAchievementHelper.GetModAchievement<T>().CompleteFlag(flag);
+        public static void CompleteFlag<T>(Player player, string flag) where T : ModAchievement => ModAchievementHelper.GetModAchievement<T>().CompleteFlag(player, flag);
+
+        public static void CompleteFlagFor(string name) => ModAchievementHelper.GetModAchievement(name).CompleteFlag();
+        public static void CompleteFlagFor(Player player, string name) => ModAchievementHelper.GetModAchievement(name).CompleteFlag(player);
+        public static void CompleteFlagFor(string name, string flag) => ModAchievementHelper.GetModAchievement(name).CompleteFlag(flag);
+        public static void CompleteFlagFor(string name, Player player, string flag) => ModAchievementHelper.GetModAchievement(name).CompleteFlag(player, flag);
 
 
         public string Name { get; }

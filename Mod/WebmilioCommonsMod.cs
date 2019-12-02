@@ -3,6 +3,7 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Achievements;
+using WebmilioCommons.Configurations;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
@@ -30,6 +31,12 @@ namespace WebmilioCommons
             On.Terraria.WorldGen.SaveAndQuit += WorldGenOnSaveAndQuit;
 
             TimeManagement.Load();
+
+            #region Client Configuration
+
+            ClientConfiguration = ModContent.GetInstance<ClientConfiguration>();
+
+            #endregion
         }
 
         public override void PostSetupContent()
@@ -64,6 +71,12 @@ namespace WebmilioCommons
 
             NetworkPacketLoader.Instance.Unload();
 
+            #region Configuration
+
+            ClientConfiguration = null;
+
+            #endregion
+
             Instance = null;
         }
 
@@ -87,5 +100,7 @@ namespace WebmilioCommons
 
 
         public static WebmilioCommonsMod Instance { get; private set; }
+
+        public ClientConfiguration ClientConfiguration { get; private set; }
     }
 }

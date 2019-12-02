@@ -17,7 +17,5 @@ namespace WebmilioCommons.Achievements
             item.Mod = mod;
             ModAchievementHelper.RegisterAchievement(item, type);
         }
-
-        public void AddAchievement(Mod mod, ModAchievement achievement) => Add(mod, achievement);
     }
 }

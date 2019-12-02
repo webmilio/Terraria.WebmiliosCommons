@@ -35,11 +35,13 @@ namespace WebmilioCommons.Achievements
         private static Dictionary<Achievement, ModAchievement> _loadedAchievements;
 
 
+        #region Loading/Unloading
+
         public static void PostSetupContent()
         {
             _loadedAchievements = new Dictionary<Achievement, ModAchievement>();
 
-            Type 
+            Type
                 achievementType = typeof(Achievement),
                 uiAchievementEntryType = typeof(UIAchievementListItem);
 
@@ -58,6 +60,7 @@ namespace WebmilioCommons.Achievements
             _iconFrameUnlocked = uiAchievementEntryType.GetField(nameof(_iconFrameUnlocked), PRIVATE_FIELD_BINDING_FLAGS);
 
             // Hooking
+            On.Terraria.Achievements.AchievementManager.Register += AchievementManagerOnRegister;
             On.Terraria.Achievements.AchievementManager.RegisterIconIndex += AchievementManagerOnRegisterIconIndex;
             On.Terraria.Achievements.AchievementManager.GetIconIndex += AchievementManagerOnGetIconIndex;
 
@@ -66,6 +69,27 @@ namespace WebmilioCommons.Achievements
             // Loading
             ModAchievementLoader.Instance.TryLoad(); // Redundant, since singletons always load on call.
         }
+
+        public static void Unload()
+        {
+            if (_achievements == null)
+            {
+                WebmilioCommonsMod.Instance.Logger.Error("Achievements getter was found to be null; canceling unload.");
+                return;
+            }
+
+            Dictionary<string, Achievement> vanillaAchievementsDictionary = (Dictionary<string, Achievement>)_achievements.GetValue(Main.Achievements);
+
+            foreach (KeyValuePair<Achievement, ModAchievement> kvp in _loadedAchievements)
+                vanillaAchievementsDictionary.Remove(kvp.Key.Name);
+
+            On.Terraria.Achievements.AchievementManager.RegisterIconIndex -= AchievementManagerOnRegisterIconIndex;
+            On.Terraria.Achievements.AchievementManager.GetIconIndex -= AchievementManagerOnGetIconIndex;
+
+            On.Terraria.GameContent.UI.Elements.UIAchievementListItem.ctor -= UIAchievementListItemOnCtor;
+        }
+
+        #endregion
 
 
         /// <summary>
@@ -82,13 +106,47 @@ namespace WebmilioCommons.Achievements
             achievement.SetCategory(modAchievement.Category);
 
             modAchievement.GameAchievement = achievement;
+            modAchievement.SetDefaults();
+
+            achievement.AddConditions(modAchievement.conditions.ToArray());
+
             _loadedAchievements.Add(achievement, modAchievement);
 
             Main.Achievements.Register(achievement);
         }
 
 
+        public static ModAchievement GetModAchievement<T>()
+        {
+            foreach (KeyValuePair<Achievement, ModAchievement> kvp in _loadedAchievements)
+                if (kvp.Key.Name.Equals(typeof(T).FullName, StringComparison.CurrentCultureIgnoreCase))
+                    return kvp.Value;
+
+            return null; 
+        }
+
+        public static ModAchievement GetModAchievement(string name)
+        {
+            foreach (KeyValuePair<Achievement, ModAchievement> kvp in _loadedAchievements)
+                if (kvp.Value.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+                    return kvp.Value;
+
+            return null;
+        }
+
+
         #region Hooking
+
+        private static void AchievementManagerOnRegister(On.Terraria.Achievements.AchievementManager.orig_Register orig, AchievementManager self, Achievement achievement)
+        {
+            orig(self, achievement);
+
+            if (WebmilioCommonsMod.Instance.ClientConfiguration.ResetAchievements)
+            {
+                achievement.ClearProgress();
+                achievement.ClearTracker();
+            }
+        }
 
         private static void UIAchievementListItemOnCtor(On.Terraria.GameContent.UI.Elements.UIAchievementListItem.orig_ctor orig, Terraria.GameContent.UI.Elements.UIAchievementListItem self, Achievement achievement, bool largeForOtherLanguages)
         {
@@ -141,25 +199,5 @@ namespace WebmilioCommons.Achievements
         private static UIImageFramed GetAchievementIcon(UIAchievementListItem achievementUIItem) => _achievementIcon.GetValue(achievementUIItem) as UIImageFramed;
 
         private static UIImage GetAchievementIconBorders(UIAchievementListItem achievementUIItem) => _achievementIconBorders.GetValue(achievementUIItem) as UIImage;
-
-
-        public static void Unload()
-        {
-            if (_achievements == null)
-            {
-                WebmilioCommonsMod.Instance.Logger.Error("Achievements getter was found to be null; canceling unload.");
-                return;
-            }
-
-            Dictionary<string, Achievement> vanillaAchievementsDictionary = (Dictionary<string, Achievement>)_achievements.GetValue(Main.Achievements);
-
-            foreach (KeyValuePair<Achievement, ModAchievement> kvp in _loadedAchievements)
-                vanillaAchievementsDictionary.Remove(kvp.Key.Name);
-
-            On.Terraria.Achievements.AchievementManager.RegisterIconIndex -= AchievementManagerOnRegisterIconIndex;
-            On.Terraria.Achievements.AchievementManager.GetIconIndex -= AchievementManagerOnGetIconIndex;
-
-            On.Terraria.GameContent.UI.Elements.UIAchievementListItem.ctor -= UIAchievementListItemOnCtor;
-        }
     }
 }
