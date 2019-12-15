@@ -1,6 +1,6 @@
 ﻿namespace WebmilioCommons.Items
 {
-    public sealed partial class WCGlobalItem
+    public sealed partial class WCGlobalItemInstanced
     {
         
     }

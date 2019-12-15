@@ -43,8 +43,14 @@ namespace WebmilioCommons.Players
             this.SendIfLocal<WCPlayerOnJoinWorld>();
         }
 
+        public override void PreUpdate()
+        {
+            if (!PreUpdateTime())
+                return;
 
-        public override void PreUpdate() => ForAllAnimations(animation => animation.HandlePreUpdate());
+            ForAllAnimations(animation => animation.HandlePreUpdate());
+        }
+
         public override void PreUpdateBuffs() => ForAllAnimations(animation => animation.HandlePreUpdateBuffs());
         public override void PreUpdateMovement() => ForAllAnimations(animation => animation.HandlePreUpdateMovements());
 

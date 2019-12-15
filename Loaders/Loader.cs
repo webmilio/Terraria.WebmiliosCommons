@@ -8,10 +8,10 @@ namespace WebmilioCommons.Loaders
 {
     public abstract class Loader<T> where T : class
     {
-        private ushort _latestTypeId = 1;
+        private int _latestTypeId = 1;
 
-        protected Dictionary<Type, ushort> idByType;
-        protected Dictionary<ushort, Type> typeById;
+        protected Dictionary<Type, int> idByType;
+        protected Dictionary<int, Type> typeById;
         protected Dictionary<Type, Mod> modByType;
 
         /// <summary>Instantiates a new <see cref="Loader{T}"/> and loads all found subtypes of <see cref="T"/> that are not abstract.</summary>
@@ -38,8 +38,8 @@ namespace WebmilioCommons.Loaders
 
             PreLoad();
 
-            idByType = new Dictionary<Type, ushort>();
-            typeById = new Dictionary<ushort, Type>();
+            idByType = new Dictionary<Type, int>();
+            typeById = new Dictionary<int, Type>();
             modByType = new Dictionary<Type, Mod>();
 
             foreach (Mod mod in ModLoader.Mods)
@@ -86,7 +86,7 @@ namespace WebmilioCommons.Loaders
 
         protected T Add(Mod mod, T item)
         {
-            ushort itemId = _latestTypeId++;
+            int itemId = _latestTypeId++;
             Type type = item.GetType();
 
             idByType.Add(type, itemId);
@@ -108,7 +108,7 @@ namespace WebmilioCommons.Loaders
         protected virtual void PostAdd(Mod mod, T item, Type type) { }
 
 
-        public T New(ushort id) => New(typeById[id]);
+        public T New(int id) => New(typeById[id]);
 
         public T New(Type type)
         {
@@ -130,9 +130,9 @@ namespace WebmilioCommons.Loaders
         public Mod GetMod<TType>() => GetMod(typeof(TType));
 
 
-        public ushort GetId(T item) => GetId(item.GetType());
-        public ushort GetId(Type type) => idByType[type];
-        public ushort GetId<TType>() where TType : T => GetId(typeof(TType));
+        public int GetId(T item) => GetId(item.GetType());
+        public int GetId(Type type) => idByType[type];
+        public int GetId<TType>() where TType : T => GetId(typeof(TType));
 
 
         public Func<TypeInfo, bool> LoadCondition { get; }

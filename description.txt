@@ -13,7 +13,8 @@ Other Utilities:
 - Class which allows you to quickly create a tile-placing item once extended.
 
 Credits (Team Members)
-- Webmilio: Networking, Managers, Loaders, Identity, Extensions, Manager
-- Scalie: QuickTileItem, the original AchievementLib mod
+- Scalie: ideas for
+	* Custom Achievements
+	* StandardTileItem
 
 If you want an example mod that uses this better networking, check out the JoJo mod by HellGoesOn on https://github.com/ruskies/TerrarianBizzareAdventure or https://github.com/ruskies/TLoZ and search for ModPlayerNetworkPacket.

@@ -11,7 +11,7 @@ namespace WebmilioCommons.Extensions
         /// <param name="mod"></param>
         /// <param name="id">The auto-generated ID of the packet.</param>
         /// <returns>A new <see cref="NetworkPacket"/>.</returns>
-        public static NetworkPacket GetPacket(this Mod mod, ushort id) => NetworkPacketLoader.Instance.New(id);
+        public static NetworkPacket GetPacket(this Mod mod, int id) => NetworkPacketLoader.Instance.New(id);
 
         /// <summary>Returns a new instance of the packet corresponding to the specified type.</summary>
         /// <param name="mod"></param>
@@ -24,7 +24,7 @@ namespace WebmilioCommons.Extensions
         /// <param name="mod"></param>
         /// <param name="packet">The packet.</param>
         /// <returns>The auto-generated ID of the packet.</returns>
-        public static ushort PacketId(this Mod mod, NetworkPacket packet) => NetworkPacketLoader.Instance.GetId(packet);
-        public static ushort PacketId<T>(this Mod mod) where T : NetworkPacket => NetworkPacketLoader.Instance.GetId<T>();
+        public static int PacketId(this Mod mod, NetworkPacket packet) => NetworkPacketLoader.Instance.GetId(packet);
+        public static int PacketId<T>(this Mod mod) where T : NetworkPacket => NetworkPacketLoader.Instance.GetId<T>();
     }
 }

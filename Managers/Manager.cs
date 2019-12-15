@@ -57,6 +57,12 @@ namespace WebmilioCommons.Managers
         /// <returns>The new instance of an instance of the same <see cref="IHasUnlocalizedName.UnlocalizedName"/> has not been found; the existing instance otherwise.</returns>
         public virtual TSub Add<TSub>() where TSub : T, new() => Add<TSub>(new TSub());
 
+        public virtual void AddRange(params T[] items)
+        {
+            for (int i = 0; i < items.Length; i++)
+                Add(items[i]);
+        }
+
         public virtual bool Remove(T item)
         {
             if (!byIndex.Contains(item)) 
@@ -83,8 +89,25 @@ namespace WebmilioCommons.Managers
         public virtual bool Contains(string unlocalizedName) => byNames.ContainsKey(unlocalizedName);
 
 
-        public int GetIndex(T item) => byIndex.IndexOf(item);
-        public int GetIndex(string unlocalizedName) => GetIndex(byNames[unlocalizedName]);
+        [Obsolete("Use IndexOf instead.")]
+        public int GetIndex(T item) => IndexOf(item);
+        [Obsolete("Use IndexOf instead.")]
+        public int GetIndex(string unlocalizedName) => IndexOf(unlocalizedName);
+
+
+        public int IndexOf(T item) => byIndex.IndexOf(item);
+        public int IndexOf(string unlocalizedName) => IndexOf(byNames[unlocalizedName]);
+
+
+        public T Get<TSub>() where TSub : T
+        {
+            for (int i = 0; i < Count; i++)
+                if (byIndex[i] is TSub)
+                    return byIndex[i];
+
+            return default;
+        }
+
 
         /// <summary>Simple search that returns elements of the manager corresponding to the specified <see cref="Predicate{T}"/>.</summary>
         /// <param name="predicate"></param>

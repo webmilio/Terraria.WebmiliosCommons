@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Packets;
+using WebmilioCommons.Tinq;
 
 namespace WebmilioCommons.Extensions
 {
@@ -17,9 +19,9 @@ namespace WebmilioCommons.Extensions
             Player nearestPlayer = null;
             float nearestDistance = float.MaxValue;
 
-            foreach (Player player in Main.player)
+            foreach (Player player in Main.player.Active())
             {
-                if (!player.active || player.itemAnimation == 0 || player.HeldItem == null || player.hitTile != null || !IsHoldingMiningItem(player)) continue;
+                if (player.itemAnimation == 0 || player.HeldItem == null || player.hitTile != null || !IsHoldingMiningItem(player)) continue;
 
                 float distance = Vector2.Distance(position, player.position / 16);
 

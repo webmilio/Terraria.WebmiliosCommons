@@ -324,7 +324,7 @@ namespace WebmilioCommons.Networking.Packets
 
         /// <summary>The ushort type of the packet, automatically assigned after the constructor has been called.</summary>
         [NotNetworkField]
-        public ushort Id => NetworkPacketLoader.Instance.GetId(GetType());
+        public int Id => NetworkPacketLoader.Instance.GetId(GetType());
 
         [NotNetworkField]
         public virtual NetworkPacketBehavior Behavior => NetworkPacketBehavior.SendToAll;

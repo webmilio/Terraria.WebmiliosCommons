@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Terraria;
 
 namespace WebmilioCommons.Tinq
@@ -32,6 +33,29 @@ namespace WebmilioCommons.Tinq
 
         public static bool AnyActive<T>(this IEnumerable<T> entities) where T : Entity => entities.GetEnumerator().Current != null;
         public static bool AnyActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity => FirstActiveOrDefault(entities, predicate) != default;
+
+
+        public static int CountActive<T>(this IEnumerable<T> entities) where T : Entity
+        {
+            int count = 0;
+
+            DoActive(entities, t => count++);
+
+            return count;
+        }
+
+        public static int CountActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
+        {
+            int count = 0;
+
+            DoActive(entities, t =>
+            {
+                if (predicate(t))
+                    count++;
+            });
+
+            return count;
+        }
 
 
         public static void Do<T>(this IEnumerable<T> source, Action<T> action)
@@ -72,6 +96,7 @@ namespace WebmilioCommons.Tinq
             throw new InvalidOperationException($"No element satisfies the condition in {nameof(predicate)}.");
         }
 
+
         public static T FirstActiveOrDefault<T>(this IEnumerable<T> entities) where T : Entity => FirstActiveOrDefault(entities, t => true);
         public static T FirstActiveOrDefault<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
@@ -81,6 +106,26 @@ namespace WebmilioCommons.Tinq
                         return entity;
 
             return default;
+        }
+
+
+        public static T NearestActive<T>(this IEnumerable<T> entities, Vector2 position, int divider = 16) where T : Entity
+        {
+            T nearestPlayer = default;
+            float nearestDistance = float.MaxValue;
+
+            entities.DoActive(player =>
+            {
+                float distance = Vector2.Distance(position, player.position / divider);
+
+                if (distance < nearestDistance)
+                {
+                    nearestPlayer = player;
+                    nearestDistance = distance;
+                }
+            });
+
+            return nearestPlayer;
         }
 
 
