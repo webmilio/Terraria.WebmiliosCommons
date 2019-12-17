@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
 using Terraria.ModLoader;
+using WebmilioCommons.Achievements.Helper;
 using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Achievements

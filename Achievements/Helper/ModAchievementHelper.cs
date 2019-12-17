@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json.Bson;
 using Terraria;
 using Terraria.Achievements;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.UI;
+using WebmilioCommons.Achievements.Helper.Proxies;
 
-namespace WebmilioCommons.Achievements
+namespace WebmilioCommons.Achievements.Helper
 {
+    // TODO Change to use normal achievement file (append unloaded achievements at the end)
     internal class ModAchievementHelper
     {
         public const string
@@ -25,7 +22,6 @@ namespace WebmilioCommons.Achievements
         public const BindingFlags PRIVATE_FIELD_BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
 
         private static FieldInfo
-            _achievements,
             _achievementIcon, _achievementIconBorders, _large,
             _locked, _iconFrame, _iconFrameLocked, _iconFrameUnlocked;
 
@@ -34,7 +30,6 @@ namespace WebmilioCommons.Achievements
         private static string _letThrough;
 
         private static Dictionary<Achievement, ModAchievement> _loadedAchievements;
-        private static Dictionary<string, Achievement> _vanillaAchievements;
 
 
         #region Loading/Unloading
@@ -43,9 +38,9 @@ namespace WebmilioCommons.Achievements
         {
             try
             {
-                _loadedAchievements = new Dictionary<Achievement, ModAchievement>();
+                AchievementManager = new AchievementManagerProxy();
 
-                _achievements = typeof(AchievementManager).GetField(nameof(_achievements), PRIVATE_FIELD_BINDING_FLAGS);
+                _loadedAchievements = new Dictionary<Achievement, ModAchievement>();
 
                 _localizedTextSetValue = typeof(LocalizedText).GetMethod("SetValue", PRIVATE_FIELD_BINDING_FLAGS);
 
@@ -65,24 +60,12 @@ namespace WebmilioCommons.Achievements
 
                 #endregion
 
-                #region AchievementManager
-
-                On.Terraria.Achievements.AchievementManager.Register += AchievementManagerOnRegister;
-                On.Terraria.Achievements.AchievementManager.RegisterIconIndex += AchievementManagerOnRegisterIconIndex;
-                On.Terraria.Achievements.AchievementManager.GetIconIndex += AchievementManagerOnGetIconIndex;
-
-                On.Terraria.Achievements.AchievementManager.Load += AchievementManagerOnLoad;
-                On.Terraria.Achievements.AchievementManager.Save += AchievementManagerOnSave;
-
-                #endregion
-
                 On.Terraria.GameContent.UI.Elements.UIAchievementListItem.ctor += UIAchievementListItemOnCtor;
-
-                _vanillaAchievements = (Dictionary<string, Achievement>) _achievements.GetValue(Main.Achievements);
 
 
                 // Loading
                 ModAchievementLoader.Instance.TryLoad(); // Redundant, since singletons always load on call.
+                AchievementManager.FakeLoad();
             }
             catch (Exception e)
             {
@@ -96,18 +79,15 @@ namespace WebmilioCommons.Achievements
 
         public static void Unload()
         {
-            if (_achievements == null)
+            if (AchievementManager == null)
             {
                 WebmilioCommonsMod.Instance.Logger.Error("Achievements getter was found to be null; canceling unload.");
                 return;
             }
 
-            On.Terraria.Achievements.AchievementManager.Register -= AchievementManagerOnRegister;
-            On.Terraria.Achievements.AchievementManager.RegisterIconIndex -= AchievementManagerOnRegisterIconIndex;
-            On.Terraria.Achievements.AchievementManager.GetIconIndex -= AchievementManagerOnGetIconIndex;
+            AchievementManager.Dispose();
 
             On.Terraria.GameContent.UI.Elements.UIAchievementListItem.ctor -= UIAchievementListItemOnCtor;
-
 
 
             ModAchievementLoader.Instance.Unload();
@@ -134,14 +114,14 @@ namespace WebmilioCommons.Achievements
 
             achievement.AddConditions(modAchievement.conditions.ToArray());
 
-            bool added = false;
+            bool added = true;
 
-            if (_vanillaAchievements.ContainsKey(achievement.Name))
+            if (AchievementManager.Achievements.ContainsKey(achievement.Name))
             {
                 WebmilioCommonsMod.Instance.Logger.Info($"Achievement `{achievement.Name}` already exists; replacing with new.");
-                _vanillaAchievements[achievement.Name] = achievement;
+                AchievementManager.Achievements[achievement.Name] = achievement;
 
-                added = true;
+                added = false;
             }
 
             _loadedAchievements.Add(achievement, modAchievement);
@@ -171,55 +151,6 @@ namespace WebmilioCommons.Achievements
 
 
         #region Hooking
-
-        #region Achievement Manager
-
-        private static void AchievementManagerOnRegister(On.Terraria.Achievements.AchievementManager.orig_Register orig, AchievementManager self, Achievement achievement)
-        {
-            try
-            {
-                orig(self, achievement);
-
-                if (WebmilioCommonsMod.Instance.ClientConfiguration.ResetAchievements)
-                {
-                    achievement.ClearProgress();
-                    achievement.ClearTracker();
-                }
-            }
-            catch
-            {
-                throw new Exception("An error occured while initializing achievements. This is sometimes due to updating Webmilio's Commons in certain scenarios. Restarting the game should fix the problem.");
-            }
-        }
-
-        // Redundant checks to make sure Terraria doesn't do the big dumb.
-        private static void AchievementManagerOnRegisterIconIndex(On.Terraria.Achievements.AchievementManager.orig_RegisterIconIndex orig, Terraria.Achievements.AchievementManager self, string achievementName, int iconIndex) =>
-            orig(self, achievementName, achievementName.StartsWith(ACHIEVEMENT_PREFIX) ? 0 : iconIndex);
-
-        private static int AchievementManagerOnGetIconIndex(On.Terraria.Achievements.AchievementManager.orig_GetIconIndex orig, Terraria.Achievements.AchievementManager self, string achievementName)
-        {
-            return achievementName.StartsWith(ACHIEVEMENT_PREFIX) ? 0 : orig(self, achievementName);
-        }
-
-        private static void AchievementManagerOnLoad(On.Terraria.Achievements.AchievementManager.orig_Load orig, AchievementManager self)
-        {
-            orig(self);
-
-
-        }
-
-        private static void AchievementManagerOnSave(On.Terraria.Achievements.AchievementManager.orig_Save orig, AchievementManager self)
-        {
-            orig(self);
-
-            foreach (Achievement achievement in self.CreateAchievementsList())
-            {
-
-            }
-        }
-
-        #endregion
-
 
 
         private static void UIAchievementListItemOnCtor(On.Terraria.GameContent.UI.Elements.UIAchievementListItem.orig_ctor orig, Terraria.GameContent.UI.Elements.UIAchievementListItem self, Achievement achievement, bool largeForOtherLanguages)
@@ -258,13 +189,14 @@ namespace WebmilioCommons.Achievements
             }
         }
 
-        
-
         #endregion
 
 
         private static UIImageFramed GetAchievementIcon(UIAchievementListItem achievementUIItem) => _achievementIcon.GetValue(achievementUIItem) as UIImageFramed;
 
         private static UIImage GetAchievementIconBorders(UIAchievementListItem achievementUIItem) => _achievementIconBorders.GetValue(achievementUIItem) as UIImage;
+
+
+        public static AchievementManagerProxy AchievementManager { get; private set; }
     }
 }

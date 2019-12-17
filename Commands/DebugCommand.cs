@@ -12,7 +12,7 @@ namespace WebmilioCommons.Commands
         }
 
 
-        public override bool Autoload(ref string name) => true;
+        public override bool Autoload(ref string name) => false;
 
 
         public override void Action(CommandCaller caller, string input, string[] args)

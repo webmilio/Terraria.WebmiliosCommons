@@ -1,11 +1,12 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WebmilioCommons.Effects.ScreenShaking;
 using WebmilioCommons.Time;
 
 namespace WebmilioCommons.Worlds
 {
-    public sealed class TimeManagementWorld : ModWorld
+    public sealed class WCWorld : ModWorld
     {
         public override void PostDrawTiles()
         {

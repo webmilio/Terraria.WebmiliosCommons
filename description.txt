@@ -8,6 +8,7 @@ Things this adds:
 - A bunch of extensions
 - Keyboard Manager: get the state of any keys (NotPressed, JustPressed, Pressed, JustReleased), regardless of Mod Hotkey.
 - Custom Achievements: you can add custom achievements in a less complex way than without the library.
+- Effects: screenshake (multiplayer compatible)
 
 Other Utilities:
 - Class which allows you to quickly create a tile-placing item once extended.

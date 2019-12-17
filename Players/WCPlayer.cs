@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using WebmilioCommons.Effects.ScreenShaking;
 using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Players
@@ -36,6 +37,17 @@ namespace WebmilioCommons.Players
         public override void Initialize()
         {
             InitializeAnimations();
+        }
+
+        public override void ModifyScreenPosition()
+        {
+            foreach (ScreenShake screenShake in ScreenShake.Current)
+            {
+                Main.screenPosition.X += Main.rand.Next(-screenShake.Intensity, screenShake.Intensity);
+                Main.screenPosition.Y += Main.rand.Next(-screenShake.Intensity, screenShake.Intensity);
+            }
+
+            ScreenShake.TickScreenShakes();
         }
 
         public override void OnEnterWorld(Player player)
