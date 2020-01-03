@@ -5,9 +5,11 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebmilioCommons.Effects.ScreenShaking;
 using WebmilioCommons.Extensions;
+using WebmilioCommons.Networking.Attributes;
 
 namespace WebmilioCommons.Players
 {
+    [AutoNetworkMapping]
     public sealed partial class WCPlayer : ModPlayer
     {
         public static WCPlayer Get() => Get(Main.LocalPlayer);
@@ -29,10 +31,18 @@ namespace WebmilioCommons.Players
 
         public override void Load(TagCompound tag)
         {
-            UniqueID = tag.ContainsKey(nameof(UniqueID)) ? Guid.Parse(tag.GetString(nameof(UniqueID))) : Guid.NewGuid();
+            if (tag.ContainsKey(nameof(UniqueID)))
+            {
+                string uniqueId = tag.GetString(nameof(UniqueID));
+
+                UniqueID = !string.IsNullOrWhiteSpace(uniqueId) && uniqueId != Guid.Empty.ToString() ? Guid.Parse(uniqueId) : Guid.NewGuid();
+            }
+            else
+                UniqueID = Guid.NewGuid();
         }
 
         #endregion
+
 
         public override void Initialize()
         {
@@ -89,7 +99,7 @@ namespace WebmilioCommons.Players
         #endregion
 
 
-
+        
         public Guid UniqueID { get; internal set; }
     }
 }

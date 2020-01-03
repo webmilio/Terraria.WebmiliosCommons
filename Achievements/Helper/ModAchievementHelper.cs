@@ -88,9 +88,6 @@ namespace WebmilioCommons.Achievements.Helper
             AchievementManager.Dispose();
 
             On.Terraria.GameContent.UI.Elements.UIAchievementListItem.ctor -= UIAchievementListItemOnCtor;
-
-
-            ModAchievementLoader.Instance.Unload();
         }
 
         #endregion
@@ -163,9 +160,9 @@ namespace WebmilioCommons.Achievements.Helper
 
             if (_loadedAchievements.ContainsKey(achievement))
             {
-                Rectangle originalFrameLocked = (Rectangle)_iconFrameLocked.GetValue(self);
+                Rectangle originalFrame = (Rectangle)_iconFrame.GetValue(self);
 
-                _iconFrameLocked.SetValue(self, new Rectangle(originalFrameLocked.X + 2, originalFrameLocked.Y, originalFrameLocked.Width, originalFrameLocked.Height));
+                _iconFrameLocked.SetValue(self, new Rectangle(originalFrame.X + originalFrame.Width + 2, originalFrame.Y, originalFrame.Width, originalFrame.Height));
 
                 GetAchievementIcon(self).Remove();
 

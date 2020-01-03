@@ -11,10 +11,31 @@ namespace WebmilioCommons.Networking.Packets
 {
     public abstract class NetworkPacket
     {
+        [NotNetworkField]
         internal static Dictionary<Type, List<PropertyInfo>> GlobalReflectedPropertyInfos { get; set; }
 
+        [NotNetworkField]
         internal static Dictionary<Type, Dictionary<PropertyInfo, Action<ModPacket, object>>> GlobalPacketWriters { get; set; }
+        [NotNetworkField]
         internal static Dictionary<Type, Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>> GlobalPacketReaders { get; set; }
+
+
+        internal static void Initialize()
+        {
+            GlobalReflectedPropertyInfos = new Dictionary<Type, List<PropertyInfo>>();
+
+            GlobalPacketWriters = new Dictionary<Type, Dictionary<PropertyInfo, Action<ModPacket, object>>>();
+            GlobalPacketReaders = new Dictionary<Type, Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>>();
+        }
+
+        internal static void Unload()
+        {
+
+            GlobalReflectedPropertyInfos = null;
+
+            GlobalPacketWriters = null;
+            GlobalPacketReaders = null;
+        }
 
 
         protected NetworkPacket() : this(true) { }

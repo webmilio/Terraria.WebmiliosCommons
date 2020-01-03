@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Terraria.ModLoader;
+using WebmilioCommons.Extensions;
+using WebmilioCommons.Managers;
 
 namespace WebmilioCommons.Loaders
 {
-    public abstract class Loader<T> where T : class
+    public abstract class Loader<T>
     {
-        private int _latestTypeId = 1;
+        public const int FIRST_INDEX = 1;
 
         protected Dictionary<Type, int> idByType;
         protected Dictionary<int, Type> typeById;
         protected Dictionary<Type, Mod> modByType;
+        protected Dictionary<Type, T> genericByType;
+        protected Dictionary<string, Type> typeByUnlocalizedName;
+
 
         /// <summary>Instantiates a new <see cref="Loader{T}"/> and loads all found subtypes of <see cref="T"/> that are not abstract.</summary>
         protected Loader() : this(typeInfo => true) { }
@@ -25,6 +30,7 @@ namespace WebmilioCommons.Loaders
         protected Loader(Func<TypeInfo, bool> loadCondition)
         {
             LoadCondition = loadCondition;
+            TypeHasUnlocalizedName = typeof(IHasUnlocalizedName).IsAssignableFrom(typeof(T));
         }
 
 
@@ -41,24 +47,33 @@ namespace WebmilioCommons.Loaders
             idByType = new Dictionary<Type, int>();
             typeById = new Dictionary<int, Type>();
             modByType = new Dictionary<Type, Mod>();
+            genericByType = new Dictionary<Type, T>();
+
+            if (TypeHasUnlocalizedName)
+                typeByUnlocalizedName = new Dictionary<string, Type>();
 
             foreach (Mod mod in ModLoader.Mods)
             {
                 if (mod.Code == null)
                     continue;
 
-                foreach (TypeInfo type in mod.Code.DefinedTypes.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T))).Where(LoadCondition))
+                foreach (TypeInfo type in mod.Code.Concrete<T>().Where(LoadCondition))
                 {
-                    T item = Activator.CreateInstance(type) as T;
+                    T item = (T) Activator.CreateInstance(type);
                     Add(mod, item);
                 }
             }
 
-            WebmilioCommonsMod.Instance.Logger.Info($"Loaded {Count} different {typeof(T).Name}");
+            if (WebmilioCommonsMod.Instance.Logger != default)
+                WebmilioCommonsMod.Instance.Logger.Info($"Loaded {Count} different {typeof(T).Name}");
+            
             Loaded = true;
 
+            InternalPostUnload();
             PostLoad();
         }
+
+        internal virtual void InternalPostUnload() { }
 
         /// <summary>Called directly after the initialization checks during <see cref="TryLoad"/>.</summary>
         public virtual void PreLoad() { }
@@ -71,11 +86,15 @@ namespace WebmilioCommons.Loaders
         {
             PreUnload();
 
-            _latestTypeId = 1;
+            NextIndex = FIRST_INDEX;
 
             idByType.Clear();
             typeById.Clear();
             modByType.Clear();
+            genericByType.Clear();
+
+            if (TypeHasUnlocalizedName)
+                typeByUnlocalizedName.Clear();
 
             PostUnload();
         }
@@ -86,12 +105,21 @@ namespace WebmilioCommons.Loaders
 
         protected T Add(Mod mod, T item)
         {
-            int itemId = _latestTypeId++;
+            int itemId = NextIndex;
+            NextIndex++;
+
             Type type = item.GetType();
 
             idByType.Add(type, itemId);
             typeById.Add(itemId, type);
             modByType.Add(type, mod);
+            genericByType.Add(type, item);
+
+            if (TypeHasUnlocalizedName)
+                typeByUnlocalizedName.Add((item as IHasUnlocalizedName).UnlocalizedName, type);
+
+            if (item is IAssociatedToMod asc)
+                asc.Mod = mod;
 
             PostAdd(mod, item);
             PostAdd(mod, item, type);
@@ -109,10 +137,11 @@ namespace WebmilioCommons.Loaders
 
 
         public T New(int id) => New(typeById[id]);
+        public TType New<TType>() where TType : class, T => New(typeof(TType)) as TType;
 
         public T New(Type type)
         {
-            T item = Activator.CreateInstance(type) as T;
+            T item = (T) Activator.CreateInstance(type);
 
             if (item is IAssociatedToMod atm)
                 atm.Mod = GetMod(type);
@@ -120,26 +149,87 @@ namespace WebmilioCommons.Loaders
             return item;
         }
 
+        public T New(string unlocalizedName)
+        {
+            if (!TypeHasUnlocalizedName)
+                return default;
 
-        public T New<TType>() where TType : class, T => New(typeof(TType)) as TType;
+            return New(typeByUnlocalizedName[unlocalizedName]);
+        }
+        
+
+        public T GetGeneric(int id) => genericByType[typeById[id]];
+        public TSub GetGeneric<TSub>() where TSub : T => (TSub)genericByType[typeof(TSub)];
+        public T GetGeneric(Type type) => genericByType[type];
+
+        public T GetGeneric(string unlocalizedName)
+        {
+            if (!TypeHasUnlocalizedName)
+                return default;
+
+            return GetGeneric(typeByUnlocalizedName[unlocalizedName]);
+        }
 
 
-        public Mod GetMod(ushort id) => modByType[typeById[id]];
+        public Mod GetMod(int id) => modByType[typeById[id]];
         public Mod GetMod(T item) => GetMod(item.GetType());
         public Mod GetMod(Type type) => modByType[type];
         public Mod GetMod<TType>() => GetMod(typeof(TType));
+
+        public Mod GetMod(string unlocalizedName)
+        {
+            if (!TypeHasUnlocalizedName)
+                return default;
+
+            return GetMod(typeByUnlocalizedName[unlocalizedName]);
+        }
 
 
         public int GetId(T item) => GetId(item.GetType());
         public int GetId(Type type) => idByType[type];
         public int GetId<TType>() where TType : T => GetId(typeof(TType));
 
+        public int GetId(string unlocalizedName)
+        {
+            if (!TypeHasUnlocalizedName)
+                return default;
+
+            return GetId(typeByUnlocalizedName[unlocalizedName]);
+        }
+
+
+        public T FindGeneric(Predicate<T> condition)
+        {
+            foreach (KeyValuePair<Type, T> kvp in genericByType)
+                if (condition(kvp.Value))
+                    return kvp.Value;
+
+            return default;
+        }
+
+        public IEnumerable<T> GenericEnumerable => genericByType.Values.AsEnumerable();
+
+        public IEnumerable<string> UnlocalizedNames => TypeHasUnlocalizedName ? typeByUnlocalizedName.Keys : default;
+
+
+        public void ForAllGeneric(Action<T> action) => ForAllGeneric((type, t) => action(t));
+
+        public void ForAllGeneric(Action<Type, T> action)
+        {
+            foreach (KeyValuePair<Type, T> kvp in genericByType)
+                action(kvp.Key, kvp.Value);
+        }
+
 
         public Func<TypeInfo, bool> LoadCondition { get; }
         public bool Loaded { get; private set; }
-
+        public bool TypeHasUnlocalizedName { get; }
 
         /// <summary>How many subtypes of <see cref="T"/> have been loaded.</summary>
         public int Count => idByType.Count;
+
+        public int FirstIndex => FIRST_INDEX;
+
+        public int NextIndex { get; private set; } = FIRST_INDEX;
     }
 }

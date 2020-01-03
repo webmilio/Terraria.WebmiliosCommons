@@ -16,7 +16,7 @@ namespace WebmilioCommons.Worlds
 
         public override void PreUpdate()
         {
-            if (Main.netMode == NetmodeID.SinglePlayer || Main.dedServ)
+            if (Main.netMode == NetmodeID.SinglePlayer || Main.netMode == NetmodeID.Server)
                 Update();
         }
 

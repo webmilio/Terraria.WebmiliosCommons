@@ -14,35 +14,29 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
-        protected override bool PreReceive(BinaryReader reader, int fromWho)
-        {
-            int whichPlayer = reader.ReadInt32();
-            Player = Main.player[whichPlayer];
-
-            return true;
-        }
+        protected override bool PreReceive(BinaryReader reader, int fromWho) => (Player = Main.player[SupposedPlayerID = reader.ReadInt32()]) != default;
 
 
         protected override void PreAssignValues(ref int? fromWho, ref int? toWho)
         {
             if (!fromWho.HasValue)
-            {
-                Player = Main.LocalPlayer;
-                fromWho = Player.whoAmI;
-            }
+                Player = Main.player[(fromWho = SupposedPlayerID = Main.myPlayer).Value];
         }
 
         protected override void PrePopulatePacket(ModPacket modPacket, ref int fromWho, ref int toWho)
         {
             if (Player == null)
-                Player = Main.player[fromWho];
+                Player = Main.player[SupposedPlayerID = fromWho];
 
-            modPacket.Write(Player.whoAmI);
+            modPacket.Write(SupposedPlayerID);
         }
 
 
         [NotNetworkField]
-        public virtual Player Player
+        public int SupposedPlayerID { get; private set; }
+
+        [NotNetworkField]
+        public Player Player
         {
             get => ContextEntity as Player;
             set => ContextEntity = value;

@@ -1,18 +1,34 @@
-﻿using Terraria;
+﻿using System.Collections.Generic;
+using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace WebmilioCommons.Buffs
 {
     public abstract class StandardBuff : ModBuff
     {
-        protected StandardBuff(string displayName, string tooltip, bool hideTime = false, bool save = false, bool persistent = false, bool canBeCleared = true)
+        protected StandardBuff(string displayName, string description, bool hideTime = false, bool save = false, bool persistent = false, bool canBeCleared = true) :
+            this(
+                new Dictionary<GameCulture, string>()
+                {
+                    {GameCulture.English, displayName}
+                },
+                new Dictionary<GameCulture, string>()
+                {
+                    {GameCulture.English, description}
+                },
+                hideTime, save, persistent, canBeCleared)
         {
-            this.displayName = displayName;
-            this.tooltip = tooltip;
+        }
 
-            this.hideTime = hideTime;
-            this.save = save;
-            this.persistent = persistent;
+        protected StandardBuff(Dictionary<GameCulture, string> displayNames, Dictionary<GameCulture, string> descriptions, bool hideTime = false, bool save = false, bool persistent = false, bool canBeCleared = true)
+        {
+            DisplayNames = displayNames;
+            Descriptions = descriptions;
+
+            HideTime = hideTime;
+            Save = save;
+            Persistent = persistent;
 
             CanBeCleared = canBeCleared;
         }
@@ -22,25 +38,29 @@ namespace WebmilioCommons.Buffs
         {
             base.SetDefaults();
 
-            DisplayName.SetDefault(displayName);
-            Description.SetDefault(tooltip);
+            DisplayName.SetDefault(DisplayNames[GameCulture.English]);
+            Description.SetDefault(Descriptions[GameCulture.English]);
 
-            Main.buffNoTimeDisplay[Type] = hideTime;
-            Main.buffNoSave[Type] = !save;
-            Main.persistentBuff[Type] = persistent;
+            foreach (KeyValuePair<GameCulture, string> displayName in DisplayNames)
+                DisplayName.AddTranslation(displayName.Key, displayName.Value);
+
+            foreach (KeyValuePair<GameCulture, string> tooltip in Descriptions)
+                Description.AddTranslation(tooltip.Key, tooltip.Value);
+
+            Main.buffNoTimeDisplay[Type] = HideTime;
+            Main.buffNoSave[Type] = !Save;
+            Main.persistentBuff[Type] = Persistent;
 
             canBeCleared = CanBeCleared;
         }
 
 
-        // ReSharper disable InconsistentNaming
-        public string displayName { get; }
-        public string tooltip { get; }
+        protected Dictionary<GameCulture, string> DisplayNames { get; }
+        protected Dictionary<GameCulture, string> Descriptions { get; }
 
-        public bool hideTime { get; }
-        public bool save { get; }
-        public bool persistent { get; }
+        public bool HideTime { get; }
+        public bool Save { get; }
+        public bool Persistent { get; }
         public bool CanBeCleared { get; }
-        // ReSharper restore InconsistentNaming
     }
 }

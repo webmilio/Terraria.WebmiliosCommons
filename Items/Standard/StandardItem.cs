@@ -63,11 +63,13 @@ namespace WebmilioCommons.Items.Standard
             item.value = Value;
             item.defense = Defense;
             item.rare = Rarity;
+
+            item.maxStack = MaxStack;
         }
 
 
-        public Dictionary<GameCulture, string> DisplayNames { get; }
-        private Dictionary<GameCulture, string> Tooltips { get; }
+        protected Dictionary<GameCulture, string> DisplayNames { get; }
+        protected Dictionary<GameCulture, string> Tooltips { get; }
 
         public int Value { get; }
         public int Defense { get; }

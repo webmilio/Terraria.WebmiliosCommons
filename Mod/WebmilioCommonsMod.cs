@@ -1,19 +1,27 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using WebmilioCommons.Achievements;
 using WebmilioCommons.Achievements.Helper;
+using WebmilioCommons.Commons;
 using WebmilioCommons.Configurations;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
+using WebmilioCommons.Loaders;
 using WebmilioCommons.Networking;
+using WebmilioCommons.Rarities;
 using WebmilioCommons.Time;
 
 namespace WebmilioCommons
 {
     public sealed partial class WebmilioCommonsMod : Mod
     {
+        internal List<IUnloadOnModUnload> unloadOnModUnload = new List<IUnloadOnModUnload>();
+
+
         public WebmilioCommonsMod()
         {
             Instance = this;
@@ -23,15 +31,17 @@ namespace WebmilioCommons
         public override void Load()
         {
             KeyboardManager.Load();
+            TimeManagement.Load();
+            //ModRarityLoader.Instance.TryLoad();
+
 
             if (!Main.dedServ)
             {
                 IdentityManager.Load();
             }
 
-            On.Terraria.WorldGen.SaveAndQuit += WorldGenOnSaveAndQuit;
 
-            TimeManagement.Load();
+            On.Terraria.WorldGen.SaveAndQuit += WorldGenOnSaveAndQuit;
 
             #region Client Configuration
 
@@ -45,7 +55,7 @@ namespace WebmilioCommons
             // In theory, you don't need to call the 'TryLoad()' method on any singletons since the instance is loaded the second its created.
             // I only put it there to make it obvious.
 
-            if (!Main.dedServ)
+            if (Main.netMode != NetmodeID.Server)
             {
                 IdentityManager.PostSetupContent();
 
@@ -63,14 +73,18 @@ namespace WebmilioCommons
 
             TimeManagement.Unload();
 
-            if (!Main.dedServ)
+
+            if (Main.netMode != NetmodeID.Server)
             {
                 IdentityManager.Unload();
 
                 ModAchievementHelper.Unload();
             }
 
-            NetworkPacketLoader.Instance.Unload();
+
+            List<IUnloadOnModUnload> originalUnloadList = new List<IUnloadOnModUnload>(unloadOnModUnload);
+            originalUnloadList.ForEach(toUnload => toUnload.Unload());
+
 
             #region Configuration
 

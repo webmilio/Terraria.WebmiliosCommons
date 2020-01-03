@@ -9,13 +9,23 @@ namespace WebmilioCommons.Tinq
     {
         #region TINQ
 
+        public static bool Active(this Entity entity) => entity != null && entity.active;
+
         public static List<T> Active<T>(this IEnumerable<T> entities) where T : Entity
         {
             List<T> activeEntities = new List<T>();
 
-            foreach (T entity in entities)
-                if (entity != null && entity.active)
+            void Filter(T entity)
+            {
+                if (Active(entity))
                     activeEntities.Add(entity);
+            }
+
+            if (entities is List<T> l)
+                l.ForEach(Filter);
+            else
+                foreach (T entity in entities)
+                    Filter(entity);
 
             return activeEntities;
         }
@@ -24,9 +34,8 @@ namespace WebmilioCommons.Tinq
         public static bool AllActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
             foreach (T entity in entities)
-                if (entity != null && entity.active)
-                    if (!predicate(entity))
-                        return false;
+                if (Active(entity) && !predicate(entity))
+                    return false;
 
             return true;
         }
@@ -60,8 +69,11 @@ namespace WebmilioCommons.Tinq
 
         public static void Do<T>(this IEnumerable<T> source, Action<T> action)
         {
-            foreach (T t in source)
-                action(t);
+            if (source is List<T> l)
+                l.ForEach(action);
+            else
+                foreach (T t in source)
+                    action(t);
         }
 
         public static void DoActive<T>(this IEnumerable<T> entities, Action<T> action) where T : Entity => entities.Active().Do(action);
@@ -89,9 +101,8 @@ namespace WebmilioCommons.Tinq
         public static T FirstActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
             foreach (T entity in entities)
-                if (entity != null && entity.active)
-                    if (predicate(entity))
-                        return entity;
+                if (Active(entity) && predicate(entity))
+                    return entity;
 
             throw new InvalidOperationException($"No element satisfies the condition in {nameof(predicate)}.");
         }
@@ -101,9 +112,8 @@ namespace WebmilioCommons.Tinq
         public static T FirstActiveOrDefault<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
             foreach (T entity in entities)
-                if (entity != null && entity.active)
-                    if (predicate(entity))
-                        return entity;
+                if (Active(entity) && predicate(entity))
+                    return entity;
 
             return default;
         }

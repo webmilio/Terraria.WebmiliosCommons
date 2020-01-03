@@ -46,17 +46,18 @@ namespace WebmilioCommons.Items.Standard
 
             item.maxStack = MaxStack;
 
-            item.type = PlacedPlacedTileType;
+            item.createTile = PlacedPlacedTileType;
 
             item.useStyle = ItemUseStyle;
             item.useTime = ItemUseTime;
             item.useAnimation = ItemUseAnimation;
 
+            item.autoReuse = AutoReuse;
+            item.consumable = Consumable;
+
             item.useTurn = true;
         }
 
-
-        public int MaxStack { get; }
 
         public int PlacedPlacedTileType { get; }
 

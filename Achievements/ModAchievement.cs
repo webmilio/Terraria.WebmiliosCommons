@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Terraria;
 using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
+using Terraria.ID;
 using Terraria.ModLoader;
 using WebmilioCommons.Achievements.Helper;
 using WebmilioCommons.Extensions;
@@ -87,15 +88,69 @@ namespace WebmilioCommons.Achievements
         }
 
 
-        public static void CompleteFlag<T>() where T : ModAchievement => ModAchievementHelper.GetModAchievement<T>().CompleteFlag();
-        public static void CompleteFlag<T>(Player player) where T : ModAchievement => ModAchievementHelper.GetModAchievement<T>().CompleteFlag(player);
-        public static void CompleteFlag<T>(string flag) where T : ModAchievement => ModAchievementHelper.GetModAchievement<T>().CompleteFlag(flag);
-        public static void CompleteFlag<T>(Player player, string flag) where T : ModAchievement => ModAchievementHelper.GetModAchievement<T>().CompleteFlag(player, flag);
+        public static void CompleteFlag<T>() where T : ModAchievement
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
 
-        public static void CompleteFlagFor(string name) => ModAchievementHelper.GetModAchievement(name).CompleteFlag();
-        public static void CompleteFlagFor(Player player, string name) => ModAchievementHelper.GetModAchievement(name).CompleteFlag(player);
-        public static void CompleteFlagFor(string name, string flag) => ModAchievementHelper.GetModAchievement(name).CompleteFlag(flag);
-        public static void CompleteFlagFor(string name, Player player, string flag) => ModAchievementHelper.GetModAchievement(name).CompleteFlag(player, flag);
+            ModAchievementHelper.GetModAchievement<T>().CompleteFlag();
+        }
+
+        public static void CompleteFlag<T>(Player player) where T : ModAchievement
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return; 
+            
+            ModAchievementHelper.GetModAchievement<T>().CompleteFlag(player);
+        }
+
+        public static void CompleteFlag<T>(string flag) where T : ModAchievement
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            ModAchievementHelper.GetModAchievement<T>().CompleteFlag(flag);
+        }
+
+        public static void CompleteFlag<T>(Player player, string flag) where T : ModAchievement
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            ModAchievementHelper.GetModAchievement<T>().CompleteFlag(player, flag);
+        }
+
+        public static void CompleteFlagFor(string name)
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            ModAchievementHelper.GetModAchievement(name).CompleteFlag();
+        }
+
+        public static void CompleteFlagFor(Player player, string name)
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            ModAchievementHelper.GetModAchievement(name).CompleteFlag(player);
+        }
+
+        public static void CompleteFlagFor(string name, string flag)
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            ModAchievementHelper.GetModAchievement(name).CompleteFlag(flag);
+        }
+
+        public static void CompleteFlagFor(string name, Player player, string flag)
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            ModAchievementHelper.GetModAchievement(name).CompleteFlag(player, flag);
+        }
 
 
         public string Name { get; }

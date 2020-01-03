@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -12,6 +13,19 @@ namespace WebmilioCommons.Extensions
     {
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
         public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.player);
+
+
+        public static void DoIfLocal(this Player player, Action<Player> action)
+        {
+            if (IsLocalPlayer(player))
+                action(player);
+        }
+
+        public static void DoIfLocal<T>(this T modPlayer, Action<T> action) where T : ModPlayer
+        {
+            if (IsLocalPlayer(modPlayer))
+                action(modPlayer);
+        }
 
 
         public static Player GetNearestMiningPlayer(this Vector2 position)
@@ -55,24 +69,14 @@ namespace WebmilioCommons.Extensions
 
         #region Packets
 
-        public static void SendIfLocal(this Player player, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null)
-        {
-            if (player.IsLocalPlayer())
-                networkPacket.Send(fromWho, toWho);
-        }
+        public static void SendIfLocal(this Player player, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null) => DoIfLocal(player, plr => networkPacket.Send(fromWho, toWho));
 
-        public static void SendIfLocal(this ModPlayer modPlayer, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null) =>
-            SendIfLocal(modPlayer.player, networkPacket, fromWho, toWho);
+        public static void SendIfLocal(this ModPlayer modPlayer, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null) => SendIfLocal(modPlayer.player, networkPacket, fromWho, toWho);
 
 
-        public static void SendIfLocal<T>(this Player player, int? fromWho = null, int? toWho = null) where T : NetworkPacket
-        {
-            if (player.IsLocalPlayer())
-                NetworkPacketLoader.Instance.SendPacket<T>(fromWho, toWho);
-        }
+        public static void SendIfLocal<T>(this Player player, int? fromWho = null, int? toWho = null) where T : NetworkPacket => DoIfLocal(player, plr => NetworkPacketLoader.Instance.SendPacket<T>(fromWho, toWho));
 
-        public static void SendIfLocal<T>(this ModPlayer modPlayer, int? fromWho = null, int? toWho = null) where T : NetworkPacket =>
-            SendIfLocal<T>(modPlayer.player, fromWho, toWho);
+        public static void SendIfLocal<T>(this ModPlayer modPlayer, int? fromWho = null, int? toWho = null) where T : NetworkPacket => SendIfLocal<T>(modPlayer.player, fromWho, toWho);
 
         #endregion
     }

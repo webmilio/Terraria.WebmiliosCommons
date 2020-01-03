@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 using WebmilioCommons.Loaders;
 using WebmilioCommons.Networking.Packets;
+using WebmilioCommons.Networking.Packets.TileEntities;
 
 namespace WebmilioCommons.Networking
 {
@@ -21,20 +23,12 @@ namespace WebmilioCommons.Networking
 
         public override void PreLoad()
         {
-            NetworkPacket.GlobalReflectedPropertyInfos = new Dictionary<Type, List<PropertyInfo>>();
-
-            NetworkPacket.GlobalPacketReaders = new Dictionary<Type, Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>>();
-            NetworkPacket.GlobalPacketWriters = new Dictionary<Type, Dictionary<PropertyInfo, Action<ModPacket, object>>>();
+            NetworkPacket.Initialize();
         }
 
-        public override void Unload()
+        protected override void PostUnload()
         {
-            NetworkPacket.GlobalReflectedPropertyInfos = null;
-
-            NetworkPacket.GlobalPacketReaders = null;
-            NetworkPacket.GlobalPacketWriters = null;
-
-            base.Unload();
+            NetworkPacket.Unload();
         }
 
         /// <summary>Main method to hook into: redirect to this in your Mod's HandlePacket.</summary>
@@ -42,7 +36,7 @@ namespace WebmilioCommons.Networking
         /// <param name="fromWho"></param>
         public void HandlePacket(BinaryReader reader, int fromWho)
         {
-            ushort typeId = reader.ReadUInt16();
+            int typeId = reader.ReadInt32();
             NetworkPacket packet = New(typeId);
 
             PacketReceived?.Invoke(packet, reader);
@@ -51,9 +45,22 @@ namespace WebmilioCommons.Networking
         }
 
 
-        public void SendPacket(ushort id, int? fromWho = null, int? toWho = null) => New(id).Send(fromWho, toWho);
-        public void SendPacket(Type type, int? fromWho = null, int? toWho = null) => New(type).Send(fromWho, toWho);
-        public void SendPacket<T>(int? fromWho = null, int? toWho = null) where T : NetworkPacket => New<T>().Send(fromWho, toWho);
+        public void SendTileEntityPacket<TPacket>(TileEntity tileEntity) where TPacket : TileEntityNetworkPacket => SendTileEntityPacket(New<TPacket>(), tileEntity);
+
+        public void SendTileEntityPacket(TileEntityNetworkPacket packet, TileEntity tileEntity) => packet.Send(tileEntity);
+
+
+        public void SendPacket(NetworkPacket packet, int? fromWho = null, int? toWho = null)
+        {
+            if (packet is TileEntityNetworkPacket)
+                throw new Exception($"You should use the {nameof(SendTileEntityPacket)} method to send ${nameof(TileEntityNetworkPacket)}.");
+
+            packet.Send(fromWho, toWho);
+        }
+
+        public void SendPacket(int id, int? fromWho = null, int? toWho = null) => SendPacket(New(id), fromWho, toWho);
+        public void SendPacket(Type type, int? fromWho = null, int? toWho = null) => SendPacket(GetId(type), fromWho, toWho);
+        public void SendPacket<TPacket>(int? fromWho = null, int? toWho = null) where TPacket : NetworkPacket => SendPacket(typeof(TPacket), fromWho, toWho);
 
 
         internal static void OnPacketSent(NetworkPacket packet) => PacketSent?.Invoke(packet);

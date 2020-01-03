@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebmilioCommonsTest", "..\W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terraria", "..\..\..\tModLoader\src\tModLoader\Terraria.csproj", "{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebmilioCommonsEnergy", "..\WebmilioCommonsEnergy\WebmilioCommonsEnergy.csproj", "{83919FD3-5E63-4120-93D5-6530DA4D18DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,26 @@ Global
 		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.WindowsServerDebug|Any CPU.Build.0 = WindowsServerDebug|Any CPU
 		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.WindowsServerRelease|Any CPU.ActiveCfg = WindowsServerRelease|Any CPU
 		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.WindowsServerRelease|Any CPU.Build.0 = WindowsServerRelease|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.LinuxServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.LinuxServerRelease|Any CPU.Build.0 = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.MacRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.MacRelease|Any CPU.Build.0 = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.MacServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.MacServerRelease|Any CPU.Build.0 = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.WindowsDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.WindowsDebug|Any CPU.Build.0 = Debug|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.WindowsRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.WindowsRelease|Any CPU.Build.0 = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.WindowsServerDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.WindowsServerDebug|Any CPU.Build.0 = Debug|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.WindowsServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{83919FD3-5E63-4120-93D5-6530DA4D18DD}.WindowsServerRelease|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
