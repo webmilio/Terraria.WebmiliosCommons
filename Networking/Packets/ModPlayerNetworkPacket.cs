@@ -30,6 +30,6 @@ namespace WebmilioCommons.Networking.Packets
 
 
         [NotNetworkField]
-        public T ModPlayer { get; set; }
+        public virtual T ModPlayer { get; set; }
     }
 }
