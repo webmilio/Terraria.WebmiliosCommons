@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using WebmilioCommons.Loaders;
 using WebmilioCommons.Networking.Packets;
 using WebmilioCommons.Networking.Packets.TileEntities;

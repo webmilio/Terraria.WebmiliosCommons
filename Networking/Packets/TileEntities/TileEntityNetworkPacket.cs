@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using WebmilioCommons.Networking.Attributes;

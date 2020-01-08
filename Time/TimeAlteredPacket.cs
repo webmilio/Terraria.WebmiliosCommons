@@ -2,10 +2,8 @@
 using System.IO;
 using System.Reflection;
 using Terraria.ModLoader;
-using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Attributes;
 using WebmilioCommons.Networking.Packets;
-using WebmilioCommons.Players;
 
 namespace WebmilioCommons.Time
 {

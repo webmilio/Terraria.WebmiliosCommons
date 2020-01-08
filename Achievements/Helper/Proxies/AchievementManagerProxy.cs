@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using Terraria;
 using Terraria.Achievements;
-using Terraria.Social;
 using Terraria.Utilities;
 
 namespace WebmilioCommons.Achievements.Helper.Proxies

@@ -1,7 +1,6 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WebmilioCommons.Effects.ScreenShaking;
 using WebmilioCommons.Time;
 
 namespace WebmilioCommons.Worlds

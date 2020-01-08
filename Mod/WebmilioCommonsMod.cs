@@ -4,13 +4,11 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WebmilioCommons.Achievements;
 using WebmilioCommons.Achievements.Helper;
 using WebmilioCommons.Commons;
 using WebmilioCommons.Configurations;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
-using WebmilioCommons.Loaders;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Rarities;
 using WebmilioCommons.Time;
@@ -32,7 +30,7 @@ namespace WebmilioCommons
         {
             KeyboardManager.Load();
             TimeManagement.Load();
-            //ModRarityLoader.Instance.TryLoad();
+            ModRarityLoader.Instance.TryLoad();
 
 
             if (!Main.dedServ)

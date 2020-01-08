@@ -4,7 +4,6 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking;
-using WebmilioCommons.Networking.Attributes;
 using WebmilioCommons.Networking.Packets;
 using WebmilioCommons.Tinq;
 

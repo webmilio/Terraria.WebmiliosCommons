@@ -1,6 +1,4 @@
-﻿using Terraria.ModLoader;
-
-namespace WebmilioCommons.NPCs
+﻿namespace WebmilioCommons.NPCs
 {
     public class BetterGlobalNPC
     {

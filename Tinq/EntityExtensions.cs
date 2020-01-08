@@ -67,19 +67,36 @@ namespace WebmilioCommons.Tinq
         }
 
 
-        public static void Do<T>(this IEnumerable<T> source, Action<T> action)
+        public static void Do<T>(this IEnumerable<T> source, Action<T> action) where T : Entity
         {
+            int dummyIndex = GetMainDummyIndex(source);
+            Action<T> safeAction = action;
+
+            if (dummyIndex != -1)
+                safeAction = entity =>
+                {
+                    if (entity.whoAmI == dummyIndex)
+                        return;
+
+                    action(entity);
+                };
+
             if (source is List<T> l)
-                l.ForEach(action);
+                l.ForEach(safeAction);
             else
                 foreach (T t in source)
-                    action(t);
+                    safeAction(t);
         }
 
         public static void DoActive<T>(this IEnumerable<T> entities, Action<T> action) where T : Entity => entities.Active().Do(action);
 
 
-        public static IEnumerable<T> ExceptActive<T>(this IEnumerable<T> first, IEnumerable<T> second) where T : Entity
+        /// <summary>Generates a </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static List<T> ExceptActive<T>(this IEnumerable<T> first, IEnumerable<T> second) where T : Entity
         {
             List<T>
                 activeFirst = first.Active(),
@@ -111,8 +128,14 @@ namespace WebmilioCommons.Tinq
         public static T FirstActiveOrDefault<T>(this IEnumerable<T> entities) where T : Entity => FirstActiveOrDefault(entities, t => true);
         public static T FirstActiveOrDefault<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
+            int dummyIndex = GetMainDummyIndex(entities);
+            Func<T, bool> safePredicate = predicate;
+
+            if (dummyIndex != -1)
+                safePredicate = entity => entity.whoAmI != dummyIndex && predicate(entity);
+
             foreach (T entity in entities)
-                if (Active(entity) && predicate(entity))
+                if (Active(entity) && safePredicate(entity))
                     return entity;
 
             return default;
@@ -151,6 +174,25 @@ namespace WebmilioCommons.Tinq
 
             return result;
         }
+
+
+        private static int GetMainDummyIndex<T>(IEnumerable<T> enumerable) where T : Entity
+        {
+            switch (enumerable)
+            {
+                case Player[] playerArray when playerArray == Main.player:
+                    return Main.maxPlayers;
+                case NPC[] npcArray when npcArray == Main.npc:
+                    return Main.maxNPCs;
+                case Projectile[] projectileArray when projectileArray == Main.projectile:
+                    return Main.maxProjectiles;
+                case Item[] itemArray when itemArray == Main.item:
+                    return Main.maxItems;
+                default:
+                    return -1;
+            }
+        }
+
 
         #endregion
     }

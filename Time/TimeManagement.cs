@@ -6,7 +6,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
-using WebmilioCommons.States;
 
 namespace WebmilioCommons.Time
 {

@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Mono.Cecil;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria;
 using Terraria.GameContent.UI;
-using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using WebmilioCommons.Loaders;
 
@@ -74,6 +70,8 @@ namespace WebmilioCommons.Rarities
 
         protected override void PreUnload()
         {
+            ForAllGeneric(rarity => _rarities.Remove(rarity.Id));
+
             _rarities = null;
 
             //On.Terraria.Main.MouseText -= Main_OnMouseText;

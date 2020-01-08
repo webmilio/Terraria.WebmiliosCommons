@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 
 namespace WebmilioCommons.Rarities.VanillaRarity
 {

@@ -2,7 +2,6 @@
 using Terraria.DataStructures;
 using Terraria.ID;
 using WebmilioCommons.Networking;
-using WebmilioCommons.Networking.Packets;
 using WebmilioCommons.Networking.Packets.TileEntities;
 
 namespace WebmilioCommons.Extensions
