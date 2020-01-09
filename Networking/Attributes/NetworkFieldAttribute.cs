@@ -2,9 +2,8 @@
 
 namespace WebmilioCommons.Networking.Attributes
 {
-    [Obsolete("WIP"), AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = true)]
     public class NetworkFieldAttribute : Attribute
     {
-        
     }
 }

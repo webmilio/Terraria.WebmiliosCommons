@@ -2,11 +2,10 @@
 
 namespace WebmilioCommons.Networking.Attributes
 {
-    [Obsolete("WIP")]
     public enum AutoNetworkMappingBehavior
     {
         DoNotMap,
         OptIn,
-        All
+        OptOut
     }
 }

@@ -3,10 +3,7 @@
 namespace WebmilioCommons.Networking.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = true)]
-    public class NotNetworkField : Attribute
+    public class NotNetworkFieldAttribute : Attribute
     {
-        public NotNetworkField()
-        {
-        }
     }
 }

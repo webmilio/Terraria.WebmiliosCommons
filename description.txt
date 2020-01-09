@@ -17,5 +17,6 @@ Credits (Team Members)
 - Scalie: ideas for
 	* Custom Achievements
 	* StandardTileItem
+- "Stupid person with good ideas" who sometimes came up with good ideas but also stupid ones
 
 If you want an example mod that uses this better networking, check out the JoJo mod by HellGoesOn on https://github.com/ruskies/TerrarianBizzareAdventure or https://github.com/ruskies/TLoZ and search for ModPlayerNetworkPacket.

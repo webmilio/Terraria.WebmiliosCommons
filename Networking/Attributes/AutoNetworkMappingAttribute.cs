@@ -2,7 +2,7 @@
 
 namespace WebmilioCommons.Networking.Attributes
 {
-    [Obsolete("WIP"), AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class AutoNetworkMappingAttribute : Attribute
     {
         public AutoNetworkMappingAttribute() : this(AutoNetworkMappingBehavior.OptIn)

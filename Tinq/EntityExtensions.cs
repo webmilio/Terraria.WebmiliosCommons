@@ -9,15 +9,19 @@ namespace WebmilioCommons.Tinq
     {
         #region TINQ
 
-        public static bool Active(this Entity entity) => entity != null && entity.active;
+        private static bool Active(this Entity entity, int ignoreWhoAmI) => Active(entity) && !IsDummyEntity(entity, ignoreWhoAmI);
+
+        public static bool Active(this Entity entity) => entity != null && entity.active && !IsDummyEntity(entity);
 
         public static List<T> Active<T>(this IEnumerable<T> entities) where T : Entity
         {
             List<T> activeEntities = new List<T>();
 
+            int dummyIndex = GetDummyIndex(entities);
+
             void Filter(T entity)
             {
-                if (Active(entity))
+                if (Active(entity, dummyIndex))
                     activeEntities.Add(entity);
             }
 
@@ -33,8 +37,10 @@ namespace WebmilioCommons.Tinq
 
         public static bool AllActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
+            int dummyIndex = GetDummyIndex(entities);
+
             foreach (T entity in entities)
-                if (Active(entity) && !predicate(entity))
+                if (Active(entity, dummyIndex) && !predicate(entity))
                     return false;
 
             return true;
@@ -69,23 +75,11 @@ namespace WebmilioCommons.Tinq
 
         public static void Do<T>(this IEnumerable<T> source, Action<T> action) where T : Entity
         {
-            int dummyIndex = GetMainDummyIndex(source);
-            Action<T> safeAction = action;
-
-            if (dummyIndex != -1)
-                safeAction = entity =>
-                {
-                    if (entity.whoAmI == dummyIndex)
-                        return;
-
-                    action(entity);
-                };
-
             if (source is List<T> l)
-                l.ForEach(safeAction);
+                l.ForEach(action);
             else
                 foreach (T t in source)
-                    safeAction(t);
+                    action(t);
         }
 
         public static void DoActive<T>(this IEnumerable<T> entities, Action<T> action) where T : Entity => entities.Active().Do(action);
@@ -105,6 +99,8 @@ namespace WebmilioCommons.Tinq
 
             except.AddRange(activeFirst);
             except.AddRange(activeSecond);
+
+            except.RemoveAll(IsDummyEntity);
 
             for (int i = 0; i < activeSecond.Count; i++)
                 if (activeFirst.Contains(activeSecond[i]))
@@ -128,14 +124,10 @@ namespace WebmilioCommons.Tinq
         public static T FirstActiveOrDefault<T>(this IEnumerable<T> entities) where T : Entity => FirstActiveOrDefault(entities, t => true);
         public static T FirstActiveOrDefault<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
-            int dummyIndex = GetMainDummyIndex(entities);
-            Func<T, bool> safePredicate = predicate;
-
-            if (dummyIndex != -1)
-                safePredicate = entity => entity.whoAmI != dummyIndex && predicate(entity);
+            int dummyIndex = GetDummyIndex(entities);
 
             foreach (T entity in entities)
-                if (Active(entity) && safePredicate(entity))
+                if (Active(entity, dummyIndex) && predicate(entity))
                     return entity;
 
             return default;
@@ -176,7 +168,7 @@ namespace WebmilioCommons.Tinq
         }
 
 
-        private static int GetMainDummyIndex<T>(IEnumerable<T> enumerable) where T : Entity
+        public static int GetDummyIndex<T>(this IEnumerable<T> enumerable) where T : Entity
         {
             switch (enumerable)
             {
@@ -193,6 +185,27 @@ namespace WebmilioCommons.Tinq
             }
         }
 
+        public static int GetDummyIndex<T>(T entity) where T : Entity
+        { 
+            switch (entity)
+            {
+                case Player player:
+                    return Main.maxPlayers;
+                case NPC npc:
+                    return Main.maxNPCs;
+                case Projectile projectile:
+                    return Main.maxProjectiles;
+                case Item item:
+                    return Main.maxItems;
+                default:
+                    return -1;
+            };
+        }
+
+
+        public static bool IsDummyEntity(this Entity entity) => IsDummyEntity(entity, GetDummyIndex(entity));
+
+        private static bool IsDummyEntity(Entity entity, int dummyIndex) => entity.whoAmI == dummyIndex;
 
         #endregion
     }

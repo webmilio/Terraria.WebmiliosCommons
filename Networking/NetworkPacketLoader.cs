@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using Terraria.DataStructures;
+using Terraria.ModLoader;
 using WebmilioCommons.Loaders;
 using WebmilioCommons.Networking.Packets;
 using WebmilioCommons.Networking.Packets.TileEntities;
@@ -24,6 +25,27 @@ namespace WebmilioCommons.Networking
             NetworkPacket.Initialize();
         }
 
+        public override void PostLoad()
+        {
+            int lastPacketIndex = NextIndex - 1;
+
+            if (lastPacketIndex <= byte.MaxValue)
+            {
+                PacketIdWriter = NetworkPacketIOExtensions.WriteByte;
+                PacketIdReader = NetworkPacketIOExtensions.ReadByte;
+            }
+            else if (lastPacketIndex <= short.MaxValue)
+            {
+                PacketIdWriter = NetworkPacketIOExtensions.WriteShort;
+                PacketIdReader = NetworkPacketIOExtensions.ReadShort;
+            }
+            else
+            {
+                PacketIdWriter = NetworkPacketIOExtensions.WriteInt;
+                PacketIdReader = NetworkPacketIOExtensions.ReadInt;
+            }
+        }
+
         protected override void PostUnload()
         {
             NetworkPacket.Unload();
@@ -34,7 +56,7 @@ namespace WebmilioCommons.Networking
         /// <param name="fromWho"></param>
         public void HandlePacket(BinaryReader reader, int fromWho)
         {
-            int typeId = reader.ReadInt32();
+            int typeId = (int) PacketIdReader(null, reader);
             NetworkPacket packet = New(typeId);
 
             PacketReceived?.Invoke(packet, reader);
@@ -59,6 +81,11 @@ namespace WebmilioCommons.Networking
         public void SendPacket(int id, int? fromWho = null, int? toWho = null) => SendPacket(New(id), fromWho, toWho);
         public void SendPacket(Type type, int? fromWho = null, int? toWho = null) => SendPacket(GetId(type), fromWho, toWho);
         public void SendPacket<TPacket>(int? fromWho = null, int? toWho = null) where TPacket : NetworkPacket => SendPacket(typeof(TPacket), fromWho, toWho);
+
+
+        public Func<NetworkPacket, BinaryReader, object> PacketIdReader { get; private set; }
+
+        public Action<NetworkPacket, ModPacket, object> PacketIdWriter { get; private set; }
 
 
         internal static void OnPacketSent(NetworkPacket packet) => PacketSent?.Invoke(packet);
