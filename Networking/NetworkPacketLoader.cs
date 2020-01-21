@@ -31,17 +31,17 @@ namespace WebmilioCommons.Networking
 
             if (lastPacketIndex <= byte.MaxValue)
             {
-                PacketIdWriter = NetworkPacketIOExtensions.WriteByte;
+                PacketIdWriter = (packet, modPacket, value) => packet.WriteByte(modPacket, (byte)(int) value);
                 PacketIdReader = NetworkPacketIOExtensions.ReadByte;
             }
             else if (lastPacketIndex <= short.MaxValue)
             {
-                PacketIdWriter = NetworkPacketIOExtensions.WriteShort;
+                PacketIdWriter = (packet, modPacket, value) => packet.WriteShort(modPacket, (short)(int) value);
                 PacketIdReader = NetworkPacketIOExtensions.ReadShort;
             }
             else
             {
-                PacketIdWriter = NetworkPacketIOExtensions.WriteInt;
+                PacketIdWriter = (packet, modPacket, value) => packet.WriteInt(modPacket, value);
                 PacketIdReader = NetworkPacketIOExtensions.ReadInt;
             }
         }
