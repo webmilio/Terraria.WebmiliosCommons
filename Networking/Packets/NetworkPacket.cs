@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -118,6 +119,21 @@ namespace WebmilioCommons.Networking.Packets
             {
                 PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadUShort);
                 PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteUShort);
+            }
+            else if (propertyInfo.PropertyType == typeof(Item))
+            {
+                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadItem);
+                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteItem);
+            }
+            else if (propertyInfo.PropertyType == typeof(Vector2))
+            {
+                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadVector2);
+                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteVector2);
+            }
+            else if (propertyInfo.PropertyType == typeof(Color))
+            {
+                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadRGB);
+                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteRGB);
             }
             else
             {
