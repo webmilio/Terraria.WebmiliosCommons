@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking.Attributes;
 
@@ -17,7 +19,7 @@ namespace WebmilioCommons.Networking.Packets
         {
             bool result = base.PreReceive(reader, fromWho);
 
-            ModPlayer = Player.GetModPlayer<T>();
+            ModPlayer = ModPlayerGetter(Player);
             return result;
         }
 
@@ -25,11 +27,15 @@ namespace WebmilioCommons.Networking.Packets
         {
             base.PreAssignValues(ref fromWho, ref toWho);
 
-            ModPlayer = Player.GetModPlayer<T>();
+            ModPlayer = ModPlayerGetter(Player);
         }
 
 
         [NotNetworkField]
         public virtual T ModPlayer { get; set; }
+
+
+        [NotNetworkField]
+        public virtual Func<Player, T> ModPlayerGetter { get; } = player => player.GetModPlayer<T>();
     }
 }

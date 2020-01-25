@@ -163,12 +163,13 @@ namespace WebmilioCommons.Networking.Packets
             if (!MidReceive(reader, fromWho))
                 return false;
 
-            if (Main.dedServ && (Behavior == NetworkPacketBehavior.SendToAllClients || Behavior == NetworkPacketBehavior.SendToAll))
+            if (Main.netMode == NetmodeID.Server && (Behavior == NetworkPacketBehavior.SendToAllClients || Behavior == NetworkPacketBehavior.SendToAll))
                 this.Send(fromWho, (int)NetworkDestinationType.AllClients);
 
             return PostReceive(reader, fromWho);
         }
 
+        // TODO CHANGE THIS TO DOPRERECEIVE.
         protected virtual bool PreReceive(BinaryReader reader, int fromWho) => true;
 
         /// <summary>Called before the packet is resent (in cases where it should). Useful for defining custom behavior that needs to be replicated on all clients.</summary>
