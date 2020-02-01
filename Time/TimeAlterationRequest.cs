@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
-using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Packets;
+using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.Tinq;
 
 namespace WebmilioCommons.Time

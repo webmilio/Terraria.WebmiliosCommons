@@ -15,7 +15,7 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
-        protected override bool PreReceive(BinaryReader reader, int fromWho)
+        internal override bool DoPreReceive(BinaryReader reader, int fromWho)
         {
             bool result = base.PreReceive(reader, fromWho);
 

@@ -1,13 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking.Packets;
 
 namespace WebmilioCommons.Networking
 {
-    public interface INetworkSerializable
+    [Obsolete("Use INetworkSerializable in WebmilioCommons.Networking.Serializing", true)]
+    public interface INetworkSerializable : Serializing.INetworkSerializable
     {
-        void Send(NetworkPacket networkPacket, ModPacket modPacket);
-
-        void Receive(NetworkPacket networkPacket, BinaryReader reader);
     }
 }

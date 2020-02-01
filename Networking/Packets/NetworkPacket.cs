@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking.Attributes;
+using WebmilioCommons.Networking.Serializing;
 
 namespace WebmilioCommons.Networking.Packets
 {
@@ -50,106 +51,28 @@ namespace WebmilioCommons.Networking.Packets
 
         private void AddReaderWriter(PropertyInfo propertyInfo)
         {
-            if (propertyInfo.PropertyType == typeof(bool))
+            if (Loader.HasSerializer(propertyInfo.PropertyType))
             {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadBool);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteBool);
-            }
-            else if (propertyInfo.PropertyType == typeof(byte))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadByte);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteByte);
-            }
-            else if (propertyInfo.PropertyType == typeof(char))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadChar);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteChar);
-            }
-            else if (propertyInfo.PropertyType == typeof(decimal))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadDecimal);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteDecimal);
-            }
-            else if (propertyInfo.PropertyType == typeof(double))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadDouble);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteDouble);
-            }
-            else if (propertyInfo.PropertyType == typeof(float))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadFloat);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteFloat);
-            }
-            else if (propertyInfo.PropertyType == typeof(int))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadInt);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteInt);
-            }
-            else if (propertyInfo.PropertyType == typeof(long))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadLong);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteLong);
-            }
-            else if (propertyInfo.PropertyType == typeof(sbyte))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadSByte);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteSByte);
-            }
-            else if (propertyInfo.PropertyType == typeof(short))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadShort);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteShort);
-            }
-            else if (propertyInfo.PropertyType == typeof(string))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadString);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteString);
-            }
-            else if (propertyInfo.PropertyType == typeof(uint))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadUInt);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteUInt);
-            }
-            else if (propertyInfo.PropertyType == typeof(ulong))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadULong);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteULong);
-            }
-            else if (propertyInfo.PropertyType == typeof(ushort))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadUShort);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteUShort);
-            }
-            else if (propertyInfo.PropertyType == typeof(Item))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadItem);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteItem);
-            }
-            else if (propertyInfo.PropertyType == typeof(Vector2))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadVector2);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteVector2);
-            }
-            else if (propertyInfo.PropertyType == typeof(Color))
-            {
-                PacketReaders.Add(propertyInfo, NetworkPacketIOExtensions.ReadRGB);
-                PacketWriters.Add(propertyInfo, NetworkPacketIOExtensions.WriteRGB);
+                NetworkTypeSerializer serializer = Loader.GetSerializer(propertyInfo.PropertyType);
+
+                PacketReaders.Add(propertyInfo, serializer.Reader);
+                PacketWriters.Add(propertyInfo, serializer.Writer);
             }
             else
             {
                 Type[] interfaceTypes = propertyInfo.PropertyType.GetInterfaces();
 
                 for (int i = 0; i < interfaceTypes.Length; i++)
-                    if (interfaceTypes[i] == typeof(INetworkSerializable))
+                    if (interfaceTypes[i] == typeof(Serializing.INetworkSerializable))
                     {
                         PacketReaders.Add(propertyInfo, (networkPacket, reader) =>
                         {
                             object value = propertyInfo.GetValue(networkPacket);
 
                             if (value == null)
-                                throw new NullReferenceException($"Tried obtaining instance of {nameof(INetworkSerializable)} from {propertyInfo.Name}: obtained null.");
+                                throw new NullReferenceException($"Tried obtaining instance of {nameof(Serializing.INetworkSerializable)} from {propertyInfo.Name}: obtained null.");
 
-                            INetworkSerializable networkSerializable = (INetworkSerializable)value;
+                            Serializing.INetworkSerializable networkSerializable = (Serializing.INetworkSerializable)value;
 
                             networkPacket.ReadNetworkSerializable(networkSerializable, reader);
                             return networkSerializable;
@@ -170,7 +93,7 @@ namespace WebmilioCommons.Networking.Packets
         /// <returns></returns>
         public virtual bool Receive(BinaryReader reader, int fromWho)
         {
-            if (!PreReceive(reader, fromWho))
+            if (!DoPreReceive(reader, fromWho) || !PreReceive(reader, fromWho))
                 return false;
 
             foreach (PropertyInfo propertyInfo in ReflectedPropertyInfos)
@@ -184,8 +107,9 @@ namespace WebmilioCommons.Networking.Packets
 
             return PostReceive(reader, fromWho);
         }
+        
+        internal virtual bool DoPreReceive(BinaryReader reader, int fromWho) => true;
 
-        // TODO CHANGE THIS TO DOPRERECEIVE.
         protected virtual bool PreReceive(BinaryReader reader, int fromWho) => true;
 
         /// <summary>Called before the packet is resent (in cases where it should). Useful for defining custom behavior that needs to be replicated on all clients.</summary>
@@ -332,13 +256,15 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
+        #region Not Synchronized
+
         /// <summary>The <see cref="Mod"/> to which this packet belongs to. Initialized after the constructor has been called.</summary>
         [NotNetworkField]
-        public Mod Mod => NetworkPacketLoader.Instance.GetMod(this);
+        public Mod Mod => Loader.GetMod(this);
 
         /// <summary>The ushort type of the packet, automatically assigned after the constructor has been called.</summary>
         [NotNetworkField]
-        public int Id => NetworkPacketLoader.Instance.GetId(GetType());
+        public int Id => Loader.GetId(GetType());
 
         [NotNetworkField]
         public virtual NetworkPacketBehavior Behavior => NetworkPacketBehavior.SendToAll;
@@ -355,5 +281,11 @@ namespace WebmilioCommons.Networking.Packets
 
         [NotNetworkField]
         public Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>> PacketReaders => GlobalPacketReaders[GetType()];
+
+
+        [NotNetworkField]
+        public NetworkPacketLoader Loader => NetworkPacketLoader.Instance;
+
+        #endregion
     }
 }
