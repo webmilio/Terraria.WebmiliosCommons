@@ -51,9 +51,9 @@ namespace WebmilioCommons.Networking.Packets
 
         private void AddReaderWriter(PropertyInfo propertyInfo)
         {
-            if (Loader.HasSerializer(propertyInfo.PropertyType))
+            if (NetworkTypeSerializers.Has(propertyInfo.PropertyType))
             {
-                NetworkTypeSerializer serializer = Loader.GetSerializer(propertyInfo.PropertyType);
+                NetworkTypeSerializer serializer = NetworkTypeSerializers.Get(propertyInfo.PropertyType);
 
                 PacketReaders.Add(propertyInfo, serializer.Reader);
                 PacketWriters.Add(propertyInfo, serializer.Writer);
@@ -260,11 +260,11 @@ namespace WebmilioCommons.Networking.Packets
 
         /// <summary>The <see cref="Mod"/> to which this packet belongs to. Initialized after the constructor has been called.</summary>
         [NotNetworkField]
-        public Mod Mod => Loader.GetMod(this);
+        public Mod Mod => NetworkPacketLoader.Instance.GetMod(this);
 
         /// <summary>The ushort type of the packet, automatically assigned after the constructor has been called.</summary>
         [NotNetworkField]
-        public int Id => Loader.GetId(GetType());
+        public int Id => NetworkPacketLoader.Instance.GetId(GetType());
 
         [NotNetworkField]
         public virtual NetworkPacketBehavior Behavior => NetworkPacketBehavior.SendToAll;
@@ -281,10 +281,6 @@ namespace WebmilioCommons.Networking.Packets
 
         [NotNetworkField]
         public Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>> PacketReaders => GlobalPacketReaders[GetType()];
-
-
-        [NotNetworkField]
-        public NetworkPacketLoader Loader => NetworkPacketLoader.Instance;
 
         #endregion
     }
