@@ -37,12 +37,12 @@ namespace WebmilioCommons.Networking
             if (lastPacketIndex <= byte.MaxValue)
             {
                 PacketIdWriter = (packet, modPacket, value) => packet.WriteByte(modPacket, (byte)(int)value);
-                PacketIdReader = NetworkPacketIOExtensions.ReadByte;
+                PacketIdReader = (packet, reader) => (int)(byte)packet.ReadByte(reader);
             }
             else if (lastPacketIndex <= short.MaxValue)
             {
                 PacketIdWriter = (packet, modPacket, value) => packet.WriteShort(modPacket, (short)(int)value);
-                PacketIdReader = NetworkPacketIOExtensions.ReadShort;
+                PacketIdReader = (packet, reader) => (int)(short)packet.ReadShort(reader);
             }
             else
             {

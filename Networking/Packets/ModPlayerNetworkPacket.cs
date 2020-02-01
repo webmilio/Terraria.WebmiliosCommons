@@ -17,7 +17,7 @@ namespace WebmilioCommons.Networking.Packets
 
         internal override bool DoPreReceive(BinaryReader reader, int fromWho)
         {
-            bool result = base.PreReceive(reader, fromWho);
+            bool result = base.DoPreReceive(reader, fromWho);
 
             ModPlayer = ModPlayerGetter(Player);
             return result;
