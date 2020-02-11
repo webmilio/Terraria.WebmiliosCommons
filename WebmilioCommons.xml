@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebmilioCommons</name>
+    </assembly>
+    <members>
+        <member name="M:WebmilioCommons.Achievements.Helper.ModAchievementHelper.RegisterAchievement(WebmilioCommons.Achievements.ModAchievement,System.Type)">
+            <summary>
+            If for some reason the ModAchievement Loader has not loaded the desired achievement, you can use this.
+            Under no circumstances should you load an achievement that is already loaded.
+            </summary>
+        </member>
+        <member name="M:WebmilioCommons.Achievements.ModAchievement.AddCompletionFlag">
+            <summary>Adds a default completion flag to be manually trigger with <see cref="M:WebmilioCommons.Achievements.ModAchievement.CompleteFlag"/>.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Achievements.ModAchievement.CompleteFlag(Terraria.Player)">
+            <summary>Completes the default completion flag if the given player is the local player.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Achievements.ModAchievement.CompleteFlag(Terraria.Player,System.String)">
+            <summary>Completes the specified flag if the given player is the local player.</summary>
+            <param name="player"></param>
+            <param name="flag"></param>
+        </member>
+        <member name="M:WebmilioCommons.Extensions.EntityExtensions.IsImmobile(Terraria.Entity,System.Boolean,System.Int32)">
+            <summary></summary>
+            <param name="entity"></param>
+            <param name="requireTileUnder"></param>
+            <param name="feetXRadius"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebmilioCommons.Extensions.ModExtensions.GetPacket(Terraria.ModLoader.Mod,System.Int32)">
+            <summary>Returns a new instance of the packet corresponding to the specified ID.</summary>
+            <param name="mod"></param>
+            <param name="id">The auto-generated ID of the packet.</param>
+            <returns>A new <see cref="T:WebmilioCommons.Networking.Packets.NetworkPacket"/>.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Extensions.ModExtensions.GetPacket(Terraria.ModLoader.Mod,System.Type)">
+            <summary>Returns a new instance of the packet corresponding to the specified type.</summary>
+            <param name="mod"></param>
+            <param name="type">The class type of the packet.</param>
+            <returns>A new <see cref="T:WebmilioCommons.Networking.Packets.NetworkPacket"/>.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Extensions.ModExtensions.PacketId(Terraria.ModLoader.Mod,WebmilioCommons.Networking.Packets.NetworkPacket)">
+            <summary>Returns the auto-generated ID for the specified packet.</summary>
+            <param name="mod"></param>
+            <param name="packet">The packet.</param>
+            <returns>The auto-generated ID of the packet.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Extensions.TypeExtensions.GetTexture(System.Type)">
+            <summary>Finds the appropriate texture based solely on the type and its associated mod.</summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebmilioCommons.Loaders.IAssociatedToMod">
+            <summary>Implementing this interface will cause the loader to automatically feed the owner <see cref="T:Terraria.ModLoader.Mod"/> to the requested instance when using <see cref="!:Loader&lt;T&gt;.New(ushort)"/> or <see cref="M:WebmilioCommons.Loaders.Loader`1.New``1"/></summary>
+        </member>
+        <member name="M:WebmilioCommons.Loaders.Loader`1.#ctor">
+            <summary>Instantiates a new <see cref="T:WebmilioCommons.Loaders.Loader`1"/> and loads all found subtypes of <see cref="!:T"/> that are not abstract.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Loaders.Loader`1.#ctor(System.Func{System.Reflection.TypeInfo,System.Boolean})">
+            <summary>
+            Instantiates a new <see cref="T:WebmilioCommons.Loaders.Loader`1"/> and loads all found subtypes of <see cref="!:T"/> that are not abstract and
+            match the specified <param name="loadCondition">load condition(s)</param>.
+            </summary>
+            <param name="loadCondition">The condition under which a subclass of <see cref="!:T"/> should be loaded.</param>
+        </member>
+        <member name="M:WebmilioCommons.Loaders.Loader`1.TryLoad">
+            <summary>Tries loading the current loader instance if it has not already been loaded.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Loaders.Loader`1.PreLoad">
+            <summary>Called directly after the initialization checks during <see cref="M:WebmilioCommons.Loaders.Loader`1.TryLoad"/>.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Loaders.Loader`1.PostLoad">
+            <summary>Called at the end of <see cref="M:WebmilioCommons.Loaders.Loader`1.TryLoad"/>.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Loaders.Loader`1.PostAdd(Terraria.ModLoader.Mod,`0)">
+            <summary>Called after each time a subclass is added to the generic instances database.</summary>
+            <param name="mod">The mod from which the generic instance originates.</param>
+            <param name="item">A generic instances created via <see cref="M:System.Activator.CreateInstance(System.Type)"/>.</param>
+        </member>
+        <member name="P:WebmilioCommons.Loaders.Loader`1.Count">
+            <summary>How many subtypes of <see cref="!:T"/> have been loaded.</summary>
+        </member>
+        <member name="P:WebmilioCommons.Loaders.SingletonLoader`2.Instance">
+            <summary>Unique TYPE instance (two same <see cref="!:TLoader"/> will have the same instance), instantiated and loaded upon first call.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Managers.Manager`1.Initialize">
+            <summary>Called during <see cref="M:WebmilioCommons.Managers.Manager`1.TryInitialize"/>. You would usually store references to definition objects in this method.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Managers.Manager`1.TryInitialize">
+            <summary>Tries initializing the current instance <see cref="T:WebmilioCommons.Managers.Manager`1"/> if it has not been initialized already.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Managers.Manager`1.Add``1(``0)">
+            <summary>Tries adding an instance to the manager.</summary>
+            <typeparam name="TSub"></typeparam>
+            <param name="item"></param>
+            <returns>The new instance of an instance of the same <see cref="P:WebmilioCommons.Managers.IHasUnlocalizedName.UnlocalizedName"/> has not been found; the existing instance otherwise.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Managers.Manager`1.Add``1">
+            <summary>Tries adding a generic instance (via new <see cref="!:TSub"/>()) to the manager.</summary>
+            <typeparam name="TSub"></typeparam>
+            <returns>The new instance of an instance of the same <see cref="P:WebmilioCommons.Managers.IHasUnlocalizedName.UnlocalizedName"/> has not been found; the existing instance otherwise.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Managers.Manager`1.Where(System.Predicate{`0})">
+            <summary>Simple search that returns elements of the manager corresponding to the specified <see cref="T:System.Predicate`1"/>.</summary>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebmilioCommons.Managers.Manager`1.GetRandom">
+            <summary>Returns a random <see cref="!:T"/> registered in the manager.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebmilioCommons.Managers.Manager`1.TryGet(System.String,`0@)">
+            <summary>Tries obtaining an instance of <see cref="!:T"/> corresponding to the specified <param name="key">unlocalized name</param>.</summary>
+            <param name="key">The desired instance's unlocalized name.</param>
+            <param name="result"></param>
+            <returns>true if the instance was found; otherwise false.</returns>
+        </member>
+        <member name="P:WebmilioCommons.Managers.SingletonManager`2.Instance">
+            <summary>Unique TYPE instance (two same <see cref="!:TManager"/> will have the same instance), instantiated and initialized upon first call.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.PostUnload">
+            <summary></summary>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.HandlePacket(System.IO.BinaryReader,System.Int32)">
+            <summary>Main method to hook into: redirect to this in your Mod's HandlePacket.</summary>
+            <param name="reader"></param>
+            <param name="fromWho"></param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendTileEntityPacket``1(Terraria.DataStructures.TileEntity)">
+            <summary>Sends a tile entity packet, providing it a tile entity.</summary>
+            <typeparam name="TPacket">The type of packet to send.</typeparam>
+            <param name="tileEntity">The associated tile entity.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendTileEntityPacket(WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket,Terraria.DataStructures.TileEntity)">
+            <summary>Sends a tile entity packet, providing it a tile entity.</summary>
+            <param name="packet">The packet to send.</param>
+            <param name="tileEntity">The associated tile entity.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendPacket(WebmilioCommons.Networking.Packets.NetworkPacket,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Sends the given packet. The packet must not be a child of <see cref="T:WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket"/>.</summary>
+            <param name="packet">The packet to send.</param>
+            <param name="fromWho">From who is the packet. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+            <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendPacket(System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Sends a new instance of the given packet. The packet must not be a child of <see cref="T:WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket"/>.</summary>
+            <param name="id">The packet id.</param>
+            <param name="fromWho">From who is the packet. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+            <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendPacket(System.Type,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Sends a new instance of the given packet type. The packet must not be a child of <see cref="T:WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket"/>.</summary>
+            <param name="type">The packet's type.</param>
+            <param name="fromWho">From who is the packet. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+            <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendPacket``1(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Sends a new instance of the given packet type. The packet must not be a child of <see cref="T:WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket"/>.</summary>
+            <typeparam name="TPacket">The packet's type.</typeparam>
+            <param name="fromWho">From who is the packet. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+            <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+        </member>
+        <member name="P:WebmilioCommons.Networking.NetworkPacketLoader.PacketIdReader">
+            <summary>The reader which is used to determine the packet id. Dynamically scales with how many packets (from 0 to 255, 255 to 65536, etc...).</summary>
+        </member>
+        <member name="P:WebmilioCommons.Networking.NetworkPacketLoader.PacketIdWriter">
+            <summary>The reader which is used to determine the packet id. Dynamically scales with how many packets (from 0 to 255, 255 to 65536, etc...).</summary>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)">
+            <summary>
+            The entire logic for receiving a packet (including resending from the server) is in this method.
+            It is better to override <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.PreReceive(System.IO.BinaryReader,System.Int32)"/>, <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.MidReceive(System.IO.BinaryReader,System.Int32)"/> or <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.PostReceive(System.IO.BinaryReader,System.Int32)"/>, depending on the behavior you want.
+            </summary>
+            <param name="reader"></param>
+            <param name="fromWho"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.PreReceive(System.IO.BinaryReader,System.Int32)">
+            <summary>Custom logic which should be executed before the rest of the <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)"/> method should put in here.</summary>
+            <param name="reader"></param>
+            <param name="fromWho">The packet's sender.</param>
+            <returns><c>true</c>to continue with the execution of the <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)"/> method; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.MidReceive(System.IO.BinaryReader,System.Int32)">
+            <summary>Called before the packet is resent (in cases where it should). Useful for defining custom behavior that needs to be replicated on all clients.</summary>
+            <param name="reader"></param>
+            <param name="fromWho">The packet's sender.</param>
+            <returns><c>true</c>to continue with the execution of the <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)"/> method; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.PostReceive(System.IO.BinaryReader,System.Int32)">
+            <summary>Called after the <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)"/> method is done (all values are assigned and packet has been resent if necessary).</summary>
+            <param name="reader"></param>
+            <param name="fromWho">The packet's sender.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.PreAssignValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)">
+            <summary>Executed before <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/> is called. Do not override this unless you know what you're doing.</summary>
+            <param name="fromWho">The packet's sender.</param>
+            <param name="toWho">The packet's receiver.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)">
+            <summary>Assigns the correct values to <paramref name="fromWho"/> and <paramref name="toWho"/>. Do not override this unless you know what you're doing.</summary>
+            <param name="fromWho"></param>
+            <param name="toWho"></param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.Send(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            The entire logic for sending packets.
+            It is better to override <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.PreSend(Terraria.ModLoader.ModPacket,System.Nullable{System.Int32},System.Nullable{System.Int32})"/> or <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.PostSend(Terraria.ModLoader.ModPacket,System.Nullable{System.Int32},System.Nullable{System.Int32})"/>, depending on the behavior you want.
+            </summary>
+            <param name="fromWho">The packet's sender.</param>
+            <param name="toWho">The packet's receiver.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.MakePacket">
+            <summary>Standard packet instance creation.</summary>
+            <returns>An instance of <see cref="T:Terraria.ModLoader.ModPacket"/> with an auto-generated ID.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.AddAllProperties">
+            <summary>Parses the current class's properties into the cache for sending and receiving.</summary>
+        </member>
+        <member name="P:WebmilioCommons.Networking.Packets.NetworkPacket.Mod">
+            <summary>The <see cref="P:WebmilioCommons.Networking.Packets.NetworkPacket.Mod"/> to which this packet belongs to. Initialized after the constructor has been called.</summary>
+        </member>
+        <member name="P:WebmilioCommons.Networking.Packets.NetworkPacket.Id">
+            <summary>The ushort type of the packet, automatically assigned after the constructor has been called.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Rarities.ModRarity.#ctor(System.Int32,System.Int32,Microsoft.Xna.Framework.Color)">
+            <summary>Called when loading all <see cref="T:WebmilioCommons.Rarities.ModRarity"/>.</summary>
+            <param name="lowerVanillaRarity">Fallback vanilla color in case the <see cref="T:WebmilioCommons.Rarities.ModRarityLoader"/> fails to load.</param>
+            <param name="upperVanillaRarity"></param>
+            <param name="color"></param>
+        </member>
+        <member name="P:WebmilioCommons.Rarities.ModRarity.Id">
+            <summary>
+            Rarity ID assigned from the <see cref="T:WebmilioCommons.Rarities.ModRarityLoader"/>.
+            Will always be greater than the highest positive vanilla rarity unless the <see cref="T:WebmilioCommons.Rarities.ModRarityLoader"/> crashes,
+            in which case it will take the value of <see cref="P:WebmilioCommons.Rarities.ModRarity.LowerVanillaRarity"/>.
+            </summary>
+        </member>
+        <member name="P:WebmilioCommons.Rarities.ModRarity.LowerVanillaRarity">
+            <summary>Used in comparing two different rarity IDs and fallback rarity ID in case the <see cref="T:WebmilioCommons.Rarities.ModRarityLoader"/> crashes.</summary>
+        </member>
+        <member name="P:WebmilioCommons.Tiles.BetterGlobalTile.MiningLookupRange">
+            <summary>The maximum range for which to trigger CanKillTile with Player. Set to -1 to not have a distance limit. Default is 25.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Time.TimeAlterationRequest.#ctor(WebmilioCommons.Time.TimeAlterationRequest.Sources,System.Int32,System.Int32)">
+            <summary>
+            </summary>
+            <param name="sourceType"></param>
+            <param name="duration"></param>
+            <param name="tickRate">The rate at which the world ticks for everything else than the source. Only tick rates of 0 or 1 are supposed.</param>
+        </member>
+        <member name="P:WebmilioCommons.Time.TimeAlterationRequest.LockedToSource">
+            <summary>
+            If true, the time alteration will only be able to be "toggled" (stopped midway) if the same person executes the required action.
+            Other entities/sources are unable to change the time state if this is true.
+            </summary>
+        </member>
+        <member name="T:WebmilioCommons.Time.TimeManagement">
+            <summary>Work-in-progress, feedback is highly appreciated on any crashes found.</summary>
+        </member>
+        <member name="M:WebmilioCommons.Time.TimeManagement.TryAlterTime(WebmilioCommons.Time.TimeAlterationRequest,System.Boolean)">
+            <summary></summary>
+            <param name="request"></param>
+            <param name="local">true if this comes from the local client; false if its from the network.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebmilioCommons.Tinq.EntityExtensions.ExceptActive``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>Generates a </summary>
+            <typeparam name="T"></typeparam>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
