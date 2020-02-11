@@ -22,7 +22,7 @@ namespace WebmilioCommons.Networking
 
         public override void PreLoad()
         {
-            NetworkPacket.Initialize();
+            NetworkPacketReflectionCache.Initialize();
         }
 
         public override void PostLoad()
@@ -48,7 +48,7 @@ namespace WebmilioCommons.Networking
 
         protected override void PostUnload()
         {
-            NetworkPacket.Unload();
+            NetworkPacketReflectionCache.Unload();
         }
 
         /// <summary>Main method to hook into: redirect to this in your Mod's HandlePacket.</summary>

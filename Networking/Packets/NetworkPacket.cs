@@ -12,33 +12,6 @@ namespace WebmilioCommons.Networking.Packets
 {
     public abstract class NetworkPacket
     {
-        [NotNetworkField]
-        internal static Dictionary<Type, List<PropertyInfo>> GlobalReflectedPropertyInfos { get; set; }
-
-        [NotNetworkField]
-        internal static Dictionary<Type, Dictionary<PropertyInfo, Action<NetworkPacket, ModPacket, object>>> GlobalPacketWriters { get; set; }
-        [NotNetworkField]
-        internal static Dictionary<Type, Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>> GlobalPacketReaders { get; set; }
-
-
-        internal static void Initialize()
-        {
-            GlobalReflectedPropertyInfos = new Dictionary<Type, List<PropertyInfo>>();
-
-            GlobalPacketWriters = new Dictionary<Type, Dictionary<PropertyInfo, Action<NetworkPacket, ModPacket, object>>>();
-            GlobalPacketReaders = new Dictionary<Type, Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>>();
-        }
-
-        internal static void Unload()
-        {
-
-            GlobalReflectedPropertyInfos = null;
-
-            GlobalPacketWriters = null;
-            GlobalPacketReaders = null;
-        }
-
-
         protected NetworkPacket() : this(true) { }
 
         protected NetworkPacket(bool autoGetProperties)
@@ -47,6 +20,45 @@ namespace WebmilioCommons.Networking.Packets
                 AddAllProperties();
         }
 
+
+        /// <summary>Parses the current class's properties into the cache for sending and receiving.</summary>
+        protected void AddAllProperties() => AddAllProperties(GetType());
+
+        protected void AddAllProperties(Type type)
+        {
+            if (NetworkPacketReflectionCache.globalReflectedPropertyInfos.ContainsKey(type))
+                return;
+
+            AutoNetworkMappingAttribute mappingAttribute = type.GetCustomAttribute<AutoNetworkMappingAttribute>();
+            AutoNetworkMappingBehavior mappingBehavior = AutoNetworkMappingBehavior.OptOut;
+
+            if (mappingAttribute != default)
+                mappingBehavior = mappingAttribute.Behavior;
+
+            if (mappingBehavior == AutoNetworkMappingBehavior.DoNotMap)
+                return;
+
+
+            List<PropertyInfo> propertyInfos = NetworkPacketReflectionCache.AddReflectedType(type);
+
+            foreach (PropertyInfo propertyInfo in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                NotNetworkFieldAttribute nnfAttribute = propertyInfo.GetCustomAttribute<NotNetworkFieldAttribute>();
+
+                if (nnfAttribute != default && mappingBehavior == AutoNetworkMappingBehavior.OptOut)
+                    continue;
+
+
+                NetworkFieldAttribute nfAttribute = propertyInfo.GetCustomAttribute<NetworkFieldAttribute>();
+
+                if (mappingBehavior == AutoNetworkMappingBehavior.OptIn && nfAttribute == default)
+                    continue;
+
+
+                propertyInfos.Add(propertyInfo);
+                AddReaderWriter(propertyInfo);
+            }
+        }
 
         private void AddReaderWriter(PropertyInfo propertyInfo)
         {
@@ -267,45 +279,6 @@ namespace WebmilioCommons.Networking.Packets
             return packet;
         }
 
-        /// <summary>Parses the current class's properties into the cache for sending and receiving.</summary>
-        protected void AddAllProperties() => AddAllProperties(GetType());
-
-        protected void AddAllProperties(Type type)
-        {
-            if (GlobalReflectedPropertyInfos.ContainsKey(type))
-                return;
-
-            AutoNetworkMappingAttribute mappingAttribute = type.GetCustomAttribute<AutoNetworkMappingAttribute>();
-            AutoNetworkMappingBehavior mappingBehavior = AutoNetworkMappingBehavior.OptOut;
-
-            if (mappingAttribute != default)
-                mappingBehavior = mappingAttribute.Behavior;
-
-            if (mappingBehavior == AutoNetworkMappingBehavior.DoNotMap)
-                return;
-
-
-            List<PropertyInfo> propertyInfos = AddReflectedType(type);
-
-            foreach (PropertyInfo propertyInfo in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                NotNetworkFieldAttribute nnfAttribute = propertyInfo.GetCustomAttribute<NotNetworkFieldAttribute>();
-
-                if (nnfAttribute != default && mappingBehavior == AutoNetworkMappingBehavior.OptOut)
-                    continue;
-
-
-                NetworkFieldAttribute nfAttribute = propertyInfo.GetCustomAttribute<NetworkFieldAttribute>();
-
-                if (mappingBehavior == AutoNetworkMappingBehavior.OptIn && nfAttribute == default)
-                    continue;
-
-
-                propertyInfos.Add(propertyInfo);
-                AddReaderWriter(propertyInfo);
-            }
-        }
-
         /*protected void AddAllPropertiesWithAttribute<T>(Type type) where T : Attribute
         {
             foreach (PropertyInfo propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
@@ -319,17 +292,6 @@ namespace WebmilioCommons.Networking.Packets
                 AddReaderWriter(propertyInfo);
             }
         }*/
-
-
-        private static List<PropertyInfo> AddReflectedType(Type type)
-        {
-            GlobalReflectedPropertyInfos.Add(type, new List<PropertyInfo>());
-
-            GlobalPacketWriters.Add(type, new Dictionary<PropertyInfo, Action<NetworkPacket, ModPacket, object>>());
-            GlobalPacketReaders.Add(type, new Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>());
-
-            return GlobalReflectedPropertyInfos[type];
-        }
 
 
         /// <summary>The <see cref="Mod"/> to which this packet belongs to. Initialized after the constructor has been called.</summary>
@@ -348,12 +310,12 @@ namespace WebmilioCommons.Networking.Packets
 
 
         [NotNetworkField]
-        public List<PropertyInfo> ReflectedPropertyInfos => GlobalReflectedPropertyInfos[GetType()];
+        public List<PropertyInfo> ReflectedPropertyInfos => NetworkPacketReflectionCache.globalReflectedPropertyInfos[GetType()];
 
         [NotNetworkField]
-        public Dictionary<PropertyInfo, Action<NetworkPacket, ModPacket, object>> PacketWriters => GlobalPacketWriters[GetType()];
+        public Dictionary<PropertyInfo, Action<NetworkPacket, ModPacket, object>> PacketWriters => NetworkPacketReflectionCache.globalPacketWriters[GetType()];
 
         [NotNetworkField]
-        public Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>> PacketReaders => GlobalPacketReaders[GetType()];
+        public Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>> PacketReaders => NetworkPacketReflectionCache.globalPacketReaders[GetType()];
     }
 }
