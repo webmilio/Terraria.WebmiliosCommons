@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using WebmilioCommons.Networking.Serializing;
 
 namespace WebmilioCommons.Networking.Packets
 {
@@ -27,7 +28,7 @@ namespace WebmilioCommons.Networking.Packets
         public static void WriteVector2(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.WriteVector2((Vector2) value);
         public static void WriteRGB(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.WriteRGB((Color) value);
 
-        public static void WriteNetworkSerializable(this NetworkPacket networkPacket, ModPacket modPacket, object value) => ((INetworkSerializable)value).Send(networkPacket, modPacket);
+        public static void WriteNetworkSerializable(this NetworkPacket networkPacket, ModPacket modPacket, object value) => ((Serializing.INetworkSerializable)value).Send(networkPacket, modPacket);
 
 
         public static object ReadBool(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadBoolean();
@@ -48,6 +49,6 @@ namespace WebmilioCommons.Networking.Packets
         public static object ReadVector2(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadVector2();
         public static object ReadRGB(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadRGB();
 
-        public static void ReadNetworkSerializable(this NetworkPacket networkPacket, INetworkSerializable networkSerializable, BinaryReader reader) => networkSerializable.Receive(networkPacket, reader);
+        public static void ReadNetworkSerializable(this NetworkPacket networkPacket, Serializing.INetworkSerializable networkSerializable, BinaryReader reader) => networkSerializable.Receive(networkPacket, reader);
     }
 }

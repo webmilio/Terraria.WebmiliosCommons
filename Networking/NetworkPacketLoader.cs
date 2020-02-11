@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using WebmilioCommons.Loaders;
 using WebmilioCommons.Networking.Packets;
 using WebmilioCommons.Networking.Packets.TileEntities;
+using WebmilioCommons.Networking.Serializing;
 
 namespace WebmilioCommons.Networking
 {
@@ -22,7 +26,8 @@ namespace WebmilioCommons.Networking
 
         public override void PreLoad()
         {
-            NetworkPacketReflectionCache.Initialize();
+            NetworkTypeSerializers.Initialize();
+            NetworkPacket.Initialize();
         }
 
         public override void PostLoad()
@@ -31,13 +36,13 @@ namespace WebmilioCommons.Networking
 
             if (lastPacketIndex <= byte.MaxValue)
             {
-                PacketIdWriter = (packet, modPacket, value) => packet.WriteByte(modPacket, (byte)(int) value);
-                PacketIdReader = NetworkPacketIOExtensions.ReadByte;
+                PacketIdWriter = (packet, modPacket, value) => packet.WriteByte(modPacket, (byte)(int)value);
+                PacketIdReader = (packet, reader) => (int)(byte)packet.ReadByte(reader);
             }
             else if (lastPacketIndex <= short.MaxValue)
             {
-                PacketIdWriter = (packet, modPacket, value) => packet.WriteShort(modPacket, (short)(int) value);
-                PacketIdReader = NetworkPacketIOExtensions.ReadShort;
+                PacketIdWriter = (packet, modPacket, value) => packet.WriteShort(modPacket, (short)(int)value);
+                PacketIdReader = (packet, reader) => (int)(short)packet.ReadShort(reader);
             }
             else
             {
@@ -48,7 +53,8 @@ namespace WebmilioCommons.Networking
 
         protected override void PostUnload()
         {
-            NetworkPacketReflectionCache.Unload();
+            NetworkPacket.Unload();
+            NetworkTypeSerializers.Unload();
         }
 
         /// <summary>Main method to hook into: redirect to this in your Mod's HandlePacket.</summary>
@@ -56,7 +62,7 @@ namespace WebmilioCommons.Networking
         /// <param name="fromWho"></param>
         public void HandlePacket(BinaryReader reader, int fromWho)
         {
-            int typeId = (int) PacketIdReader(null, reader);
+            int typeId = (int)PacketIdReader(null, reader);
             NetworkPacket packet = New(typeId);
 
             PacketReceived?.Invoke(packet, reader);

@@ -14,7 +14,7 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
-        protected override bool PreReceive(BinaryReader reader, int fromWho) => (Player = Main.player[SupposedPlayerID = reader.ReadInt32()]) != default;
+        internal override bool DoPreReceive(BinaryReader reader, int fromWho) => (Player = Main.player[SupposedPlayerID = reader.ReadInt32()]) != default;
 
 
         protected override void PreAssignValues(ref int? fromWho, ref int? toWho)

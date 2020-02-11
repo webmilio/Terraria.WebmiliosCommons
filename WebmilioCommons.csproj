@@ -12,6 +12,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <DocumentationFile>C:\Users\Webmilio\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons\WebmilioCommons.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -21,5 +22,6 @@
     <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />
     <Exec Command="copy &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mods\WebmilioCommons.tmod&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.tmod&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.dll&quot;" />
     <Exec Command="copy &quot;$(TargetPath)&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\references\WebmilioCommons.dll&quot;" />
+	<Exec Command="copy &quot;$(ProjectDir)$(OutDir)$(ProjectName).xml&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.xml&quot;" />
   </Target>
 </Project>
