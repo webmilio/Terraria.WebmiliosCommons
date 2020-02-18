@@ -147,11 +147,11 @@ namespace WebmilioCommons.Achievements.Helper.Proxies
             {
                 orig(self, achievement);
 
-                if (WebmilioCommonsMod.Instance.ClientConfiguration.ResetAchievements)
+                /*if (WebmilioCommonsMod.Instance.ClientConfiguration.ResetAchievements)
                 {
                     achievement.ClearProgress();
                     achievement.ClearTracker();
-                }
+                }*/
             }
             catch
             {

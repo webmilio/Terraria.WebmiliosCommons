@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace WebmilioCommons.Achievements.Helper
 {
-    public class StoredAchievement
+    internal class StoredAchievement
     {
         public Dictionary<string, JObject> Conditions;
     }

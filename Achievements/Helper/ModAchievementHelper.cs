@@ -158,32 +158,38 @@ namespace WebmilioCommons.Achievements.Helper
                 orig(self, achievement, largeForOtherLanguages);
             }
 
-            if (_loadedAchievements.ContainsKey(achievement))
-            {
-                Rectangle originalFrame = (Rectangle)_iconFrame.GetValue(self);
+            if (!_loadedAchievements.ContainsKey(achievement)) return;
 
-                _iconFrameLocked.SetValue(self, new Rectangle(originalFrame.X + originalFrame.Width + 2, originalFrame.Y, originalFrame.Width, originalFrame.Height));
 
-                GetAchievementIcon(self).Remove();
+            Rectangle originalFrame = (Rectangle)_iconFrame.GetValue(self);
 
-                UIImageFramed achievementIcon = new UIImageFramed(ModContent.GetTexture(_loadedAchievements[achievement].TexturePath), (Rectangle)_iconFrame.GetValue(self));
 
-                bool large = (bool)_large.GetValue(self);
+            _iconFrameLocked.SetValue(self, new Rectangle(originalFrame.X + originalFrame.Width + 2, originalFrame.Y, originalFrame.Width, originalFrame.Height));
+                
+                
+            GetAchievementIcon(self).Remove();
+            UIImageFramed achievementIcon = new UIImageFramed(ModContent.GetTexture(_loadedAchievements[achievement].TexturePath), (Rectangle)_iconFrame.GetValue(self));
 
-                float
-                    xOffset = large ? 6 : 0,
-                    yOffset = large ? 12 : 0;
 
-                achievementIcon.Left.Set(xOffset, 0f);
-                achievementIcon.Top.Set(yOffset, 0f);
+            bool large = (bool)_large.GetValue(self);
 
-                _achievementIcon.SetValue(self, achievementIcon);
-                self.Append(achievementIcon);
 
-                UIImage achievementIconBorders = GetAchievementIconBorders(self);
-                achievementIconBorders.Remove();
-                self.Append(achievementIconBorders);
-            }
+            float
+                xOffset = large ? 6 : 0,
+                yOffset = large ? 12 : 0;
+
+
+            achievementIcon.Left.Set(xOffset, 0f);
+            achievementIcon.Top.Set(yOffset, 0f);
+
+
+            _achievementIcon.SetValue(self, achievementIcon);
+            self.Append(achievementIcon);
+
+
+            UIImage achievementIconBorders = GetAchievementIconBorders(self);
+            achievementIconBorders.Remove();
+            self.Append(achievementIconBorders);
         }
 
         #endregion

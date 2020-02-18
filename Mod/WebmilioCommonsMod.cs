@@ -17,6 +17,7 @@ namespace WebmilioCommons
 {
     public sealed partial class WebmilioCommonsMod : Mod
     {
+        private ulong _ticks;
         internal List<IUnloadOnModUnload> unloadOnModUnload = new List<IUnloadOnModUnload>();
 
 
@@ -26,12 +27,12 @@ namespace WebmilioCommons
         }
 
 
+        /// <summary></summary>
         public override void Load()
         {
             KeyboardManager.Load();
             TimeManagement.Load();
             ModRarityLoader.Instance.TryLoad();
-
 
             if (!Main.dedServ)
             {
@@ -39,15 +40,18 @@ namespace WebmilioCommons
             }
 
 
+            Main.OnTick += UpdateTick;
             On.Terraria.WorldGen.SaveAndQuit += WorldGenOnSaveAndQuit;
+
 
             #region Client Configuration
 
-            ClientConfiguration = ModContent.GetInstance<ClientConfiguration>();
+            //ClientConfiguration = ModContent.GetInstance<ClientConfiguration>();
 
             #endregion
         }
 
+        /// <summary></summary>
         public override void PostSetupContent()
         {
             // In theory, you don't need to call the 'TryLoad()' method on any singletons since the instance is loaded the second its created.
@@ -65,9 +69,12 @@ namespace WebmilioCommons
             //PlayerSynchronizationPacket.Construct();
         }
 
+        /// <summary></summary>
         public override void Unload()
         {
+            Main.OnTick -= UpdateTick;
             On.Terraria.WorldGen.SaveAndQuit -= WorldGenOnSaveAndQuit;
+
 
             TimeManagement.Unload();
 
@@ -86,12 +93,28 @@ namespace WebmilioCommons
 
             #region Configuration
 
-            ClientConfiguration = null;
+            //ClientConfiguration = null;
 
             #endregion
 
             Instance = null;
         }
+
+
+        /// <summary></summary>
+        /// <param name="reader"></param>
+        /// <param name="whoAmI"></param>
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            NetworkPacketLoader.Instance.HandlePacket(reader, whoAmI);
+        }
+
+        /// <summary></summary>
+        public override void PostUpdateInput()
+        {
+            KeyboardManager.Update();
+        }
+
 
         private void WorldGenOnSaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
@@ -100,20 +123,12 @@ namespace WebmilioCommons
             TimeManagement.ForceUnalter(false);
         }
 
-
-        public override void HandlePacket(BinaryReader reader, int whoAmI)
-        {
-            NetworkPacketLoader.Instance.HandlePacket(reader, whoAmI);
-        }
-
-        public override void PostUpdateInput()
-        {
-            KeyboardManager.Update();
-        }
+        private void UpdateTick() => _ticks++;
 
 
+        /// <summary>The current loaded instance of <see cref="WebmilioCommonsMod"/>.</summary>
         public static WebmilioCommonsMod Instance { get; private set; }
 
-        public ClientConfiguration ClientConfiguration { get; private set; }
+        //public ClientConfiguration ClientConfiguration { get; private set; }
     }
 }
