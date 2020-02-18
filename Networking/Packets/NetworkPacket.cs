@@ -119,13 +119,13 @@ namespace WebmilioCommons.Networking.Packets
         /// <summary>Called before the packet is resent (in cases where it should). Useful for defining custom behavior that needs to be replicated on all clients.</summary>
         /// <param name="reader"></param>
         /// <param name="fromWho">The packet's sender.</param>
-        /// <returns><c>true</c>to continue with the execution of the <see cref="Receive"/> method; otherwise <c>false</c>.</returns>
+        /// <returns><c>true</c> to continue with the execution of the <see cref="Receive"/> method; otherwise <c>false</c>.</returns>
         protected virtual bool MidReceive(BinaryReader reader, int fromWho) => true;
 
         /// <summary>Called after the <see cref="Receive"/> method is done (all values are assigned and packet has been resent if necessary).</summary>
         /// <param name="reader"></param>
         /// <param name="fromWho">The packet's sender.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if the method was successfully executed; otherwise <c>false</c>.</returns>
         protected virtual bool PostReceive(BinaryReader reader, int fromWho) => true;
 
 
@@ -155,8 +155,22 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
+        /// <summary>
+        /// Called before <see cref="PopulatePacket"/>. Assigns the values used during <see cref="PopulatePacket"/>.
+        /// Only modify this method if you know what you're doing.
+        /// </summary>
+        /// <param name="modPacket"></param>
+        /// <param name="fromWho"></param>
+        /// <param name="toWho"></param>
         protected virtual void PrePopulatePacket(ModPacket modPacket, ref int fromWho, ref int toWho) { }
 
+        /// <summary>
+        /// Reads the properties' values and feeds them to the packet.
+        /// Only modify this method if you know what you're doing.
+        /// </summary>
+        /// <param name="modPacket"></param>
+        /// <param name="fromWho"></param>
+        /// <param name="toWho"></param>
         protected virtual void PopulatePacket(ModPacket modPacket, int? fromWho, int? toWho)
         {
             foreach (PropertyInfo propertyInfo in ReflectedPropertyInfos)
@@ -196,8 +210,17 @@ namespace WebmilioCommons.Networking.Packets
             PostSend(modPacket, fromWho, toWho);
         }
 
+        /// <summary>Called before <see cref="Send"/> and after <see cref="AssignInitialValues"/>.</summary>
+        /// <param name="modPacket"></param>
+        /// <param name="fromWho"></param>
+        /// <param name="toWho"></param>
+        /// <returns><c>true</c> to continue into <see cref="Send"/>, <c>false</c> to stop. Returns <c>true</c> by default.</returns>
         protected virtual bool PreSend(ModPacket modPacket, int? fromWho = null, int? toWho = null) => true;
 
+        /// <summary>Called after <see cref="Send"/>.</summary>
+        /// <param name="modPacket"></param>
+        /// <param name="fromWho"></param>
+        /// <param name="toWho"></param>
         protected virtual void PostSend(ModPacket modPacket, int? fromWho = null, int? toWho = null) { }
 
 
@@ -211,10 +234,12 @@ namespace WebmilioCommons.Networking.Packets
             return packet;
         }
 
-        /// <summary>Parses the current class's properties into the cache for sending and receiving.</summary>
+        /// <summary>Reflect the current class's properties into the cache for sending and receiving.</summary>
         protected void AddAllProperties() => AddAllProperties(GetType());
 
-        protected void AddAllProperties(Type type)
+        /// <summary>Reflect through all the given properties of a type and cache them.</summary>
+        /// <param name="type">The tyoe to reflect through.</param>
+        protected internal void AddAllProperties(Type type)
         {
             if (GlobalReflectedPropertyInfos.ContainsKey(type))
                 return;
