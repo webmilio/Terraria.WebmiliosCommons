@@ -10,6 +10,7 @@
             Under no circumstances should you load an achievement that is already loaded.
             </summary>
         </member>
+<<<<<<< HEAD
         <member name="T:WebmilioCommons.Achievements.ModAchievement">
             <summary>This class serves as the public surface linking the vanilla achievement system and the modded achievement system together.</summary>
         </member>
@@ -46,6 +47,10 @@
         <member name="M:WebmilioCommons.Achievements.ModAchievement.CompleteFlag(System.String)">
             <summary>Completes the specified named completion flag.</summary>
             <param name="flag">The name of the completion flag.</param>
+=======
+        <member name="M:WebmilioCommons.Achievements.ModAchievement.AddCompletionFlag">
+            <summary>Adds a default completion flag to be manually trigger with <see cref="M:WebmilioCommons.Achievements.ModAchievement.CompleteFlag"/>.</summary>
+>>>>>>> ac6b86d1950d712e51b77b60076e15f3f969ac61
         </member>
         <member name="M:WebmilioCommons.Achievements.ModAchievement.CompleteFlag(Terraria.Player)">
             <summary>Completes the default completion flag if the given player is the local player.</summary>
@@ -55,6 +60,7 @@
             <param name="player"></param>
             <param name="flag"></param>
         </member>
+<<<<<<< HEAD
         <member name="M:WebmilioCommons.Achievements.ModAchievement.AddTracker">
             <summary>Adds a tracker to the achievement, requiring a certain amount of tasks to be completed.</summary>
         </member>
@@ -119,6 +125,8 @@
         <member name="P:WebmilioCommons.Achievements.ModAchievement.GameAchievement">
             <summary>The vanilla category under to which this achievement belongs.</summary>
         </member>
+=======
+>>>>>>> ac6b86d1950d712e51b77b60076e15f3f969ac61
         <member name="M:WebmilioCommons.Extensions.EntityExtensions.IsImmobile(Terraria.Entity,System.Boolean,System.Int32)">
             <summary></summary>
             <param name="entity"></param>
@@ -217,6 +225,7 @@
         <member name="P:WebmilioCommons.Managers.SingletonManager`2.Instance">
             <summary>Unique TYPE instance (two same <see cref="!:TManager"/> will have the same instance), instantiated and initialized upon first call.</summary>
         </member>
+<<<<<<< HEAD
         <member name="M:WebmilioCommons.WebmilioCommonsMod.Load">
             <summary></summary>
         </member>
@@ -237,26 +246,117 @@
         <member name="P:WebmilioCommons.WebmilioCommonsMod.Instance">
             <summary>The current loaded instance of <see cref="T:WebmilioCommons.WebmilioCommonsMod"/>.</summary>
         </member>
+=======
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.PostUnload">
+            <summary></summary>
+        </member>
+>>>>>>> ac6b86d1950d712e51b77b60076e15f3f969ac61
         <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.HandlePacket(System.IO.BinaryReader,System.Int32)">
             <summary>Main method to hook into: redirect to this in your Mod's HandlePacket.</summary>
             <param name="reader"></param>
             <param name="fromWho"></param>
         </member>
+<<<<<<< HEAD
         <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)">
             <summary>
             The entire logic for receiving a packet (including resending from the server) is in this method.
             It is better to override PreReceive or PostReceive, depending on the behavior you want.
+=======
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendTileEntityPacket``1(Terraria.DataStructures.TileEntity)">
+            <summary>Sends a tile entity packet, providing it a tile entity.</summary>
+            <typeparam name="TPacket">The type of packet to send.</typeparam>
+            <param name="tileEntity">The associated tile entity.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendTileEntityPacket(WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket,Terraria.DataStructures.TileEntity)">
+            <summary>Sends a tile entity packet, providing it a tile entity.</summary>
+            <param name="packet">The packet to send.</param>
+            <param name="tileEntity">The associated tile entity.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendPacket(WebmilioCommons.Networking.Packets.NetworkPacket,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Sends the given packet. The packet must not be a child of <see cref="T:WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket"/>.</summary>
+            <param name="packet">The packet to send.</param>
+            <param name="fromWho">From who is the packet. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+            <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendPacket(System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Sends a new instance of the given packet. The packet must not be a child of <see cref="T:WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket"/>.</summary>
+            <param name="id">The packet id.</param>
+            <param name="fromWho">From who is the packet. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+            <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendPacket(System.Type,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Sends a new instance of the given packet type. The packet must not be a child of <see cref="T:WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket"/>.</summary>
+            <param name="type">The packet's type.</param>
+            <param name="fromWho">From who is the packet. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+            <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.NetworkPacketLoader.SendPacket``1(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Sends a new instance of the given packet type. The packet must not be a child of <see cref="T:WebmilioCommons.Networking.Packets.TileEntities.TileEntityNetworkPacket"/>.</summary>
+            <typeparam name="TPacket">The packet's type.</typeparam>
+            <param name="fromWho">From who is the packet. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+            <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/>.</param>
+        </member>
+        <member name="P:WebmilioCommons.Networking.NetworkPacketLoader.PacketIdReader">
+            <summary>The reader which is used to determine the packet id. Dynamically scales with how many packets (from 0 to 255, 255 to 65536, etc...).</summary>
+        </member>
+        <member name="P:WebmilioCommons.Networking.NetworkPacketLoader.PacketIdWriter">
+            <summary>The reader which is used to determine the packet id. Dynamically scales with how many packets (from 0 to 255, 255 to 65536, etc...).</summary>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)">
+            <summary>
+            The entire logic for receiving a packet (including resending from the server) is in this method.
+            It is better to override <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.PreReceive(System.IO.BinaryReader,System.Int32)"/>, <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.MidReceive(System.IO.BinaryReader,System.Int32)"/> or <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.PostReceive(System.IO.BinaryReader,System.Int32)"/>, depending on the behavior you want.
+>>>>>>> ac6b86d1950d712e51b77b60076e15f3f969ac61
             </summary>
             <param name="reader"></param>
             <param name="fromWho"></param>
             <returns></returns>
         </member>
+<<<<<<< HEAD
         <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.MidReceive(System.IO.BinaryReader,System.Int32)">
             <summary>Called before the packet is resent (in cases where it should). Useful for defining custom behavior that needs to be replicated on all clients.</summary>
             <param name="reader"></param>
             <param name="fromWho"></param>
             <returns></returns>
         </member>
+=======
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.PreReceive(System.IO.BinaryReader,System.Int32)">
+            <summary>Custom logic which should be executed before the rest of the <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)"/> method should put in here.</summary>
+            <param name="reader"></param>
+            <param name="fromWho">The packet's sender.</param>
+            <returns><c>true</c>to continue with the execution of the <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)"/> method; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.MidReceive(System.IO.BinaryReader,System.Int32)">
+            <summary>Called before the packet is resent (in cases where it should). Useful for defining custom behavior that needs to be replicated on all clients.</summary>
+            <param name="reader"></param>
+            <param name="fromWho">The packet's sender.</param>
+            <returns><c>true</c>to continue with the execution of the <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)"/> method; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.PostReceive(System.IO.BinaryReader,System.Int32)">
+            <summary>Called after the <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.Receive(System.IO.BinaryReader,System.Int32)"/> method is done (all values are assigned and packet has been resent if necessary).</summary>
+            <param name="reader"></param>
+            <param name="fromWho">The packet's sender.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.PreAssignValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)">
+            <summary>Executed before <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)"/> is called. Do not override this unless you know what you're doing.</summary>
+            <param name="fromWho">The packet's sender.</param>
+            <param name="toWho">The packet's receiver.</param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.AssignInitialValues(System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)">
+            <summary>Assigns the correct values to <paramref name="fromWho"/> and <paramref name="toWho"/>. Do not override this unless you know what you're doing.</summary>
+            <param name="fromWho"></param>
+            <param name="toWho"></param>
+        </member>
+        <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.Send(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            The entire logic for sending packets.
+            It is better to override <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.PreSend(Terraria.ModLoader.ModPacket,System.Nullable{System.Int32},System.Nullable{System.Int32})"/> or <see cref="M:WebmilioCommons.Networking.Packets.NetworkPacket.PostSend(Terraria.ModLoader.ModPacket,System.Nullable{System.Int32},System.Nullable{System.Int32})"/>, depending on the behavior you want.
+            </summary>
+            <param name="fromWho">The packet's sender.</param>
+            <param name="toWho">The packet's receiver.</param>
+        </member>
+>>>>>>> ac6b86d1950d712e51b77b60076e15f3f969ac61
         <member name="M:WebmilioCommons.Networking.Packets.NetworkPacket.MakePacket">
             <summary>Standard packet instance creation.</summary>
             <returns>An instance of <see cref="T:Terraria.ModLoader.ModPacket"/> with an auto-generated ID.</returns>
@@ -318,10 +418,13 @@
             <param name="second"></param>
             <returns></returns>
         </member>
+<<<<<<< HEAD
         <member name="M:WebmilioCommons.Worlds.Generation.Structures.WorldStructure.Generate(System.Int32,System.Int32)">
             <summary>Generates the structure from the top-left to the bottom-right starting at the given coordinates.</summary>
             <param name="x">The X coordinate of the origin tile..</param>
             <param name="y">The Y coordinate of the origin tile.</param>
         </member>
+=======
+>>>>>>> ac6b86d1950d712e51b77b60076e15f3f969ac61
     </members>
 </doc>

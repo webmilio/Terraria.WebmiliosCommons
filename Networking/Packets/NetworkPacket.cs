@@ -86,7 +86,7 @@ namespace WebmilioCommons.Networking.Packets
 
         /// <summary>
         /// The entire logic for receiving a packet (including resending from the server) is in this method.
-        /// It is better to override PreReceive or PostReceive, depending on the behavior you want.
+        /// It is better to override <see cref="PreReceive"/>, <see cref="MidReceive"/> or <see cref="PostReceive"/>, depending on the behavior you want.
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="fromWho"></param>
@@ -110,19 +110,33 @@ namespace WebmilioCommons.Networking.Packets
         
         internal virtual bool DoPreReceive(BinaryReader reader, int fromWho) => true;
 
+        /// <summary>Custom logic which should be executed before the rest of the <see cref="Receive"/> method should put in here.</summary>
+        /// <param name="reader"></param>
+        /// <param name="fromWho">The packet's sender.</param>
+        /// <returns><c>true</c>to continue with the execution of the <see cref="Receive"/> method; otherwise <c>false</c>.</returns>
         protected virtual bool PreReceive(BinaryReader reader, int fromWho) => true;
 
         /// <summary>Called before the packet is resent (in cases where it should). Useful for defining custom behavior that needs to be replicated on all clients.</summary>
         /// <param name="reader"></param>
-        /// <param name="fromWho"></param>
-        /// <returns></returns>
+        /// <param name="fromWho">The packet's sender.</param>
+        /// <returns><c>true</c>to continue with the execution of the <see cref="Receive"/> method; otherwise <c>false</c>.</returns>
         protected virtual bool MidReceive(BinaryReader reader, int fromWho) => true;
 
+        /// <summary>Called after the <see cref="Receive"/> method is done (all values are assigned and packet has been resent if necessary).</summary>
+        /// <param name="reader"></param>
+        /// <param name="fromWho">The packet's sender.</param>
+        /// <returns></returns>
         protected virtual bool PostReceive(BinaryReader reader, int fromWho) => true;
 
 
+        /// <summary>Executed before <see cref="AssignInitialValues"/> is called. Do not override this unless you know what you're doing.</summary>
+        /// <param name="fromWho">The packet's sender.</param>
+        /// <param name="toWho">The packet's receiver.</param>
         protected virtual void PreAssignValues(ref int? fromWho, ref int? toWho) { }
 
+        /// <summary>Assigns the correct values to <paramref name="fromWho"/> and <paramref name="toWho"/>. Do not override this unless you know what you're doing.</summary>
+        /// <param name="fromWho"></param>
+        /// <param name="toWho"></param>
         protected void AssignInitialValues(ref int? fromWho, ref int? toWho)
         {
             if (!toWho.HasValue)
@@ -150,6 +164,12 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
+        /// <summary>
+        /// The entire logic for sending packets.
+        /// It is better to override <see cref="PreSend"/> or <see cref="PostSend"/>, depending on the behavior you want.
+        /// </summary>
+        /// <param name="fromWho">The packet's sender.</param>
+        /// <param name="toWho">The packet's receiver.</param>
         public virtual void Send(int? fromWho = null, int? toWho = null)
         {
             if (Main.netMode == NetmodeID.SinglePlayer)
