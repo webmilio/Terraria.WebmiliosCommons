@@ -10,6 +10,7 @@ using WebmilioCommons.Configurations;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
+using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.Rarities;
 using WebmilioCommons.Time;
 
@@ -24,6 +25,8 @@ namespace WebmilioCommons
         public WebmilioCommonsMod()
         {
             Instance = this;
+
+            NetworkTypeSerializers.Initialize();
         }
 
 
@@ -72,13 +75,15 @@ namespace WebmilioCommons
         /// <summary></summary>
         public override void Unload()
         {
+            // Events
             Main.OnTick -= UpdateTick;
             On.Terraria.WorldGen.SaveAndQuit -= WorldGenOnSaveAndQuit;
 
-
+            NetworkTypeSerializers.Unload();
             TimeManagement.Unload();
 
 
+            // Server stuff
             if (Main.netMode != NetmodeID.Server)
             {
                 IdentityManager.Unload();
@@ -87,6 +92,7 @@ namespace WebmilioCommons
             }
 
 
+            // Unload all lazy-loaded singletons.
             List<IUnloadOnModUnload> originalUnloadList = new List<IUnloadOnModUnload>(unloadOnModUnload);
             originalUnloadList.ForEach(toUnload => toUnload.Unload());
 

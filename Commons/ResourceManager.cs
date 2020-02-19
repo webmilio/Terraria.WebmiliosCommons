@@ -135,7 +135,8 @@ namespace WebmilioCommons.Commons
         // TODO Verify impact on performance.
         private void MainOnOnTick()
         {
-            lock (_lock)
+            // Disabled for public release.
+            /*lock (_lock)
             {
                 bool[] prune = new bool[_instances.Count];
                 int index = 0;
@@ -151,7 +152,7 @@ namespace WebmilioCommons.Commons
                 for (int i = prune.Length - 1; i >= 0 ; i--)
                     if (prune[i])
                         Prune(_instances[i]);
-            }
+            }*/
         }
 
 
