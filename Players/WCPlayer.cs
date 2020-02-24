@@ -1,5 +1,6 @@
 ﻿using System;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -95,6 +96,11 @@ namespace WebmilioCommons.Players
         }
 
         public override void PostUpdate() => ForAllAnimations(animation => animation.HandlePostUpdate());
+
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            damageSource.SourceCustomReason = "peepee poopoo";
+        }
 
         #endregion
 

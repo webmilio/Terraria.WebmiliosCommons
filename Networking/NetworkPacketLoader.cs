@@ -26,7 +26,6 @@ namespace WebmilioCommons.Networking
 
         public override void PreLoad()
         {
-            NetworkTypeSerializers.Initialize();
             NetworkPacket.Initialize();
         }
 
@@ -55,7 +54,6 @@ namespace WebmilioCommons.Networking
         protected override void PostUnload()
         {
             NetworkPacket.Unload();
-            NetworkTypeSerializers.Unload();
         }
 
         /// <summary>Main method to hook into: redirect to this in your Mod's HandlePacket.</summary>
