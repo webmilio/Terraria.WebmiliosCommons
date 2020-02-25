@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using MonoMod.Utils;
 using Terraria;
@@ -34,7 +35,9 @@ namespace WebmilioCommons.Networking.Serializing
                 { typeof(string), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadString, NetworkPacketIOExtensions.WriteString) },
                 { typeof(Item), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadItem, NetworkPacketIOExtensions.WriteItem) },
                 { typeof(Vector2), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadVector2, NetworkPacketIOExtensions.WriteVector2) },
-                { typeof(Color), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadRGB, NetworkPacketIOExtensions.WriteRGB) }
+                { typeof(Color), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadRGB, NetworkPacketIOExtensions.WriteRGB) },
+
+                { typeof(BitsByte), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadBitsByte, NetworkPacketIOExtensions.WriteBitsByte) }
             };
         }
 

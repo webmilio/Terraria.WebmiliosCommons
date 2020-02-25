@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿using Terraria;
+using Terraria.DataStructures;
 using WebmilioCommons.Players;
 
 namespace WebmilioCommons.NPCs
@@ -13,6 +14,6 @@ namespace WebmilioCommons.NPCs
         /// <param name="pvp"></param>
         /// <param name="damageSource"></param>
         /// <returns>The custom death message.</returns>
-        string GetDeathMessage(WCPlayer player, double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource);
+        string GetDeathMessage(Player player, double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource);
     }
 }

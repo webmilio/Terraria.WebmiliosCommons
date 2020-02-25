@@ -28,7 +28,10 @@ namespace WebmilioCommons.Networking.Packets
         public static void WriteVector2(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.WriteVector2((Vector2) value);
         public static void WriteRGB(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.WriteRGB((Color) value);
 
+        public static void WriteBitsByte(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.Write((BitsByte) value);
+
         public static void WriteNetworkSerializable(this NetworkPacket networkPacket, ModPacket modPacket, object value) => ((Serializing.INetworkSerializable)value).Send(networkPacket, modPacket);
+
 
 
         public static object ReadBool(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadBoolean();
@@ -48,6 +51,8 @@ namespace WebmilioCommons.Networking.Packets
         public static object ReadItem(this NetworkPacket networkPacket, BinaryReader reader) => ItemIO.Receive(reader, true, true);
         public static object ReadVector2(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadVector2();
         public static object ReadRGB(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadRGB();
+
+        public static object ReadBitsByte(this NetworkPacket networkPacket, BinaryReader reader) => (BitsByte) reader.ReadByte();
 
         public static void ReadNetworkSerializable(this NetworkPacket networkPacket, Serializing.INetworkSerializable networkSerializable, BinaryReader reader) => networkSerializable.Receive(networkPacket, reader);
     }

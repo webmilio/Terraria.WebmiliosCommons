@@ -21,6 +21,7 @@ namespace WebmilioCommons.Rarities
         private Dictionary<int, Color> _rarities;
 
 
+        /// <inheritdoc />
         public override void PreLoad()
         {
             try
@@ -54,20 +55,22 @@ namespace WebmilioCommons.Rarities
         }
 
 
+        /// <inheritdoc />
         public override void PostLoad()
         {
-            ForAllGeneric(rarity =>
+            if (HookingSuccessful)
             {
-                if (HookingSuccessful)
+                ForAllGeneric(rarity =>
                 {
                     rarity.Id = _nextRarityId++;
                     _rarities.Add(rarity.Id, rarity.Color);
-                }
-                else
-                    rarity.Id = rarity.LowerVanillaRarity;
-            });
+                });
+            }
+            else
+                ForAllGeneric(rarity => rarity.Id = rarity.LowerVanillaRarity);
         }
 
+        /// <inheritdoc />
         protected override void PreUnload()
         {
             ForAllGeneric(rarity => _rarities.Remove(rarity.Id));
@@ -228,11 +231,19 @@ namespace WebmilioCommons.Rarities
         */
 
 
+
+        /// <summary>Gets the <see cref="ModRarity"/> instance corresponding to the specified type.</summary>
+        /// <typeparam name="T">The type of rarity.</typeparam>
+        /// <returns>The <see cref="ModRarity"/> from the loaded rarities if found; otherwise <c>null</c>.</returns>
         public static ModRarity GetRarity<T>() where T : ModRarity => Instance.GetGeneric<T>();
 
+        /// <summary>Gets the rarity id of the given type.</summary>
+        /// <typeparam name="T">The rarity type.</typeparam>
+        /// <returns></returns>
         public static int RarityType<T>() where T : ModRarity => Instance.GetGeneric<T>().Id;
 
 
+        /// <summary><c>true</c> if the loader successfully hooked into the game's IL; otherwise <c>false</c>.</summary>
         public bool HookingSuccessful { get; private set; }
     }
 }
