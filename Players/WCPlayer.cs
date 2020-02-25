@@ -7,6 +7,7 @@ using Terraria.ModLoader.IO;
 using WebmilioCommons.Effects.ScreenShaking;
 using WebmilioCommons.Extensions;
 using WebmilioCommons.Networking.Attributes;
+using WebmilioCommons.NPCs;
 
 namespace WebmilioCommons.Players
 {
@@ -97,15 +98,25 @@ namespace WebmilioCommons.Players
 
         public override void PostUpdate() => ForAllAnimations(animation => animation.HandlePostUpdate());
 
+
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
-            damageSource.SourceCustomReason = "peepee poopoo";
+            IOverridesPlayerDeathMessage opdm = default;
+
+            if (damageSource.SourceNPCIndex > -1)
+                opdm = Main.npc[damageSource.SourceNPCIndex]?.modNPC as IOverridesPlayerDeathMessage;
+            else if (damageSource.SourceProjectileIndex > -1)
+                opdm = Main.projectile[damageSource.SourceProjectileIndex]?.modProjectile as IOverridesPlayerDeathMessage;
+
+            if (opdm != default)
+                damageSource.SourceCustomReason = opdm.GetDeathMessage(player, damage, hitDirection, pvp, damageSource);
         }
+
 
         #endregion
 
 
-        
+
         public Guid UniqueID { get; internal set; }
     }
 }

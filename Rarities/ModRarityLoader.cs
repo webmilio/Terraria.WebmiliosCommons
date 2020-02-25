@@ -91,8 +91,7 @@ namespace WebmilioCommons.Rarities
 
             // Finding baseColor index.
             int baseColorIndex = 0;
-            c.GotoNext(i => i.MatchLdloca(out baseColorIndex),
-                i => i.MatchLdsfld<Main>("mouseTextColor"));
+            c.GotoNext(i => i.MatchLdloca(out baseColorIndex), i => i.MatchLdsfld<Main>("mouseTextColor"));
 
             c.Goto(null); // Move to end
             c.GotoPrev(MoveType.After, i => i.MatchLdloc(baseColorIndex));
@@ -142,6 +141,8 @@ namespace WebmilioCommons.Rarities
             string sil = c.Context.ToString();
         }
 
+
+        /*
         private void Main_OnMouseText(On.Terraria.Main.orig_MouseText orig, Main self, string cursorText, int rare, byte diff, int hackedMouseX, int hackedMouseY, int hackedScreenWidth, int hackedScreenHeight)
         {
             if (Main.instance.mouseNPC > -1 || cursorText == null)
@@ -224,6 +225,7 @@ namespace WebmilioCommons.Rarities
         {
 
         }
+        */
 
 
         public static ModRarity GetRarity<T>() where T : ModRarity => Instance.GetGeneric<T>();
