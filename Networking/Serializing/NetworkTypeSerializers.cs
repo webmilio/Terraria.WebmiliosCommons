@@ -37,7 +37,8 @@ namespace WebmilioCommons.Networking.Serializing
                 { typeof(Vector2), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadVector2, NetworkPacketIOExtensions.WriteVector2) },
                 { typeof(Color), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadRGB, NetworkPacketIOExtensions.WriteRGB) },
 
-                { typeof(BitsByte), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadBitsByte, NetworkPacketIOExtensions.WriteBitsByte) }
+                { typeof(BitsByte), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadBitsByte, NetworkPacketIOExtensions.WriteBitsByte) },
+                { typeof(Rectangle), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadRectangle, NetworkPacketIOExtensions.WriteRectangle) }
             };
         }
 

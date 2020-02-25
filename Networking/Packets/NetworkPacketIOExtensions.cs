@@ -8,6 +8,7 @@ using WebmilioCommons.Networking.Serializing;
 
 namespace WebmilioCommons.Networking.Packets
 {
+#pragma warning disable 1591
     public static class NetworkPacketIOExtensions
     {
         public static void WriteBool(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.Write((bool)value);
@@ -29,6 +30,35 @@ namespace WebmilioCommons.Networking.Packets
         public static void WriteRGB(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.WriteRGB((Color) value);
 
         public static void WriteBitsByte(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.Write((BitsByte) value);
+
+        public static void WriteRectangle(this NetworkPacket networkPacket, ModPacket modPacket, object value)
+        {
+            Rectangle rectangle = (Rectangle) value;
+
+            modPacket.Write(rectangle.X);
+            modPacket.Write(rectangle.Y);
+            modPacket.Write(rectangle.Width);
+            modPacket.Write(rectangle.Height);
+        }
+
+        public static void WriteVector3(this NetworkPacket networkPacket, ModPacket modPacket, object value)
+        {
+            Vector3 vector = (Vector3) value;
+
+            modPacket.Write(vector.X);
+            modPacket.Write(vector.Y);
+            modPacket.Write(vector.Z);
+        }
+
+        public static void WriteVector4(this NetworkPacket networkPacket, ModPacket modPacket, object value)
+        {
+            Vector4 vector = (Vector4) value;
+
+            modPacket.Write(vector.X);
+            modPacket.Write(vector.Y);
+            modPacket.Write(vector.Z);
+            modPacket.Write(vector.W);
+        }
 
         public static void WriteNetworkSerializable(this NetworkPacket networkPacket, ModPacket modPacket, object value) => ((Serializing.INetworkSerializable)value).Send(networkPacket, modPacket);
 
@@ -54,6 +84,18 @@ namespace WebmilioCommons.Networking.Packets
 
         public static object ReadBitsByte(this NetworkPacket networkPacket, BinaryReader reader) => (BitsByte) reader.ReadByte();
 
+        public static object ReadRectangle(this NetworkPacket networkPacket, BinaryReader reader) => new Rectangle(
+            reader.ReadInt32(), reader.ReadInt32(),
+            reader.ReadInt32(), reader.ReadInt32());
+
+        public static object ReadVector3(this NetworkPacket networkPacket, BinaryReader reader) => new Vector3(
+            reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
+
+        public static object ReadVector4(this NetworkPacket networkPacket, BinaryReader reader) => new Vector4(
+            reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
+
+
         public static void ReadNetworkSerializable(this NetworkPacket networkPacket, Serializing.INetworkSerializable networkSerializable, BinaryReader reader) => networkSerializable.Receive(networkPacket, reader);
     }
+#pragma warning restore 1591
 }
