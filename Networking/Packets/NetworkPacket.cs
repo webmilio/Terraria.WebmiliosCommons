@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Extensions;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -20,6 +21,9 @@ namespace WebmilioCommons.Networking.Packets
         internal static Dictionary<Type, Dictionary<PropertyInfo, Action<NetworkPacket, ModPacket, object>>> GlobalPacketWriters { get; set; }
         [NotNetworkField]
         internal static Dictionary<Type, Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>> GlobalPacketReaders { get; set; }
+
+
+        public delegate bool ReceiveMethod(BinaryReader reader, int fromWho);
 
 
         internal static void Initialize()
@@ -96,16 +100,20 @@ namespace WebmilioCommons.Networking.Packets
             if (!DoPreReceive(reader, fromWho) || !PreReceive(reader, fromWho))
                 return false;
 
+
             foreach (PropertyInfo propertyInfo in ReflectedPropertyInfos)
                 propertyInfo.SetValue(this, PacketReaders[propertyInfo](this, reader));
 
-            if (!MidReceive(reader, fromWho))
+            
+            if (!ExecuteIfShould(reader, fromWho, DoMidReceive))
                 return false;
 
-            if (Main.netMode == NetmodeID.Server && (Behavior == NetworkPacketBehavior.SendToAllClients || Behavior == NetworkPacketBehavior.SendToAll))
+
+            if (Main.netMode == NetmodeID.Server && Behavior.HasFlag(NetworkPacketBehavior.SendToAllClients))
                 this.Send(fromWho, (int)NetworkDestinationType.AllClients);
 
-            return PostReceive(reader, fromWho);
+
+            return ExecuteIfShould(reader, fromWho, PostReceive);
         }
         
         internal virtual bool DoPreReceive(BinaryReader reader, int fromWho) => true;
@@ -116,11 +124,31 @@ namespace WebmilioCommons.Networking.Packets
         /// <returns><c>true</c>to continue with the execution of the <see cref="Receive"/> method; otherwise <c>false</c>.</returns>
         protected virtual bool PreReceive(BinaryReader reader, int fromWho) => true;
 
+
+        /// <summary>Executes a provided receiver method if the <see cref="Behavior"/> of the method implies it.</summary>
+        /// <param name="reader"></param>
+        /// <param name="fromWho"></param>
+        /// <param name="method">The receiver method to execute if it should.</param>
+        /// <param name="returnIfNotExecute">The value to return if the method wasn't executed.</param>
+        /// <returns><c>true</c> if <paramref name="method"/> returned <c>true</c>; <paramref name="returnIfNotExecute"/> if the method wasn't executed; otherwise <c>false</c>.</returns>
+        public virtual bool ExecuteIfShould(BinaryReader reader, int fromWho, ReceiveMethod method, bool returnIfNotExecute = true)
+        {
+            if (Main.netMode == NetmodeID.Server && !Behavior.HasFlag(NetworkPacketBehavior.SendToServer) || Main.netMode == NetmodeID.MultiplayerClient && !Behavior.HasFlag(NetworkPacketBehavior.SendToClient))
+                return returnIfNotExecute;
+
+            return method(reader, fromWho);
+        }
+
+        internal virtual bool DoMidReceive(BinaryReader reader, int fromWho) => MidReceive(reader, fromWho);
+
         /// <summary>Called before the packet is resent (in cases where it should). Useful for defining custom behavior that needs to be replicated on all clients.</summary>
         /// <param name="reader"></param>
         /// <param name="fromWho">The packet's sender.</param>
         /// <returns><c>true</c> to continue with the execution of the <see cref="Receive"/> method; otherwise <c>false</c>.</returns>
         protected virtual bool MidReceive(BinaryReader reader, int fromWho) => true;
+
+
+
 
         /// <summary>Called after the <see cref="Receive"/> method is done (all values are assigned and packet has been resent if necessary).</summary>
         /// <param name="reader"></param>
@@ -144,10 +172,10 @@ namespace WebmilioCommons.Networking.Packets
                 if (Behavior == NetworkPacketBehavior.SendToClient)
                     throw new ArgumentNullException($"The packet behavior is defined as sending to a specific client. You must specify the client id with the {nameof(toWho)} field.");
 
-                if (Behavior == NetworkPacketBehavior.SendToServer)
-                    toWho = 256;
-                else if (Behavior == NetworkPacketBehavior.SendToAllClients || Behavior == NetworkPacketBehavior.SendToAll)
+                if (Behavior.HasFlag(NetworkPacketBehavior.SendToAllClients))
                     toWho = -1;
+                else if (Behavior.Has(NetworkPacketBehavior.SendToServer))
+                    toWho = 256;
             }
 
             if (!fromWho.HasValue)
@@ -311,13 +339,16 @@ namespace WebmilioCommons.Networking.Packets
         [NotNetworkField]
         public int Id => NetworkPacketLoader.Instance.GetId(GetType());
 
+        /// <summary>The packet's behavior. See <see cref="NetworkPacketBehavior"/>'s documentation for more information.</summary>
         [NotNetworkField]
-        public virtual NetworkPacketBehavior Behavior => NetworkPacketBehavior.SendToAll;
+        public virtual NetworkPacketBehavior Behavior { get; set; } = NetworkPacketBehavior.SendToAll;
 
+        /// <summary>The entity to which this instance pertains.</summary>
         [NotNetworkField]
         public object ContextEntity { get; protected set; }
 
 
+        /// <summary>Don't touch this if you don't know what it does.</summary>
         [NotNetworkField]
         public List<PropertyInfo> ReflectedPropertyInfos => GlobalReflectedPropertyInfos[GetType()];
 

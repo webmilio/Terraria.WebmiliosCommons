@@ -11,20 +11,37 @@ namespace WebmilioCommons.Time
 {
     public class TimeAlterationRequest : INetworkSerializable
     {
+        /// <summary>Instantiates an empty standard <see cref="TimeAlterationRequest"/>.</summary>
         public TimeAlterationRequest() { }
 
+        /// <summary>Instantiates a standard <see cref="TimeAlterationRequest"/>.</summary>
+        /// <param name="player">The player who initiated the time alteration.</param>
+        /// <param name="duration">How long the time alteration should last.</param>
+        /// <param name="tickRate">The rate at which the world ticks for everything else than the source. Only tick rates of 0 or 1 are supposed as of yet.</param>
         public TimeAlterationRequest(Player player, int duration, int tickRate) : this(Sources.Player, player, duration, tickRate)
         {
         }
 
+        /// <summary>Instantiates a standard <see cref="TimeAlterationRequest"/>.</summary>
+        /// <param name="npc">The player who initiated the time alteration.</param>
+        /// <param name="duration">How long the time alteration should last.</param>
+        /// <param name="tickRate">The rate at which the world ticks for everything else than the source. Only tick rates of 0 or 1 are supposed as of yet.</param>
         public TimeAlterationRequest(NPC npc, int duration, int tickRate) : this(Sources.NPC, npc, duration, tickRate)
         {
         }
 
+        /// <summary>Instantiates a standard <see cref="TimeAlterationRequest"/>.</summary>
+        /// <param name="projectile">The npc who initiated the time alteration.</param>
+        /// <param name="duration">How long the time alteration should last.</param>
+        /// <param name="tickRate">The rate at which the world ticks for everything else than the source. Only tick rates of 0 or 1 are supposed as of yet.</param>
         public TimeAlterationRequest(Projectile projectile, int duration, int tickRate) : this(Sources.Projectile, projectile, duration, tickRate)
         {
         }
 
+        /// <summary>Instantiates a standard <see cref="TimeAlterationRequest"/>.</summary>
+        /// <param name="item">The item which initiated the time alteration.</param>
+        /// <param name="duration">How long the time alteration should last.</param>
+        /// <param name="tickRate">The rate at which the world ticks for everything else than the source. Only tick rates of 0 or 1 are supposed as of yet.</param>
         public TimeAlterationRequest(Item item, int duration, int tickRate) : this(Sources.Item, item, duration, tickRate)
         {
         }
@@ -34,7 +51,7 @@ namespace WebmilioCommons.Time
         /// </summary>
         /// <param name="sourceType"></param>
         /// <param name="duration"></param>
-        /// <param name="tickRate">The rate at which the world ticks for everything else than the source. Only tick rates of 0 or 1 are supposed.</param>
+        /// <param name="tickRate">The rate at which the world ticks for everything else than the source. Only tick rates of 0 or 1 are supposed as of yet.</param>
         public TimeAlterationRequest(Sources sourceType, int duration, int tickRate) : this(sourceType, null, duration, tickRate)
         {
             if (sourceType.HasFlag(Sources.Entity))
@@ -51,6 +68,9 @@ namespace WebmilioCommons.Time
         }
 
 
+        /// <summary>Writes the request's information to the provided <see cref="ModPacket"/>. To add information to the <see cref="ModPacket"/>, override <see cref="ModSend"/>.</summary>
+        /// <param name="networkPacket"></param>
+        /// <param name="modPacket"></param>
         public void Send(NetworkPacket networkPacket, ModPacket modPacket)
         {
             networkPacket.WriteString(modPacket, SourceType.ToString());
@@ -69,8 +89,19 @@ namespace WebmilioCommons.Time
             networkPacket.WriteInt(modPacket, DayRate);
             networkPacket.WriteInt(modPacket, TimeRate);
             networkPacket.WriteInt(modPacket, RainRate);
+
+            ModSend(networkPacket, modPacket);
         }
 
+        /// <summary></summary>
+        /// <param name="networkPacket"></param>
+        /// <param name="modPacket"></param>
+        public virtual void ModSend(NetworkPacket networkPacket, ModPacket modPacket) { }
+
+
+        /// <summary>Reads the request's information to the provided <see cref="ModPacket"/>. To receive additional information to the <see cref="ModPacket"/>, override <see cref="ModReceive"/>.</summary>
+        /// <param name="networkPacket"></param>
+        /// <param name="reader"></param>
         public void Receive(NetworkPacket networkPacket, BinaryReader reader)
         {
             SourceType = (Sources) Enum.Parse(typeof(Sources), reader.ReadString());
@@ -109,7 +140,14 @@ namespace WebmilioCommons.Time
             DayRate = reader.ReadInt32();
             TimeRate = reader.ReadInt32();
             RainRate = reader.ReadInt32();
+
+            ModReceive(networkPacket, reader);
         }
+
+        /// <summary></summary>
+        /// <param name="networkPacket"></param>
+        /// <param name="modPacket"></param>
+        public virtual void ModReceive(NetworkPacket networkPacket, BinaryReader reader) { }
 
 
         public Sources SourceType { get; private set; }

@@ -254,7 +254,11 @@ namespace WebmilioCommons.Loaders
             return default;
         }
 
-        public IEnumerable<T> GenericEnumerable => genericByType.Values.AsEnumerable();
+        /// <summary>An <see cref="IEnumerable{T}"/> that contains all instances created during load (generics).</summary>
+        public IEnumerable<T> Generics => genericByType.Values.AsEnumerable();
+
+        [Obsolete("Obsolete, use Generics instead.", true)]
+        public IEnumerable<T> GenericEnumerable => Generics;
 
         public IEnumerable<string> UnlocalizedNames => TypeHasUnlocalizedName ? typeByUnlocalizedName.Keys : default;
 
