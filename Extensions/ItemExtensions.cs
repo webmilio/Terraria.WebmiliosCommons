@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace WebmilioCommons.Extensions
@@ -29,6 +30,11 @@ namespace WebmilioCommons.Extensions
         }
 
         public static bool Consume(this ModItem modItem, int count = 1) => Consume(modItem.item, count);
+
+
+        public static void Synchronize(this ModItem modItem) => Synchronize(modItem.item);
+
+        public static void Synchronize(this Item item) => NetMessage.SendData(MessageID.SyncItem, number: item.whoAmI);
 
 
         #region Item Checks

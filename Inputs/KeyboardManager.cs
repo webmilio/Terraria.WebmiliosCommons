@@ -12,7 +12,7 @@ namespace WebmilioCommons.Inputs
         public delegate void KeyStateChanged(Keys key);
 
         private static Keys[] _allKeys;
-        public static readonly Dictionary<Keys, KeyStates> keyStates = new Dictionary<Keys, KeyStates>();
+        private static Dictionary<Keys, KeyStates> _keyStates;
 
         public static readonly List<Keys>
             notPressed = new List<Keys>(),
@@ -26,12 +26,23 @@ namespace WebmilioCommons.Inputs
             _loaded = false;
 
             _allKeys = (Keys[])Enum.GetValues(typeof(Keys));
-            keyStates.Clear();
+
+            _keyStates = new Dictionary<Keys, KeyStates>();
 
             for (int i = 0; i < _allKeys.Length; i++)
-                keyStates.Add(_allKeys[i], KeyStates.NotPressed);
+                _keyStates.Add(_allKeys[i], KeyStates.NotPressed);
 
             _loaded = true;
+        }
+
+        internal static void Unload()
+        {
+            _loaded = false;
+            
+            _allKeys = null;
+
+            _keyStates.Clear();
+            _keyStates = null;
         }
 
 
@@ -40,7 +51,7 @@ namespace WebmilioCommons.Inputs
             if (!_loaded)
                 return;
 
-            foreach (KeyValuePair<Keys, KeyStates> kvp in new Dictionary<Keys, KeyStates>(keyStates))
+            foreach (KeyValuePair<Keys, KeyStates> kvp in new Dictionary<Keys, KeyStates>(_keyStates))
             {
                 Keys key = kvp.Key;
 
@@ -66,7 +77,7 @@ namespace WebmilioCommons.Inputs
 
         private static void SetState(Keys key, KeyStates keyState)
         {
-            keyStates[key] = keyState;
+            _keyStates[key] = keyState;
 
             if (keyState.HasFlag(KeyStates.JustPressed))
             {
@@ -99,7 +110,7 @@ namespace WebmilioCommons.Inputs
 
 
         public static KeyStates GetKeyState(Keys key, bool ignoreBlockInput = false) => 
-            (!Main.blockInput || ignoreBlockInput) ? keyStates[key] : KeyStates.NotPressed;
+            (!Main.blockInput || ignoreBlockInput) ? _keyStates[key] : KeyStates.NotPressed;
 
 
         public static bool IsNotPressed(Keys key, bool ignoreBlockInput = false) =>Is(key, KeyStates.NotPressed, ignoreBlockInput);
@@ -109,7 +120,7 @@ namespace WebmilioCommons.Inputs
 
 
         public static bool Is(Keys key, KeyStates keyState, bool ignoreBlockInput = false) =>
-            (!Main.blockInput || ignoreBlockInput) && keyStates[key].HasFlag(keyState);
+            (!Main.blockInput || ignoreBlockInput) && _keyStates[key].HasFlag(keyState);
 
 
         public static event KeyStateChanged KeyPressed, KeyReleased;

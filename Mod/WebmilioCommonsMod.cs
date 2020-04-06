@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 using WebmilioCommons.Achievements.Helper;
 using WebmilioCommons.Commons;
 using WebmilioCommons.Configurations;
+using WebmilioCommons.Globals;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
@@ -33,13 +34,14 @@ namespace WebmilioCommons
         /// <summary></summary>
         public override void Load()
         {
-            KeyboardManager.Load();
-            TimeManagement.Load();
+            GlobalNPCSetupShopMethods.Load();
             ModRarityLoader.Instance.TryLoad();
+            TimeManagement.Load();
 
-            if (!Main.dedServ)
+            if (Main.netMode != NetmodeID.Server)
             {
                 IdentityManager.Load();
+                KeyboardManager.Load();
             }
 
 
@@ -79,6 +81,7 @@ namespace WebmilioCommons
             Main.OnTick -= UpdateTick;
             On.Terraria.WorldGen.SaveAndQuit -= WorldGenOnSaveAndQuit;
 
+            GlobalNPCSetupShopMethods.Unload();
             NetworkTypeSerializers.Unload();
             TimeManagement.Unload();
 
@@ -87,7 +90,7 @@ namespace WebmilioCommons
             if (Main.netMode != NetmodeID.Server)
             {
                 IdentityManager.Unload();
-
+                KeyboardManager.Unload();
                 ModAchievementHelper.Unload();
             }
 
