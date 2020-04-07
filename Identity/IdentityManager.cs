@@ -20,7 +20,7 @@ namespace WebmilioCommons.Identity
                 if (mod.Code == null)
                     continue;
 
-                foreach (TypeInfo type in mod.Code.DefinedTypes.Where(t => t.IsSubclassOf(typeof(Identity)) && t.Assembly != Assembly.GetExecutingAssembly()))
+                foreach (TypeInfo type in mod.Code.DefinedTypes.Where(t => t.IsSubclassOf(typeof(Identity))))
                     _allIdentities.Add(Activator.CreateInstance(type) as Identity);
             }
         }
@@ -48,6 +48,9 @@ namespace WebmilioCommons.Identity
         }
 
 
+        public static bool Is<T>() where T : Identity => HasIdentity && Identity is T;
+
+
         #region Steam
 
         private static void VerifyIdentities()
@@ -58,6 +61,7 @@ namespace WebmilioCommons.Identity
                     if (identity.Verify(SteamID64))
                     {
                         identity.Active = true;
+                        Identity = identity;
                         return;
                     }
                 }
