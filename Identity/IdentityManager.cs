@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Terraria.ModLoader;
+using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Identity
 {
@@ -17,10 +18,10 @@ namespace WebmilioCommons.Identity
 
             foreach (Mod mod in ModLoader.Mods)
             {
-                if (mod.Code == null)
+                if (mod.Code == null || mod == WebmilioCommonsMod.Instance)
                     continue;
 
-                foreach (TypeInfo type in mod.Code.DefinedTypes.Where(t => t.IsSubclassOf(typeof(Identity))))
+                foreach (TypeInfo type in mod.Code.Concrete<Identity>())
                     _allIdentities.Add(Activator.CreateInstance(type) as Identity);
             }
         }
@@ -44,7 +45,8 @@ namespace WebmilioCommons.Identity
 
         internal static void Unload()
         {
-
+            _allIdentities.Clear();
+            _allIdentities = null;
         }
 
 
