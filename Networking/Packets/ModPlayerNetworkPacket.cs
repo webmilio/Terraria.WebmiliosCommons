@@ -14,20 +14,35 @@ namespace WebmilioCommons.Networking.Packets
         {
         }
 
+        protected ModPlayerNetworkPacket(T modPlayer) : base(modPlayer.player)
+        {
+            ModPlayer = modPlayer;
+        }
+
 
         internal override bool DoPreReceive(BinaryReader reader, int fromWho)
         {
             bool result = base.DoPreReceive(reader, fromWho);
 
-            ModPlayer = ModPlayerGetter(Player);
+            if (ModPlayer == null)
+                ModPlayer = ModPlayerGetter(Player);
+
             return result;
         }
 
-        protected override void PreAssignValues(ref int? fromWho, ref int? toWho)
+        /*protected override void PreAssignValues(ref int? fromWho, ref int? toWho)
         {
             base.PreAssignValues(ref fromWho, ref toWho);
 
             ModPlayer = ModPlayerGetter(Player);
+        }*/
+
+        protected override void PrePopulatePacket(ModPacket modPacket, ref int fromWho, ref int toWho)
+        {
+            base.PrePopulatePacket(modPacket, ref fromWho, ref toWho);
+
+            if (ModPlayer == null)
+                ModPlayer = ModPlayerGetter(Player);
         }
 
 

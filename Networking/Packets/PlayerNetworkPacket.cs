@@ -13,6 +13,11 @@ namespace WebmilioCommons.Networking.Packets
         {
         }
 
+        protected PlayerNetworkPacket(Player player)
+        {
+            Player = player;
+        }
+
 
         internal override bool DoPreReceive(BinaryReader reader, int fromWho) => (Player = Main.player[SupposedPlayerID = reader.ReadInt32()]) != default;
 
@@ -20,7 +25,7 @@ namespace WebmilioCommons.Networking.Packets
         protected override void PreAssignValues(ref int? fromWho, ref int? toWho)
         {
             if (!fromWho.HasValue)
-                Player = Main.player[(fromWho = SupposedPlayerID = Main.myPlayer).Value];
+                fromWho = SupposedPlayerID = Main.myPlayer;
         }
 
         protected override void PrePopulatePacket(ModPacket modPacket, ref int fromWho, ref int toWho)
@@ -28,7 +33,7 @@ namespace WebmilioCommons.Networking.Packets
             if (Player == null)
                 Player = Main.player[SupposedPlayerID = fromWho];
 
-            modPacket.Write(SupposedPlayerID);
+            modPacket.Write(Player.whoAmI);
         }
 
 

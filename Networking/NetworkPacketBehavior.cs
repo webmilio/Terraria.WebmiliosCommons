@@ -7,8 +7,11 @@ namespace WebmilioCommons.Networking
     [Flags]
     public enum NetworkPacketBehavior : byte
     {
-        /// <summary>Sends directly to the specified client (toWho).</summary>
+        /// <summary>Same as <see cref="SendToSpecific"/>.</summary>
         SendToClient = 1,
+
+        /// <summary>Sends directly to the specified entity (toWho).</summary>
+        SendToSpecific = SendToClient,
 
         /// <summary>
         /// Sends to all clients using the server as a bounce, but <see cref="NetworkPacket.MidReceive"/> and <see cref="NetworkPacket.PostReceive"/> are not executed on the server (automatically resent).

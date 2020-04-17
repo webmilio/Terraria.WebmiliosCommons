@@ -133,7 +133,11 @@ namespace WebmilioCommons.Networking.Packets
         /// <returns><c>true</c> if <paramref name="method"/> returned <c>true</c>; <paramref name="returnIfNotExecute"/> if the method wasn't executed; otherwise <c>false</c>.</returns>
         public virtual bool ExecuteIfShould(BinaryReader reader, int fromWho, ReceiveMethod method, bool returnIfNotExecute = true)
         {
-            if (Main.netMode == NetmodeID.Server && !Behavior.HasFlag(NetworkPacketBehavior.SendToServer) || Main.netMode == NetmodeID.MultiplayerClient && !Behavior.HasFlag(NetworkPacketBehavior.SendToClient))
+            if (
+                Behavior.HasFlag(NetworkPacketBehavior.SendToAny) ||
+                Main.netMode == NetmodeID.Server && !Behavior.HasFlag(NetworkPacketBehavior.SendToServer) || 
+                Main.netMode == NetmodeID.MultiplayerClient && !Behavior.HasFlag(NetworkPacketBehavior.SendToClient)
+                )
                 return returnIfNotExecute;
 
             return method(reader, fromWho);
@@ -217,23 +221,29 @@ namespace WebmilioCommons.Networking.Packets
             if (Main.netMode == NetmodeID.SinglePlayer)
                 return;
 
+
             ModPacket modPacket = MakePacket();
 
             PreAssignValues(ref fromWho, ref toWho);
             AssignInitialValues(ref fromWho, ref toWho);
 
+
             int
                 confirmedFromWho = fromWho.Value,
                 confirmedToWho = toWho.Value;
 
+
             PrePopulatePacket(modPacket, ref confirmedFromWho, ref confirmedToWho);
             PopulatePacket(modPacket, confirmedFromWho, confirmedToWho);
+
 
             if (!PreSend(modPacket, fromWho, toWho))
                 return;
 
+
             modPacket.Send(confirmedToWho, confirmedFromWho);
             NetworkPacketLoader.OnPacketSent(this);
+
 
             PostSend(modPacket, fromWho, toWho);
         }

@@ -62,10 +62,12 @@ namespace WebmilioCommons.Players
             ScreenShake.TickScreenShakes();
         }
 
-        public override void OnEnterWorld(Player player)
+        
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
-            this.SendIfLocal<WCPlayerOnJoinWorld>();
+            new WCPlayerOnJoinWorld(this).Send(fromWho, toWho);
         }
+
 
         public override void PreUpdate()
         {

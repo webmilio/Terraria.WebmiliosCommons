@@ -172,10 +172,10 @@ namespace WebmilioCommons.Tinq
         {
             switch (enumerable)
             {
-                case Player[] playerArray when playerArray == Main.player:
-                    return Main.maxPlayers;
                 case NPC[] npcArray when npcArray == Main.npc:
                     return Main.maxNPCs;
+                /*case Player[] playerArray when playerArray == Main.player:
+                    return Main.maxPlayers;*/
                 case Projectile[] projectileArray when projectileArray == Main.projectile:
                     return Main.maxProjectiles;
                 case Item[] itemArray when itemArray == Main.item:
@@ -189,14 +189,14 @@ namespace WebmilioCommons.Tinq
         { 
             switch (entity)
             {
-                case Player player:
-                    return Main.maxPlayers;
                 case NPC npc:
                     return Main.maxNPCs;
-                case Projectile projectile:
+                /*case Player player:
+                    return Main.maxPlayers;
+                    case Projectile projectile:
                     return Main.maxProjectiles;
                 case Item item:
-                    return Main.maxItems;
+                    return Main.maxItems;*/
                 default:
                     return -1;
             };

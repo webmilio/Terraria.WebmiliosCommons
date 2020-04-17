@@ -48,6 +48,9 @@ namespace WebmilioCommons.Extensions
             return nearestPlayer;
         }
 
+        /// <summary>Checks if the player is holding an item capable of breaking blocks (pickaxes, axes, hammers).</summary>
+        /// <param name="player"></param>
+        /// <returns><c>true</c> if the player is holding a mining item; <c>false</c> otherwise.</returns>
         public static bool IsHoldingMiningItem(this Player player)
         {
             Item item = player.HeldItem;
@@ -57,7 +60,9 @@ namespace WebmilioCommons.Extensions
 
             return item.pick > 0 || item.axe > 0 || item.hammer > 0;
         }
-        
+
+        public static bool IsHoldingMiningItem(this ModPlayer modPlayer) => IsHoldingMiningItem(modPlayer.player);
+
 
         public static Tile GetTileOnCenter(this ModPlayer modPlayer) => GetTileOnCenter(modPlayer.player);
         public static Tile GetTileOnCenter(this ModNPC modNPC) => GetTileOnCenter(modNPC.npc);
