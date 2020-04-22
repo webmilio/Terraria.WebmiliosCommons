@@ -8,7 +8,7 @@ using WebmilioCommons.Managers;
 
 namespace WebmilioCommons.Loaders
 {
-    public abstract class Loader<T>
+    public class Loader<T>
     {
         public const int FIRST_INDEX = 1;
 
@@ -20,14 +20,14 @@ namespace WebmilioCommons.Loaders
 
 
         /// <summary>Instantiates a new <see cref="Loader{T}"/> and loads all found subtypes of <see cref="T"/> that are not abstract.</summary>
-        protected Loader() : this(typeInfo => true) { }
+        public Loader() : this(typeInfo => true) { }
 
         /// <summary>
         /// Instantiates a new <see cref="Loader{T}"/> and loads all found subtypes of <see cref="T"/> that are not abstract and
         /// match the specified <param name="loadCondition">load condition(s)</param>.
         /// </summary>
         /// <param name="loadCondition">The condition under which a subclass of <see cref="T"/> should be loaded.</param>
-        protected Loader(Func<TypeInfo, bool> loadCondition)
+        public Loader(Func<TypeInfo, bool> loadCondition)
         {
             LoadCondition = loadCondition;
             TypeHasUnlocalizedName = typeof(IHasUnlocalizedName).IsAssignableFrom(typeof(T));
@@ -76,10 +76,10 @@ namespace WebmilioCommons.Loaders
         internal virtual void InternalPostUnload() { }
 
         /// <summary>Called directly after the initialization checks during <see cref="TryLoad"/>.</summary>
-        public virtual void PreLoad() { }
+        protected virtual void PreLoad() { }
 
         /// <summary>Called at the end of <see cref="TryLoad"/>.</summary>
-        public virtual void PostLoad() { }
+        protected virtual void PostLoad() { }
 
 
         public virtual void Unload()
