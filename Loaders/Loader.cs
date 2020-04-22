@@ -76,10 +76,10 @@ namespace WebmilioCommons.Loaders
         internal virtual void InternalPostUnload() { }
 
         /// <summary>Called directly after the initialization checks during <see cref="TryLoad"/>.</summary>
-        protected virtual void PreLoad() { }
+        public virtual void PreLoad() { }
 
         /// <summary>Called at the end of <see cref="TryLoad"/>.</summary>
-        protected virtual void PostLoad() { }
+        public virtual void PostLoad() { }
 
 
         public virtual void Unload()
