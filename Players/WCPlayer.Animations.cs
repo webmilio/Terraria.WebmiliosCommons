@@ -38,6 +38,10 @@ namespace WebmilioCommons.Players
 
         public void ForAllAnimations(Action<PlayerAnimation> action)
         {
+            if (_currentAnimations.Count == 0)
+                return;
+
+
             for (int i = 0; i < _currentAnimations.Count; i++)
                 action(_currentAnimations[i]);
         }

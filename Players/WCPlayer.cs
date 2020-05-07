@@ -105,10 +105,12 @@ namespace WebmilioCommons.Players
         {
             IOverridesPlayerDeathMessage opdm = default;
 
+
             if (damageSource.SourceNPCIndex > -1)
                 opdm = Main.npc[damageSource.SourceNPCIndex]?.modNPC as IOverridesPlayerDeathMessage;
             else if (damageSource.SourceProjectileIndex > -1)
                 opdm = Main.projectile[damageSource.SourceProjectileIndex]?.modProjectile as IOverridesPlayerDeathMessage;
+
 
             if (opdm != default)
                 damageSource.SourceCustomReason = opdm.GetDeathMessage(player, damage, hitDirection, pvp, damageSource);

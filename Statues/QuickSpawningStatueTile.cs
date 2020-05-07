@@ -9,7 +9,7 @@ using WebmilioCommons.Tiles;
 namespace WebmilioCommons.Statues
 {
     /*
-     * Most of this code (if not all of it) is from ExampleStatue from tModLoader.
+     * Some of this code (if not all of it) is from ExampleStatue from tModLoader.
      * https://github.com/tModLoader/tModLoader/blob/master/ExampleMod/Tiles/ExampleStatue.cs
     */
     public abstract class QuickSpawningStatueTile : StandardTile
@@ -19,9 +19,14 @@ namespace WebmilioCommons.Statues
             ITEM_SPAWN_DELAY = 60;
 
 
-        protected QuickSpawningStatueTile(int droppedItemType)
+        protected QuickSpawningStatueTile(int droppedItemType) : this(droppedItemType, TileObjectData.Style2xX)
+        {
+        }
+
+        protected QuickSpawningStatueTile(int droppedItemType, TileObjectData tileObjectData)
         {
             DroppedItemType = droppedItemType;
+            TileObjectData = tileObjectData;
         }
 
 
@@ -32,7 +37,7 @@ namespace WebmilioCommons.Statues
             Main.tileFrameImportant[Type] = true;
             Main.tileObsidianKill[Type] = true;
 
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
+            TileObjectData.newTile.CopyFrom(TileObjectData);
             TileObjectData.addTile(Type);
 
             AddMapEntry(MapEntryColor, GetMapEntryName());
@@ -97,11 +102,15 @@ namespace WebmilioCommons.Statues
 
         public virtual void SpawnItem(int wireHitX, int wireHitY, int spawnX, int spawnY)
         {
+            spawnX += GetItemSpawnXOffset(wireHitX, wireHitY, spawnX, spawnY);
+            spawnY += GetItemSpawnYOffset(wireHitX, wireHitY, spawnX, spawnY);
+
+
             if (!PreSpawnItem(wireHitX, wireHitY, spawnX, spawnY))
                 return;
 
 
-            int itemIndex = DoSpawnItem(wireHitX, wireHitY, spawnX, spawnY, GetRandomSpawnedType());
+            int itemIndex = DoSpawnItem(wireHitX, wireHitY, spawnX, spawnY, GetSpawnedType());
 
             if (itemIndex < 0)
                 return;
@@ -110,10 +119,13 @@ namespace WebmilioCommons.Statues
             PostSpawnItem(Main.item[itemIndex]);
         }
 
-        public int DoSpawnItem(int wireHitX, int wireHitY, int spawnX, int spawnY, int itemType) => Item.NewItem(spawnX, spawnY - 20, 0, 0, itemType, GetItemStack(itemType), false, GetItemPrefix(itemType), false);
+        public int DoSpawnItem(int wireHitX, int wireHitY, int spawnX, int spawnY, int itemType) => Item.NewItem(spawnX, spawnY, 0, 0, itemType, GetItemStack(itemType), false, GetItemPrefix(itemType), false);
 
         public virtual void PostSpawnItem(Item item) { }
 
+
+        public virtual int GetItemSpawnXOffset(int wireHitX, int wireHitY, int spawnX, int spawnY) => 0;
+        public virtual int GetItemSpawnYOffset(int wireHitX, int wireHitY, int spawnX, int spawnY) => -20;
 
         public virtual int GetItemStack(int itemType) => 1;
         public virtual int GetItemPrefix(int itemType) => 0;
@@ -123,15 +135,19 @@ namespace WebmilioCommons.Statues
 
         #region NPCs
 
-        public virtual bool PreSpawnNPC(int wireHitX, int wireHitY, int spawnX, int spawnY) => EntityMechSpawn(NPC.MechSpawn, spawnX, spawnY, -12);
+        public virtual bool PreSpawnNPC(int wireHitX, int wireHitY, int spawnX, int spawnY) => EntityMechSpawn(NPC.MechSpawn, spawnX, spawnY, spawnYOffset: -12);
 
         public virtual void SpawnNPC(int wireHitX, int wireHitY, int spawnX, int spawnY)
         {
+            spawnX += GetNPCSpawnXOffset(wireHitX, wireHitY, spawnX, spawnY);
+            spawnY += GetNPCSpawnYOffset(wireHitX, wireHitY, spawnX, spawnY);
+
+
             if (!PreSpawnNPC(wireHitX, wireHitY, spawnX, spawnY)) 
                 return;
 
 
-            int npcIndex = DoSpawnNPC(wireHitX, wireHitY, spawnX, spawnY, GetRandomSpawnedType());
+            int npcIndex = DoSpawnNPC(wireHitX, wireHitY, spawnX, spawnY, GetSpawnedType());
 
             if (npcIndex < 0)
                 return;
@@ -147,8 +163,14 @@ namespace WebmilioCommons.Statues
         /// <param name="spawnY"></param>
         /// <param name="npcType"></param>
         /// <returns>-1 to stop the execution of <see cref="SpawnNPC"/>; otherwise the NPC index in the world.</returns>
-        public virtual int DoSpawnNPC(int wireHitX, int wireHitY, int spawnX, int spawnY, int npcType) => NPC.NewNPC(spawnX, spawnY - 12, npcType);
+        public virtual int DoSpawnNPC(int wireHitX, int wireHitY, int spawnX, int spawnY, int npcType) => 
+            NPC.NewNPC(spawnX, spawnY, npcType);
 
+        /// <summary>Called after <see cref="SpawnNPC"/>. Modifies the existing NPC by calling <see cref="GetNPCValue"/>, <see cref="GetNPCSlots"/> and <see cref="GetNPCSpawnedFromStatue"/>.</summary>
+        /// <param name="npc"></param>
+        /// <seealso cref="GetNPCValue"/>
+        /// <seealso cref="GetNPCSlots"/>
+        /// <seealso cref="GetNPCSpawnedFromStatue"/>
         public virtual void PostSpawnNPC(NPC npc)
         {
             npc.value = GetNPCValue(npc);
@@ -157,6 +179,9 @@ namespace WebmilioCommons.Statues
         }
 
 
+        public virtual int GetNPCSpawnXOffset(int wireHitX, int wireHitY, int spawnX, int spawnY) => 0;
+        public virtual int GetNPCSpawnYOffset(int wireHitX, int wireHitY, int spawnX, int spawnY) => -12;
+
         public virtual float GetNPCValue(NPC npc) => 0f;
         public virtual float GetNPCSlots(NPC npc) => 0f;
         public virtual bool GetNPCSpawnedFromStatue(NPC npc) => true;
@@ -164,19 +189,38 @@ namespace WebmilioCommons.Statues
         #endregion
 
 
+        /// <summary>Place to have all your custom logic as to which entity to spawn. When not overriden, calls <see cref="GetRandomSpawnedType"/>.</summary>
+        /// <returns></returns>
+        /// <seealso cref="GetRandomSpawnedType"/>
+        public virtual int GetSpawnedType() => GetRandomSpawnedType();
+
+
         public virtual bool PreWiringMechCheck(int wireHitX, int wireHitY, int spawnX, int spawnY) => Wiring.CheckMech(wireHitX, wireHitY, SpawnDelay);
 
-        protected bool EntityMechSpawn(Func<float, float, int, bool> mechSpawn, int spawnX, int spawnY, int spawnYOffset = 0)
+        protected bool EntityMechSpawn(Func<float, float, int, bool> mechSpawn, int spawnX, int spawnY, int spawnXOffset = 0, int spawnYOffset = 0)
         {
             for (int i = 0; i < SpawnedTypes.Length; i++)
-                if (!mechSpawn(spawnX, spawnY + spawnYOffset, SpawnedTypes[i]))
+                if (!mechSpawn(spawnX + spawnXOffset, spawnY + spawnYOffset, SpawnedTypes[i]))
                     return false;
 
             return true;
         }
 
 
-        protected int GetRandomSpawnedType() => SpawnedTypes.Length == 1 ? SpawnedTypes[0] : Main.rand.Next(SpawnedTypes);
+        /// <summary>Gets a random type from <see cref="SpawnedTypes"/>.</summary>
+        /// <returns>The only element in <see cref="SpawnedTypes"/> if <see cref="SpawnedTypes"/> contains one element; otherwise a random type.</returns>
+        /// <seealso cref="SpawnedTypes"/>
+        protected int GetRandomSpawnedType()
+        {
+            int[] spawnedTypes = GetSpawnedTypesArray();
+            int type = spawnedTypes.Length == 1 ? spawnedTypes[0] : Main.rand.Next(spawnedTypes);
+
+            return type;
+        }
+
+        /// <summary>Used when you have different entity spawning chances.</summary>
+        /// <returns></returns>
+        protected virtual int[] GetSpawnedTypesArray() => SpawnedTypes;
 
 
         public virtual Color MapEntryColor { get; } = new Color(144, 148, 144);
@@ -184,11 +228,20 @@ namespace WebmilioCommons.Statues
 
         public int DroppedItemType { get; }
 
+        public TileObjectData TileObjectData { get; }
 
+
+        /// <summary>The type of entity the statue spawns. The method calls differ depending on this value.</summary>
+        /// <seealso cref="SpawnItem"/>
+        /// <seealso cref="SpawnNPC"/>
         public virtual StatueSpawneableEntityType Spawns { get; } = StatueSpawneableEntityType.NPC;
 
-        public virtual int SpawnDelay { get; } = NPC_SPAWN_DELAY;
 
-        public abstract int[] SpawnedTypes { get; }
+        /// <summary>The cooldown between each spawn for a given statue.</summary>
+        public virtual int SpawnDelay { get; } = NPC_SPAWN_DELAY;
+        
+
+        /// <summary>Used in checks for max statue-spawned entities and default random implementation.</summary>
+        public abstract int [] SpawnedTypes { get; }
     }
 }

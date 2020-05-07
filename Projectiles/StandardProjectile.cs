@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+﻿using Microsoft.Xna.Framework;
+using Terraria.ModLoader;
 
 namespace WebmilioCommons.Projectiles
 {
@@ -19,6 +20,55 @@ namespace WebmilioCommons.Projectiles
 
             if (projectile.frame >= frameCount)
                 projectile.frame = 0;
+        }
+
+
+        public Vector2 Position
+        {
+            get => projectile.position;
+            set => projectile.position = value;
+        }
+
+        public float Rotation
+        {
+            get => projectile.rotation;
+            set => projectile.rotation = value;
+        }
+
+        public Vector2 Velocity
+        {
+            get => projectile.velocity;
+            set => projectile.velocity = value;
+        }
+
+        public int TimeLeft
+        {
+            get => projectile.timeLeft;
+            set => projectile.timeLeft = value;
+        }
+
+        public float AI0
+        {
+            get => projectile.ai[0];
+            set => projectile.ai[0] = value;
+        }
+
+        public float AI1
+        {
+            get => projectile.ai[1];
+            set => projectile.ai[1] = value;
+        }
+
+        public int Frame
+        {
+            get => projectile.frame;
+            set => projectile.frame = value;
+        }
+
+        public int FrameCounter
+        {
+            get => projectile.frameCounter;
+            set => projectile.frameCounter = value;
         }
     }
 }

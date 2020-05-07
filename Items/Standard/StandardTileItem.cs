@@ -29,7 +29,7 @@ namespace WebmilioCommons.Items.Standard
             int itemUseStyle = ItemUseStyleID.SwingThrow, int itemUseTime = USE_TIME, int useAnimation = USE_TIME, bool autoReuse = true, bool consumable = true) :
             base(displayNames, tooltips, width, height, rarity: rarity, value: value, maxStack: maxStack)
         {
-            PlacedPlacedTileType = placedTileType;
+            PlacedTileType = placedTileType;
 
             ItemUseStyle = itemUseStyle;
             ItemUseTime = itemUseTime;
@@ -46,7 +46,7 @@ namespace WebmilioCommons.Items.Standard
 
             item.maxStack = MaxStack;
 
-            item.createTile = PlacedPlacedTileType;
+            item.createTile = PlacedTileType;
 
             item.useStyle = ItemUseStyle;
             item.useTime = ItemUseTime;
@@ -59,7 +59,7 @@ namespace WebmilioCommons.Items.Standard
         }
 
 
-        public int PlacedPlacedTileType { get; }
+        public int PlacedTileType { get; }
 
         public int ItemUseStyle { get; }
         public int ItemUseTime { get; }
