@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace WebmilioCommons.Projectiles
@@ -23,11 +24,32 @@ namespace WebmilioCommons.Projectiles
         }
 
 
+        public Player Owner
+        {
+            get
+            {
+                int owner = projectile.owner;
+
+                if (owner < 0 || owner > Main.maxPlayers)
+                    return default;
+
+                return Main.player[owner];
+            }
+        }
+
+
         public Vector2 Position
         {
             get => projectile.position;
             set => projectile.position = value;
         }
+
+        public Vector2 Center
+        {
+            get => projectile.Center;
+            set => projectile.Center = value;
+        }
+
 
         public float Rotation
         {
@@ -41,11 +63,39 @@ namespace WebmilioCommons.Projectiles
             set => projectile.velocity = value;
         }
 
+
+        public int Width
+        {
+            get => projectile.width;
+            set => projectile.width = value;
+        }
+
+        public int Height
+        {
+            get => projectile.height;
+            set => projectile.height = value;
+        }
+
+
+        public int Damage
+        {
+            get => projectile.damage;
+            set => projectile.damage = value;
+        }
+
+        public int Penetrate
+        {
+            get => projectile.penetrate;
+            set => projectile.penetrate = value;
+        }
+
+
         public int TimeLeft
         {
             get => projectile.timeLeft;
             set => projectile.timeLeft = value;
         }
+
 
         public float AI0
         {
@@ -58,6 +108,7 @@ namespace WebmilioCommons.Projectiles
             get => projectile.ai[1];
             set => projectile.ai[1] = value;
         }
+
 
         public int Frame
         {

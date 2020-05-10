@@ -6,8 +6,10 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebmilioCommons.Effects.ScreenShaking;
 using WebmilioCommons.Extensions;
+using WebmilioCommons.Items;
 using WebmilioCommons.Networking.Attributes;
 using WebmilioCommons.NPCs;
+#pragma warning disable 1591
 
 namespace WebmilioCommons.Players
 {
@@ -46,10 +48,41 @@ namespace WebmilioCommons.Players
         #endregion
 
 
+        public override bool CanSellItem(NPC vendor, Item[] shopInventory, Item item)
+        {
+            if (!(item.modItem is ICanBeSold cbs))
+                return true;
+
+            return cbs.CanBeSold(this, vendor, shopInventory);
+        }
+
+
         public override void Initialize()
         {
             InitializeAnimations();
         }
+
+
+        public override void PreUpdate()
+        {
+            if (!PreUpdateTime())
+                return;
+
+            ForAllAnimations(animation => animation.HandlePreUpdate());
+        }
+
+        public override void PreUpdateBuffs() => ForAllAnimations(animation => animation.HandlePreUpdateBuffs());
+        public override void PreUpdateMovement() => ForAllAnimations(animation => animation.HandlePreUpdateMovements());
+
+
+        public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            /*KeyStates keyState = KeyboardManager.GetKeyState(Keys.U);
+
+            if (keyState != KeyStates.NotPressed)
+                Main.NewText($"Key U State: {keyState}");*/
+        }
+
 
         public override void ModifyScreenPosition()
         {
@@ -68,25 +101,6 @@ namespace WebmilioCommons.Players
             new WCPlayerOnJoinWorld(this).Send(fromWho, toWho);
         }
 
-
-        public override void PreUpdate()
-        {
-            if (!PreUpdateTime())
-                return;
-
-            ForAllAnimations(animation => animation.HandlePreUpdate());
-        }
-
-        public override void PreUpdateBuffs() => ForAllAnimations(animation => animation.HandlePreUpdateBuffs());
-        public override void PreUpdateMovement() => ForAllAnimations(animation => animation.HandlePreUpdateMovements());
-
-        public override void ProcessTriggers(TriggersSet triggersSet)
-        {
-            /*KeyStates keyState = KeyboardManager.GetKeyState(Keys.U);
-
-            if (keyState != KeyStates.NotPressed)
-                Main.NewText($"Key U State: {keyState}");*/
-        }
 
         public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff)
         {
