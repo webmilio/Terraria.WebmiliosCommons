@@ -10,7 +10,7 @@ namespace WebmilioCommons.Items.Standard
         protected readonly int width, height;
 
 
-        protected StandardItem(string displayName, string tooltip, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999) : 
+        protected StandardItem(string displayName, string tooltip, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) : 
             this(
                 new Dictionary<GameCulture, string>()
                 {
@@ -23,7 +23,7 @@ namespace WebmilioCommons.Items.Standard
         {
         }
 
-        protected StandardItem(Dictionary<GameCulture, string> displayNames, Dictionary<GameCulture, string> tooltips, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999)
+        protected StandardItem(Dictionary<GameCulture, string> displayNames, Dictionary<GameCulture, string> tooltips, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1)
         {
             DisplayNames = displayNames;
             Tooltips = tooltips;

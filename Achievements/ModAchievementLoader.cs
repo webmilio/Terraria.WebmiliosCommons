@@ -15,5 +15,13 @@ namespace WebmilioCommons.Achievements
             item.Mod = mod;
             ModAchievementHelper.RegisterAchievement(item, type);
         }
+
+        public override void PostLoad()
+        {
+            foreach (var modAchievement in Generics)
+            {
+                var texture = modAchievement.Texture;
+            }
+        }
     }
 }

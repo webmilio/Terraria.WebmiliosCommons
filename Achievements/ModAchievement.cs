@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
@@ -17,6 +18,8 @@ namespace WebmilioCommons.Achievements
         /// <summary>The name of the default completion flag.</summary>
         public const string DEFAULT_COMPLETION_FLAG = "Completed";
         internal readonly List<AchievementCondition> conditions = new List<AchievementCondition>();
+
+        private Texture _texture;
 
 
         /// <summary></summary>
@@ -65,7 +68,7 @@ namespace WebmilioCommons.Achievements
 
         /// <summary>Completes the default completion flag.</summary>
         public void CompleteFlag() => CompleteFlag(DEFAULT_COMPLETION_FLAG);
-        
+
         /// <summary>Completes the specified named completion flag.</summary>
         /// <param name="flag">The name of the completion flag.</param>
         public void CompleteFlag(string flag)
@@ -100,7 +103,7 @@ namespace WebmilioCommons.Achievements
         [Obsolete("Trackers are not yet implemented.")]
         public void AddTracker()
         {
-            
+
         }
 
 
@@ -120,8 +123,8 @@ namespace WebmilioCommons.Achievements
         public static void CompleteFlag<T>(Player player) where T : ModAchievement
         {
             if (Main.netMode == NetmodeID.Server)
-                return; 
-            
+                return;
+
             ModAchievementHelper.GetModAchievement<T>().CompleteFlag(player);
         }
 
@@ -204,6 +207,8 @@ namespace WebmilioCommons.Achievements
 
         /// <summary>The path to the texture for the achievement.</summary>
         public virtual string TexturePath { get; }
+
+        public Texture Texture => _texture ?? (_texture = ModContent.GetTexture(TexturePath));
 
         /// <summary>true if the achievement be automatically created upon loading all <see cref="ModAchievement"/>.</summary>
         public virtual bool Autoload { get; protected set; } = true;
