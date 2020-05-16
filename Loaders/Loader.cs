@@ -24,13 +24,15 @@ namespace WebmilioCommons.Loaders
 
         /// <summary>
         /// Instantiates a new <see cref="Loader{T}"/> and loads all found subtypes of <see cref="T"/> that are not abstract and
-        /// match the specified <param name="loadCondition">load condition(s)</param>.
+        /// match the specified <see cref="loadCondition" />load condition(s)</param>.
         /// </summary>
         /// <param name="loadCondition">The condition under which a subclass of <see cref="T"/> should be loaded.</param>
         public Loader(Func<TypeInfo, bool> loadCondition)
         {
             LoadCondition = loadCondition;
             TypeHasUnlocalizedName = typeof(IHasUnlocalizedName).IsAssignableFrom(typeof(T));
+
+            NextIndex = FirstIndex;
         }
 
 
@@ -86,7 +88,7 @@ namespace WebmilioCommons.Loaders
         {
             PreUnload();
 
-            NextIndex = FIRST_INDEX;
+            NextIndex = FirstIndex;
 
             idByType.Clear();
             typeById.Clear();
@@ -283,6 +285,6 @@ namespace WebmilioCommons.Loaders
         public int FirstIndex => FIRST_INDEX;
 
         /// <summary>The next auto-assigned Id for the next added generic instance.</summary>
-        public int NextIndex { get; private set; } = FIRST_INDEX;
+        public int NextIndex { get; private set; }
     }
 }

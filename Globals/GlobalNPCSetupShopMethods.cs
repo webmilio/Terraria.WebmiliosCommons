@@ -40,7 +40,7 @@ namespace WebmilioCommons.Globals
 
         internal static void Unload()
         {
-            shopMethods.Clear();
+            shopMethods?.Clear();
             shopMethods = null;
         }
 
