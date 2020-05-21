@@ -24,6 +24,8 @@ namespace WebmilioCommons.Rarities
         /// <inheritdoc />
         public override void PreLoad()
         {
+            _rarities = new Dictionary<int, Color>();
+
             try
             {
                 /*Type irType = typeof(ItemRarity);
