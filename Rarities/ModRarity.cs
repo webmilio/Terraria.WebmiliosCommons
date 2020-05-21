@@ -30,7 +30,7 @@ namespace WebmilioCommons.Rarities
 
         public int UpperVanillaRarity { get; }
 
-
+        /// <summary>The displayed color. You can return something dynamic like <example>new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB)</example>.</summary>
         public virtual Color Color { get; }
     }
 }
