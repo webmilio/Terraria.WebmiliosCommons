@@ -1,26 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\references\tModLoader.targets" />
   <PropertyGroup>
     <AssemblyName>WebmilioCommons</AssemblyName>
     <TargetFramework>net45</TargetFramework>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>latest</LangVersion>
-    <RootNamespace>WebmilioCommons</RootNamespace>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <DocumentationFile>C:\Users\Webmilio\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons\WebmilioCommons.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
   <Target Name="BuildMod" AfterTargets="Build">
     <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />
     <Exec Command="copy &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mods\WebmilioCommons.tmod&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.tmod&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.dll&quot;" />
     <Exec Command="copy &quot;$(TargetPath)&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\references\WebmilioCommons.dll&quot;" />
-	<Exec Command="copy &quot;$(ProjectDir)$(OutDir)$(ProjectName).xml&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.xml&quot;" />
+	  <Exec Command="copy &quot;$(ProjectDir)$(OutDir)$(ProjectName).xml&quot; &quot;%25USERPROFILE%25\Documents\My Games\Terraria\ModLoader\Mod Sources\WebmilioCommons-Releases\WebmilioCommons.xml&quot;" />
   </Target>
+  <ItemGroup>
+    <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+  </ItemGroup>
 </Project>
