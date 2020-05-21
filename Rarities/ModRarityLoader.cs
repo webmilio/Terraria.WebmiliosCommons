@@ -26,7 +26,7 @@ namespace WebmilioCommons.Rarities
         {
             try
             {
-                Type irType = typeof(ItemRarity);
+                /*Type irType = typeof(ItemRarity);
                 FieldInfo irField = irType.GetField(nameof(_rarities), BindingFlags.NonPublic | BindingFlags.Static);
                 object irDic = irField.GetValue(null);
 
@@ -43,7 +43,7 @@ namespace WebmilioCommons.Rarities
                 IL.Terraria.Main.MouseText += Main_OnMouseText;
                 IL.Terraria.Main.MouseText_DrawItemTooltip += Main_OnMouseText_DrawItemTooltip;
 
-                HookingSuccessful = true;
+                HookingSuccessful = true;*/
             }
             catch (Exception e)
             {
@@ -90,7 +90,7 @@ namespace WebmilioCommons.Rarities
 
         private void Main_OnMouseText(ILContext il)
         {
-            ILCursor c = new ILCursor(il);
+            /*ILCursor c = new ILCursor(il);
 
             // Finding baseColor index.
             int baseColorIndex = 0;
@@ -110,12 +110,12 @@ namespace WebmilioCommons.Rarities
                 color = new Color(color.R * colorPercentage, color.G * colorPercentage, color.B * colorPercentage, (int)Main.mouseTextColor);
 
                 return color;
-            });
+            });*/
         }
 
         private void Main_OnMouseText_DrawItemTooltip(ILContext il)
         {
-            ILCursor c = new ILCursor(il);
+            /*ILCursor c = new ILCursor(il);
 
             MethodInfo blackPropertyGetter = typeof(Color).GetProperty(nameof(Color.Black)).GetMethod;
 
@@ -141,7 +141,7 @@ namespace WebmilioCommons.Rarities
                 return baseColor;
             });
 
-            string sil = c.Context.ToString();
+            string sil = c.Context.ToString();*/
         }
 
 
