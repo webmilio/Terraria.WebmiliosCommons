@@ -45,7 +45,7 @@ namespace WebmilioCommons.Identity
 
         internal static void Unload()
         {
-            _allIdentities.Clear();
+            _allIdentities?.Clear();
             _allIdentities = null;
         }
 

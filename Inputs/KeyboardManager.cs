@@ -41,7 +41,7 @@ namespace WebmilioCommons.Inputs
             
             _allKeys = null;
 
-            _keyStates.Clear();
+            _keyStates?.Clear();
             _keyStates = null;
         }
 
