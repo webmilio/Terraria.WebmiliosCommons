@@ -54,11 +54,8 @@ namespace WebmilioCommons.Loaders
             if (TypeHasUnlocalizedName)
                 typeByUnlocalizedName = new Dictionary<string, Type>();
 
-            foreach (Mod mod in ModLoader.Mods)
+            foreach (Mod mod in ModLoader.Mods.StandardModFilter())
             {
-                if (mod.Code == null)
-                    continue;
-
                 foreach (TypeInfo type in mod.Code.Concrete<T>().Where(LoadCondition))
                 {
                     T item = (T) Activator.CreateInstance(type);

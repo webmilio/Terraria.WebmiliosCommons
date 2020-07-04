@@ -10,7 +10,7 @@ namespace WebmilioCommons.Extensions
     {
         public static void SetDefaults(this Item item, ModItem modItem)
         {
-            Type itemType = modItem.GetType();
+            var itemType = modItem.GetType();
 
             item.SetDefaults(itemType.GetModFromType().ItemType(itemType.Name));
         }

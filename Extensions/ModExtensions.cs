@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Packets;
@@ -26,5 +27,20 @@ namespace WebmilioCommons.Extensions
         /// <returns>The auto-generated ID of the packet.</returns>
         public static int PacketId(this Mod mod, NetworkPacket packet) => NetworkPacketLoader.Instance.GetId(packet);
         public static int PacketId<T>(this Mod mod) where T : NetworkPacket => NetworkPacketLoader.Instance.GetId<T>();
+
+
+        /// <summary>Filters out mods that have a <c>null</c> <see cref="Mod.Code"/>.</summary>
+        /// <param name="mods"></param>
+        /// <returns>A list of filtered mods.</returns>
+        public static List<Mod> StandardModFilter(this IList<Mod> mods)
+        {
+            List<Mod> filtered = new List<Mod>();
+
+            for (int i = 0; i < mods.Count; i++)
+                if (mods[i].Code != null)
+                    filtered.Add(mods[i]);
+
+            return filtered;
+        }
     }
 }
