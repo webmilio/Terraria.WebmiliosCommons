@@ -188,30 +188,38 @@ namespace WebmilioCommons.Tinq
         }
 
 
-        /// <summary></summary>
+        /// <summary>Finds the nearest entity to a point from the sequence.</summary>
         /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
-        /// <param name="entities"></param>
-        /// <param name="position"></param>
-        /// <param name="divider"></param>
-        /// <returns></returns>
-        public static T NearestActive<T>(this IEnumerable<T> entities, Vector2 position, int divider = 16) where T : Entity
+        /// <param name="entities">The <see cref="IEnumerable{T}"/> to return the nearest element of.</param>
+        /// <param name="position">The position to search around.</param>
+        /// <param name="divider">The divider for each entity's position. If the provided position is a world tile, this needs to be 16.</param>
+        /// <returns>The nearest active entity to the provided point or <c>default</c> if the source <paramref name="entities"/> was empty.</returns>
+        public static T Nearest<T>(this IEnumerable<T> entities, Vector2 position, int divider = 1) where T : Entity
         {
-            T nearestPlayer = default;
-            float nearestDistance = float.MaxValue;
+            T nearestEntity = default;
+            float smallestDistance = float.MaxValue;
 
-            entities.DoActive(player =>
+            entities.Do(entity =>
             {
-                float distance = Vector2.Distance(position, player.position / divider);
+                float distance = Vector2.Distance(position, entity.position / divider);
 
-                if (distance < nearestDistance)
+                if (distance < smallestDistance)
                 {
-                    nearestPlayer = player;
-                    nearestDistance = distance;
+                    nearestEntity = entity;
+                    smallestDistance = distance;
                 }
             });
 
-            return nearestPlayer;
+            return nearestEntity;
         }
+
+        /// <summary>Finds the nearest active entity to a point from the sequence.</summary>
+        /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
+        /// <param name="entities">The <see cref="IEnumerable{T}"/> to return the nearest element of.</param>
+        /// <param name="position">The position to search around.</param>
+        /// <param name="divider">The divider for each entity's position. If the provided position is a world tile, this needs to be 16.</param>
+        /// <returns>The nearest active entity to the provided point or <c>default</c> if the source <paramref name="entities"/> was empty.</returns>
+        public static T NearestActive<T>(this IEnumerable<T> entities, Vector2 position, int divider = 1) where T : Entity => entities.Active().Nearest(position, divider);
 
 
         /// <summary></summary>
