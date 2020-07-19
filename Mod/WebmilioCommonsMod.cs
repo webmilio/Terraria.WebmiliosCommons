@@ -12,6 +12,7 @@ using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Serializing;
+using WebmilioCommons.NPCs;
 using WebmilioCommons.Rarities;
 using WebmilioCommons.Time;
 
@@ -37,6 +38,8 @@ namespace WebmilioCommons
             GlobalNPCSetupShopMethods.Load();
             ModRarityLoader.Instance.TryLoad();
             TimeManagement.Load();
+
+            SpecialNPCNamingBehavior.Load();
 
             if (Main.netMode != NetmodeID.Server)
             {
@@ -85,6 +88,7 @@ namespace WebmilioCommons
             NetworkTypeSerializers.Unload();
             TimeManagement.Unload();
 
+            SpecialNPCNamingBehavior.Unload();
 
             // Server stuff
             if (Main.netMode != NetmodeID.Server)

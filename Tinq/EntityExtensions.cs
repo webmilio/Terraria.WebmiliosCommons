@@ -157,6 +157,7 @@ namespace WebmilioCommons.Tinq
         /// <param name="entities">An <see cref="IEnumerable{T}"/> to return an element from.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>The first active entity in the sequence that passes the test in the specified predicate function.</returns>
+        /// <exception cref="InvalidOperationException">No element satisfies the condition in <paramref name="predicate"/>.</exception>
         public static T FirstActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
             foreach (T entity in entities)
@@ -194,6 +195,7 @@ namespace WebmilioCommons.Tinq
         /// <param name="position">The position to search around.</param>
         /// <param name="divider">The divider for each entity's position. If the provided position is a world tile, this needs to be 16.</param>
         /// <returns>The nearest active entity to the provided point or <c>default</c> if the source <paramref name="entities"/> was empty.</returns>
+        /// <exception cref="DivideByZeroException">Cannot divide an entity's position by zero.</exception>
         public static T Nearest<T>(this IEnumerable<T> entities, Vector2 position, int divider = 1) where T : Entity
         {
             T nearestEntity = default;
@@ -222,11 +224,12 @@ namespace WebmilioCommons.Tinq
         public static T NearestActive<T>(this IEnumerable<T> entities, Vector2 position, int divider = 1) where T : Entity => entities.Active().Nearest(position, divider);
 
 
-        /// <summary></summary>
+        /// <summary>Returns the only entity of a sequence that satisfies a specified condition and is active, and throws an exception if more than one such element exists.</summary>
         /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
-        /// <param name="entities"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <param name="entities">An <see cref="IEnumerable{T}"/> to return a single element from.</param>
+        /// <param name="predicate">A function to test an element for a condition.</param>
+        /// <returns>The single element of the input sequence that satisfies a condition and is active.</returns>
+        /// <exception cref="InvalidOperationException">More than one active entity satisfies the condition in predicate.</exception>
         public static T SingleActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T: Entity
         {
             T found = SingleActiveOrDefault(entities, predicate);
@@ -237,11 +240,12 @@ namespace WebmilioCommons.Tinq
             return found;
         }
 
-        /// <summary></summary>
+        /// <summary>Returns the only entity of a sequence that satisfies a specified condition and is active or a default value if no such element exists; this method throws an exception if more than one element satisfies the condition.</summary>
         /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
-        /// <param name="entities"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <param name="entities">An <see cref="IEnumerable{T}"/> to return a single active element from.</param>
+        /// <param name="predicate">A function to test an element for a condition.</param>
+        /// <returns>The single element of the input sequence that satisfies the condition and is active, or <c>default(T)</c> if no such element is found.</returns>
+        /// <exception cref="InvalidOperationException">More than one active entity satisfies the condition in predicate.</exception>
         public static T SingleActiveOrDefault<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
             T found = default;
@@ -259,11 +263,11 @@ namespace WebmilioCommons.Tinq
         }
 
 
-        /// <summary></summary>
+        /// <summary>Filters a sequence of entities based on their active state and a predicate.</summary>
         /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
-        /// <param name="entities"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <param name="entities">An <see cref="IEnumerable{T}"/> to filter.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <returns>A <see cref="List{T}"/> that contains entities from the input sequence that satisfy the condition and are active.</returns>
         public static List<T> WhereActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
             var result = new List<T>();
