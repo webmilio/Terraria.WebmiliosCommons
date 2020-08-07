@@ -8,6 +8,8 @@ using WebmilioCommons.Achievements.Helper;
 using WebmilioCommons.Commons;
 using WebmilioCommons.Configurations;
 using WebmilioCommons.Globals;
+using WebmilioCommons.Hooks;
+using WebmilioCommons.Hooks.Wiring;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
@@ -48,8 +50,14 @@ namespace WebmilioCommons
             }
 
 
+            #region Hooks
+
             Main.OnTick += UpdateTick;
             On.Terraria.WorldGen.SaveAndQuit += WorldGenOnSaveAndQuit;
+
+            Hooking.Load();
+
+            #endregion
 
 
             #region Client Configuration
@@ -72,6 +80,9 @@ namespace WebmilioCommons
                 ModAchievementHelper.PostSetupContent();
             }
 
+            
+            Hooking.PostSetupContent();
+
             NetworkPacketLoader.Instance.TryLoad();
 
             //PlayerSynchronizationPacket.Construct();
@@ -81,8 +92,16 @@ namespace WebmilioCommons
         public override void Unload()
         {
             // Events
+
+            #region Hooks
+
+            Hooking.Unload();
+
             Main.OnTick -= UpdateTick;
             On.Terraria.WorldGen.SaveAndQuit -= WorldGenOnSaveAndQuit;
+
+            #endregion
+
 
             GlobalNPCSetupShopMethods.Unload();
             NetworkTypeSerializers.Unload();
@@ -110,7 +129,7 @@ namespace WebmilioCommons
 
             #endregion
 
-            Instance = null;
+            Instance = default;
         }
 
 

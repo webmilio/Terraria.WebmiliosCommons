@@ -29,7 +29,7 @@ namespace WebmilioCommons.Extensions
 
         public static Player GetNearestMiningPlayer(this Vector2 position)
         {
-            Player nearestPlayer = null;
+            Player nearestPlayer = default;
             float nearestDistance = float.MaxValue;
 
             foreach (Player player in Main.player.Active())
@@ -55,7 +55,7 @@ namespace WebmilioCommons.Extensions
         {
             Item item = player.HeldItem;
 
-            if (item == null || !item.active)
+            if (item == default || !item.active)
                 return false;
 
             return item.pick > 0 || item.axe > 0 || item.hammer > 0;

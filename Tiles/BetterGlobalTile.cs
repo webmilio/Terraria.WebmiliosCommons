@@ -6,7 +6,6 @@ using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Tiles
 {
-    [Obsolete("Work-in-progress, might not behave as expected. Feedback is appreciated.")]
     public abstract class BetterGlobalTile : GlobalTile
     {
         public sealed override bool CanKillTile(int i, int j, int type, ref bool blockDamaged)
