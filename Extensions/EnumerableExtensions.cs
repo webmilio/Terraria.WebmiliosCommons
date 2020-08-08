@@ -47,6 +47,55 @@ namespace WebmilioCommons.Extensions
             return entries;
         }
 
+        /// <summary>Executes a provided action on a sequence of elements. If the provided sequence implements <see cref="IList{T}"/>, the iteration is done through a <c>for</c>, otherwise it is done through a <c>foreach</c>.</summary>
+        /// <typeparam name="T">The type of <paramref name="source"/>.</typeparam>
+        /// <param name="source"></param>
+        /// <param name="action">The action to execute on each element of the sequence.</param>
+        public static void Do<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            if (source is IList<T> l)
+                Do<T>(l, action);
+            else
+                foreach (T t in source)
+                    action(t);
+        }
+
+        public static void Do<T>(this IList<T> source, Action<T> action)
+        {
+            for (int i = 0; i < source.Count; i++)
+                action(source[i]);
+        }
+
+        public static void DoInverted<T>(this IList<T> source, Action<T> action) => DoInverted(source, (e, i) => action(e));
+
+        public static void DoInverted<T>(this IList<T> source, Action<T, int> action)
+        {
+            for (int i = source.Count - 1; i >= 0; i--)
+                action(source[i], i);
+        }
+
+
+        public static bool ForAll<T>(this IList<T> source, Predicate<T> predicate)
+        {
+            for (int i = 0; i < source.Count; i++)
+                if (!predicate(source[i]))
+                    return false;
+
+            return true;
+        }
+
+
+        public static bool ForAllInverted<T>(this IList<T> source, Predicate<T> predicate) => ForAllInverted(source, (e, i) => predicate(e));
+
+        public static bool ForAllInverted<T>(this IList<T> source, Func<T, int, bool> predicate)
+        {
+            for (int i = source.Count - 1; i >= 0; i--)
+                if (!predicate(source[i], i))
+                    return false;
+
+            return true;
+        }
+
 
         public static string GenerateSlashedString(this List<float> values) => GenerateSlashedString(values.ToArray());
 
@@ -74,6 +123,6 @@ namespace WebmilioCommons.Extensions
         }
 
         // https://stackoverflow.com/questions/36147162/c-sharp-string-split-separate-string-by-uppercase
-        public static string SplitEveryCapital(this string str) => string.Join(" ", Regex.Split(str, @"(?<!^)(?=[A-Z])"));
+        public static string SplitEveryCapital(this string str) => String.Join(" ", Regex.Split(str, @"(?<!^)(?=[A-Z])"));
     }
 }

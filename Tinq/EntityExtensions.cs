@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
+using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Tinq
 {
@@ -100,27 +101,18 @@ namespace WebmilioCommons.Tinq
 
 
         /// <summary>Executes a provided action on a sequence of elements. If the provided sequence implements <see cref="IList{T}"/>, the iteration is done through a <c>for</c>, otherwise it is done through a <c>foreach</c>.</summary>
-        /// <typeparam name="T">The entity type of <paramref name="source"/>.</typeparam>
+        /// <typeparam name="T">The type of <paramref name="source"/>.</typeparam>
         /// <param name="source"></param>
         /// <param name="action">The action to execute on each element of the sequence.</param>
-        public static void Do<T>(this IEnumerable<T> source, Action<T> action)
-        {
-            if (source is IList<T> l)
-            {
-                for (int i = 0; i < l.Count; i++)
-                    action(l[i]);
-            }
-            else
-                foreach (T t in source)
-                    action(t);
-        }
+        [Obsolete("Moved to WebmiliosCommons.Extensions namespace.")]
+        public static void Do<T>(this IEnumerable<T> source, Action<T> action) => EnumerableExtensions.Do(source, action);
 
 
         /// <summary>Executes a provided action on a sequence of entities. The sequence is filtered by active before the action is executed.</summary>
         /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
         /// <param name="entities"></param>
         /// <param name="action">The action to execute on each active element of the sequence.</param>
-        public static void DoActive<T>(this IEnumerable<T> entities, Action<T> action) where T : Entity => entities.Active().Do(action);
+        public static void DoActive<T>(this IEnumerable<T> entities, Action<T> action) where T : Entity => EnumerableExtensions.Do(entities.Active(), action);
 
 
         /// <summary>Generates a list of active entities that are exclusive to one another. Note: I'm not really sure if this does what its supposed to.</summary>
@@ -230,7 +222,7 @@ namespace WebmilioCommons.Tinq
         /// <param name="predicate">A function to test an element for a condition.</param>
         /// <returns>The single element of the input sequence that satisfies a condition and is active.</returns>
         /// <exception cref="InvalidOperationException">More than one active entity satisfies the condition in predicate.</exception>
-        public static T SingleActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T: Entity
+        public static T SingleActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
             T found = SingleActiveOrDefault(entities, predicate);
 

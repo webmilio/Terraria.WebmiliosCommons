@@ -157,6 +157,16 @@ namespace WebmilioCommons.Players
         }
 
 
+        #region LifeRegen
+
+        public override void UpdateBadLifeRegen() => UpdateBadLifeRegenTransformation();
+
+        public override void UpdateLifeRegen() => UpdateLifeRegenTransformation();
+
+        public override void UpdateDead() => UpdateDeadTransformation();
+
+        #endregion
+
         #endregion
 
 

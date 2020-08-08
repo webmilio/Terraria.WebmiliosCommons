@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using WebmilioCommons.Commons.Players;
 using WebmilioCommons.Networking.Attributes;
 
 namespace WebmilioCommons.Networking.Packets
 {
-    public abstract class PlayerNetworkPacket : NetworkPacket
+    public abstract class PlayerNetworkPacket : NetworkPacket, IPlayerLinked
     {
         protected PlayerNetworkPacket() : this(true) { }
 
