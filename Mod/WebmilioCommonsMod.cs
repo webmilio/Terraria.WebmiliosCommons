@@ -15,6 +15,7 @@ using WebmilioCommons.Inputs;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.NPCs;
+using WebmilioCommons.Proxies;
 using WebmilioCommons.Rarities;
 using WebmilioCommons.Time;
 
@@ -37,6 +38,8 @@ namespace WebmilioCommons
         /// <summary></summary>
         public override void Load()
         {
+            Proxies.Proxies.Load();
+
             GlobalNPCSetupShopMethods.Load();
             ModRarityLoader.Instance.TryLoad();
             TimeManagement.Load();
@@ -53,7 +56,7 @@ namespace WebmilioCommons
             #region Hooks
 
             Main.OnTick += UpdateTick;
-            On.Terraria.WorldGen.SaveAndQuit += WorldGenOnSaveAndQuit;
+            On.Terraria.WorldGen.SaveAndQuit += WorldGen_OnSaveAndQuit;
 
             Hooking.Load();
 
@@ -76,11 +79,9 @@ namespace WebmilioCommons
             if (Main.netMode != NetmodeID.Server)
             {
                 IdentityManager.PostSetupContent();
-
-                ModAchievementHelper.PostSetupContent();
             }
 
-            
+            Proxies.Proxies.PostSetupContent();
             Hooking.PostSetupContent();
 
             NetworkPacketLoader.Instance.TryLoad();
@@ -98,7 +99,7 @@ namespace WebmilioCommons
             Hooking.Unload();
 
             Main.OnTick -= UpdateTick;
-            On.Terraria.WorldGen.SaveAndQuit -= WorldGenOnSaveAndQuit;
+            On.Terraria.WorldGen.SaveAndQuit -= WorldGen_OnSaveAndQuit;
 
             #endregion
 
@@ -114,7 +115,6 @@ namespace WebmilioCommons
             {
                 IdentityManager.Unload();
                 KeyboardManager.Unload();
-                ModAchievementHelper.Unload();
             }
 
 
@@ -128,6 +128,9 @@ namespace WebmilioCommons
             //ClientConfiguration = null;
 
             #endregion
+
+
+            Proxies.Proxies.Unload();
 
             Instance = default;
         }
@@ -148,10 +151,11 @@ namespace WebmilioCommons
         }
 
 
-        private void WorldGenOnSaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
+        private void WorldGen_OnSaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
             orig(callback);
 
+            Proxies.Proxies.WorldGen_OnSaveAndQuit();
             TimeManagement.ForceUnalter(false);
         }
 

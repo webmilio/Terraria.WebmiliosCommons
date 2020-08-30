@@ -5,31 +5,30 @@ using WebmilioCommons.Systems;
 
 namespace WebmilioCommons.Transformations
 {
-    public class PlayerTransformation : IPlayerSystem, IPlayerLinked
+    public abstract class PlayerTransformation : IPlayerSystem, IPlayerLinked
     {
         #region BadLifeRegen
 
-        public virtual bool PreUpdateBadLifeRegen(WCPlayer wcPlayer, Player player) => true;
+        public virtual bool PreUpdateBadLifeRegen() => true;
 
-        public virtual void UpdateBadLifeRegen(WCPlayer wcPlayer, Player player) { }
+        public virtual void UpdateBadLifeRegen() { }
 
         #endregion
 
-
         #region LifeRegen
 
-        public virtual bool PreUpdateLifeRegen(WCPlayer wcPlayer, Player player) => true;
+        public virtual bool PreUpdateLifeRegen() => true;
 
-        public virtual void UpdateLifeRegen(WCPlayer wcPlayer, Player player) { }
+        public virtual void UpdateLifeRegen() { }
 
         #endregion
 
 
         #region Transformation
 
-        public virtual bool PreTransform(WCPlayer wcPlayer, Player player) => true;
+        public virtual bool PreTransform() => true;
 
-        public virtual void PostTransform(WCPlayer wcPlayer, Player player) { }
+        public virtual void PostTransform() { }
 
 
         public virtual bool PreAnyTransform(WCPlayer wcPlayer, Player player, PlayerTransformation transformation) => true;
@@ -37,9 +36,9 @@ namespace WebmilioCommons.Transformations
         public virtual void PostAnyTransform(WCPlayer wcPlayer, Player player, PlayerTransformation transformation) { }
 
 
-        public virtual bool PreDeTransform(WCPlayer wcPlayer, Player player, bool death) => true;
+        public virtual bool PreDeTransform(bool death) => true;
 
-        public virtual void PostDeTransform(WCPlayer wcPlayer, Player player, bool death) { }
+        public virtual void PostDeTransform(bool death) { }
 
 
         public virtual bool PreAnyDeTransform(WCPlayer wcPlayer, Player player, PlayerTransformation transformation, bool death) => true;
@@ -47,7 +46,7 @@ namespace WebmilioCommons.Transformations
         public virtual void PostAnyDeTransform(WCPlayer wcPlayer, Player player, PlayerTransformation transformation, bool death) { }
 
 
-        public virtual bool DeTransformOnDeath(WCPlayer wcPlayer, Player player) => true;
+        public virtual bool DeTransformOnDeath() => true;
 
         #endregion
 
@@ -59,5 +58,6 @@ namespace WebmilioCommons.Transformations
         public virtual bool Unique { get; set; } = true;
 
         public Player Player { get; internal set; }
+        public WCPlayer WCPlayer { get; internal set; }
     }
 }

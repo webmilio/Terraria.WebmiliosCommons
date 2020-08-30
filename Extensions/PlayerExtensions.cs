@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Packets;
@@ -12,6 +13,10 @@ namespace WebmilioCommons.Extensions
     {
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
         public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.player);
+
+
+        public static bool IsServerOwner(this Player player) => Main.netMode == NetmodeID.SinglePlayer || Netplay.Connection.Socket.GetRemoteAddress().IsLocalHost();
+        public static bool IsServerOwner(this ModPlayer modPlayer) => IsServerOwner(modPlayer.player);
 
 
         public static void DoIfLocal(this Player player, Action<Player> action)

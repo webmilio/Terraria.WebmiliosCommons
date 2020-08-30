@@ -7,7 +7,7 @@ using WebmilioCommons.Systems;
 
 namespace WebmilioCommons.Transformations
 {
-    public class ModPlayerTransformation<T> : PlayerTransformation, IModPlayerLinked<T> where T : ModPlayer
+    public abstract class ModPlayerTransformation<T> : PlayerTransformation, IModPlayerLinked<T> where T : ModPlayer
     {
         private T _modPlayer;
 
@@ -23,6 +23,6 @@ namespace WebmilioCommons.Transformations
             }
         }
 
-        public virtual Func<Player, T> ModPlayerGetter { get; }
+        public virtual Func<Player, T> ModPlayerGetter { get; } = player => player.GetModPlayer<T>();
     }
 }

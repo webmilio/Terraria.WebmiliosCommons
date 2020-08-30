@@ -12,6 +12,8 @@ using WebmilioCommons.Items.Standard;
 using WebmilioCommons.Items.Starting;
 using WebmilioCommons.Networking.Attributes;
 using WebmilioCommons.NPCs;
+using WebmilioCommons.Proxies.Players;
+
 #pragma warning disable 1591
 
 namespace WebmilioCommons.Players
@@ -94,6 +96,22 @@ namespace WebmilioCommons.Players
         }
 
 
+        public override void OnEnterWorld(Player plr)
+        {
+            PlayerHooksProxy.RegisterPlayersModPlayer(plr);
+        }
+
+        public override void PlayerConnect(Player plr)
+        {
+            PlayerHooksProxy.RegisterPlayersModPlayer(plr);
+        }
+
+        public override void PlayerDisconnect(Player plr)
+        {
+            PlayerHooksProxy.UnRegisterPlayersModPlayer(plr);
+        }
+
+
         public override void PostUpdate() => ForAllAnimations(animation => animation.HandlePostUpdate());
 
 
@@ -101,6 +119,9 @@ namespace WebmilioCommons.Players
         {
             if (!PreUpdateTime())
                 return;
+
+            if (player.talkNPC != -1 && !PlayerHooksProxy.All<BetterModPlayer>(player, bmp => bmp.CanInteractWithTownNPCs()))
+                player.talkNPC = -1;
 
             ForAllAnimations(animation => animation.HandlePreUpdate());
         }
@@ -168,7 +189,6 @@ namespace WebmilioCommons.Players
         #endregion
 
         #endregion
-
 
 
         public Guid UniqueID { get; internal set; }

@@ -25,15 +25,16 @@ namespace WebmilioCommons.Players
         public bool Transform(PlayerTransformation transformation)
         {
             transformation.Player = player;
+            transformation.WCPlayer = this;
 
             if (transformation.Unique && IsTransformed(transformation) ||
-                !transformation.PreTransform(this, player) || !activeTransformations.TrueForAll(t => t.PreAnyTransform(this, player, transformation)))
+                !transformation.PreTransform() || !activeTransformations.TrueForAll(t => t.PreAnyTransform(this, player, transformation)))
                 return false;
 
             activeTransformations.Add(transformation);
             activeTransformationTypes.Add(transformation.GetType());
 
-            transformation.PostTransform(this, player);
+            transformation.PostTransform();
             activeTransformations.Do(t => t.PostAnyTransform(this, player, transformation));
 
             return true;
@@ -66,13 +67,13 @@ namespace WebmilioCommons.Players
         {
             var transformation = activeTransformations[transformationIndex];
 
-            if (!transformation.PreDeTransform(this, player, death) || !activeTransformations.TrueForAll(t => t.PreAnyDeTransform(this, player, transformation, death)))
+            if (!transformation.PreDeTransform(death) || !activeTransformations.TrueForAll(t => t.PreAnyDeTransform(this, player, transformation, death)))
                 return false;
 
             activeTransformations.RemoveAt(transformationIndex);
             activeTransformationTypes.RemoveAt(transformationIndex);
 
-            transformation.PostDeTransform(this, player, death);
+            transformation.PostDeTransform(death);
             activeTransformations.Do(t => t.PostAnyDeTransform(this, player, transformation, death));
 
             return true;
@@ -83,25 +84,25 @@ namespace WebmilioCommons.Players
 
         private void UpdateBadLifeRegenTransformation()
         {
-            if (!activeTransformations.TrueForAll(t => t.PreUpdateBadLifeRegen(this, player)))
+            if (!activeTransformations.TrueForAll(t => t.PreUpdateBadLifeRegen()))
                 return;
 
-            activeTransformations.Do(t => t.UpdateBadLifeRegen(this, player));
+            activeTransformations.Do(t => t.UpdateBadLifeRegen());
         }
 
         private void UpdateLifeRegenTransformation()
         {
-            if (!activeTransformations.TrueForAll(t => t.PreUpdateLifeRegen(this, player)))
+            if (!activeTransformations.TrueForAll(t => t.PreUpdateLifeRegen()))
                 return;
 
-            activeTransformations.Do(t => t.UpdateLifeRegen(this, player));
+            activeTransformations.Do(t => t.UpdateLifeRegen());
         }
 
         private void UpdateDeadTransformation()
         {
             activeTransformations.DoInverted((t, i) =>
             {
-                if (t.DeTransformOnDeath(this, player))
+                if (t.DeTransformOnDeath())
                     DoDeTransform(i, true);
             });
         }
