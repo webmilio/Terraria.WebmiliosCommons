@@ -8,8 +8,6 @@ namespace WebmilioCommons.Tinq
 {
     public static class EntityExtensions
     {
-        #region TINQ
-
         /// <summary>Checks if the entity is considered active.</summary>
         /// <param name="entity">The entity to verify.</param>
         /// <returns><c>true</c> if the entity is not null and <see cref="Entity.active"/> is <c>true</c>; otherwise <c>false</c>.</returns>
@@ -30,7 +28,8 @@ namespace WebmilioCommons.Tinq
             }
 
             if (entities is List<T> l)
-                l.ForEach(Filter);
+                for (int i = 0; i < l.Count; i++)
+                    Filter(l[i]);
             else
                 foreach (T entity in entities)
                     Filter(entity);
@@ -193,9 +192,9 @@ namespace WebmilioCommons.Tinq
             T nearestEntity = default;
             float smallestDistance = float.MaxValue;
 
-            entities.Do(entity =>
+            EnumerableExtensions.Do(entities, entity =>
             {
-                float distance = Vector2.Distance(position, entity.position / divider);
+                float distance = Vector2.DistanceSquared(position, entity.position / divider);
 
                 if (distance < smallestDistance)
                 {
@@ -262,7 +261,12 @@ namespace WebmilioCommons.Tinq
         /// <returns>A <see cref="List{T}"/> that contains entities from the input sequence that satisfy the condition and are active.</returns>
         public static List<T> WhereActive<T>(this IEnumerable<T> entities, Func<T, bool> predicate) where T : Entity
         {
-            var result = new List<T>();
+            List<T> result = default;
+
+            if (entities is IList<T> l)
+                result = new List<T>(l.Count);
+            else
+                result = new List<T>();
 
             DoActive(entities, t =>
             {
@@ -272,7 +276,5 @@ namespace WebmilioCommons.Tinq
 
             return result;
         }
-
-        #endregion
     }
 }

@@ -23,7 +23,7 @@ namespace WebmilioCommons.Extensions
             string[] segments = type.Namespace.Split('.');
             return string.Join("/", segments, 1, segments.Length - 1);
         }
-
+        
         [Obsolete("Replaced by GetRootPath()")]
         public static string GetTexturePathRoot(this Type type) => GetRootPath(type);
 

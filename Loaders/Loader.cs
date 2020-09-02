@@ -52,7 +52,7 @@ namespace WebmilioCommons.Loaders
             genericByType = new Dictionary<Type, T>();
 
             if (TypeHasUnlocalizedName)
-                typeByUnlocalizedName = new Dictionary<string, Type>();
+                typeByUnlocalizedName = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
 
             foreach (Mod mod in ModLoader.Mods.StandardModFilter())
             {
@@ -239,6 +239,9 @@ namespace WebmilioCommons.Loaders
 
             return GetId(typeByUnlocalizedName[unlocalizedName]);
         }
+
+
+        public bool Has(string unlocalizedName) => TypeHasUnlocalizedName && unlocalizedName.Contains(unlocalizedName);
 
 
         /// <summary>Searches for a generic instance that matches the conditions defined by the specified predicate.</summary>

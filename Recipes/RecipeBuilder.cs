@@ -237,6 +237,7 @@ namespace WebmilioCommons.Recipes
         private RecipeBuilder Finish()
         {
             _recipe.AddRecipe();
+            Clear();
 
             return this;
         }

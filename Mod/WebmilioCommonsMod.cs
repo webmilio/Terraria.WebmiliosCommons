@@ -7,7 +7,6 @@ using Terraria.ModLoader;
 using WebmilioCommons.Achievements.Helper;
 using WebmilioCommons.Commons;
 using WebmilioCommons.Configurations;
-using WebmilioCommons.Globals;
 using WebmilioCommons.Hooks;
 using WebmilioCommons.Hooks.Wiring;
 using WebmilioCommons.Identity;

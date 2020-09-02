@@ -17,25 +17,6 @@ namespace WebmilioCommons.Extensions
             halfCircleRadians = fullCircleRadians / 2;
 
 
-        public static T NearestActive<T>(this Entity entity, IEnumerable<T> entities) where T : Entity
-        {
-            T target = null;
-            float distance = int.MaxValue;
-
-            entities.DoActive(t =>
-            {
-                float newDistance = Vector2.Distance(entity.Center, t.Center);
-
-                if (newDistance < distance)
-                {
-                    target = t;
-                    distance = newDistance;
-                }
-            });
-
-            return target;
-        }
-
         public static float VelocityRotation(this Entity entity, bool degrees = false)
         {
             float rotation = entity.velocity.ToRotation();

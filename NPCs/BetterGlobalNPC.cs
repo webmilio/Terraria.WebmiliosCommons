@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
+﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace WebmilioCommons.Globals
+namespace WebmilioCommons.NPCs
 {
     public abstract class BetterGlobalNPC : GlobalNPC
     {

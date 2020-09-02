@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WebmilioCommons.Globals
+namespace WebmilioCommons.NPCs
 {
     public static class GlobalNPCSetupShopMethods
     {

@@ -12,15 +12,12 @@ namespace WebmilioCommons.NPCs
     {
         private static Dictionary<int, Func<NPC, string>> _uniqueNPCNaming;
         private static Dictionary<int, LocalizedText> _localizationEntries;
-        private static MethodInfo _localizedTextSetValue;
 
 
         internal static void Load()
         {
             _uniqueNPCNaming = new Dictionary<int, Func<NPC, string>>();
             _localizationEntries = new Dictionary<int, LocalizedText>();
-
-            _localizedTextSetValue = typeof(LocalizedText).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance);
 
             Lang.GetNPCName += Lang_OnGetNPCName;
         }
@@ -32,8 +29,6 @@ namespace WebmilioCommons.NPCs
 
             _localizationEntries?.Clear();
             _localizationEntries = default;
-
-            _localizedTextSetValue = default;
 
             Lang.GetNPCName -= Lang_OnGetNPCName;
         }

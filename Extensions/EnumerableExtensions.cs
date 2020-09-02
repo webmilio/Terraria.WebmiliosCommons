@@ -60,11 +60,14 @@ namespace WebmilioCommons.Extensions
                     action(t);
         }
 
-        public static void Do<T>(this IList<T> source, Action<T> action)
+        public static void Do<T>(this IList<T> source, Action<T> action) => Do(source, (e, i) => action(e));
+
+        public static void Do<T>(this IList<T> source, Action<T, int> action)
         {
             for (int i = 0; i < source.Count; i++)
-                action(source[i]);
+                action(source[i], i);
         }
+
 
         public static void DoInverted<T>(this IList<T> source, Action<T> action) => DoInverted(source, (e, i) => action(e));
 
