@@ -241,7 +241,7 @@ namespace WebmilioCommons.Loaders
         }
 
 
-        public bool Has(string unlocalizedName) => TypeHasUnlocalizedName && unlocalizedName.Contains(unlocalizedName);
+        public bool Has(string unlocalizedName) => TypeHasUnlocalizedName && typeByUnlocalizedName.ContainsKey(unlocalizedName);
 
 
         /// <summary>Searches for a generic instance that matches the conditions defined by the specified predicate.</summary>
