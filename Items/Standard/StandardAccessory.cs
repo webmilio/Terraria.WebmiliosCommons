@@ -6,7 +6,7 @@ namespace WebmilioCommons.Items.Standard
 {
     public abstract class StandardAccessory : StandardItem
     {
-        protected StandardAccessory(string displayName, string tooltip, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999) : 
+        protected StandardAccessory(string displayName, string tooltip, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) : 
             this(
                 new Dictionary<GameCulture, string>()
                 {
@@ -20,7 +20,7 @@ namespace WebmilioCommons.Items.Standard
         {
         }
 
-        protected StandardAccessory(Dictionary<GameCulture, string> displayNames, Dictionary<GameCulture, string> tooltips, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999) :
+        protected StandardAccessory(Dictionary<GameCulture, string> displayNames, Dictionary<GameCulture, string> tooltips, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) :
             base(displayNames, tooltips, width, height, value, defense, rarity, maxStack)
         {
         }

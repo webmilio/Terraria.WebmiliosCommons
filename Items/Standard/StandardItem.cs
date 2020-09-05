@@ -51,7 +51,12 @@ namespace WebmilioCommons.Items.Standard
 
             foreach (KeyValuePair<GameCulture, string> tooltip in Tooltips)
                 Tooltip.AddTranslation(tooltip.Key, tooltip.Value);
+
+            PostSetStaticDefaults();
         }
+
+        public virtual void PostSetStaticDefaults() { }
+
 
         public override void SetDefaults()
         {
@@ -65,7 +70,11 @@ namespace WebmilioCommons.Items.Standard
             item.rare = Rarity;
 
             item.maxStack = MaxStack;
+
+            PostSetDefaults();
         }
+
+        public virtual void PostSetDefaults() { }
 
 
         protected Dictionary<GameCulture, string> DisplayNames { get; }
