@@ -10,6 +10,16 @@ namespace WebmilioCommons.Items.Standard
         protected readonly int width, height;
 
 
+        protected StandardItem((GameCulture culture, string displayName, string tooltip)[] strings, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) :
+            this(new Dictionary<GameCulture, string>(), new Dictionary<GameCulture, string>(), width, height, value, defense, rarity, maxStack)
+        {
+            foreach (var str in strings)
+            {
+                DisplayNames.Add(str.culture, str.displayName);
+                Tooltips.Add(str.culture, str.tooltip);
+            }
+        }
+
         protected StandardItem(string displayName, string tooltip, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) : 
             this(
                 new Dictionary<GameCulture, string>()

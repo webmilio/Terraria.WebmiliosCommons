@@ -10,6 +10,11 @@ namespace WebmilioCommons.Items.Standard
         private const int USE_TIME = 10;
 
 
+        protected StandardTileItem((GameCulture culture, string displayName, string tooltip)[] strings, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999) :
+            base(strings, width, height, value, defense, rarity, maxStack)
+        {
+        }
+
         protected StandardTileItem(string displayName, string tooltip, int width, int height, int placedTileType, int rarity = ItemRarityID.White, int value = 0, int maxStack = 999, 
             int itemUseStyle = ItemUseStyleID.SwingThrow, int itemUseTime = USE_TIME, int useAnimation = USE_TIME, bool autoReuse = true, bool consumable = true) : 
             this(
