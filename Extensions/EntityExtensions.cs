@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using WebmilioCommons.Effects.Shaders;
 using WebmilioCommons.Tinq;
 
 namespace WebmilioCommons.Extensions
@@ -15,6 +17,19 @@ namespace WebmilioCommons.Extensions
         public static readonly float
             fullCircleRadians = MathHelper.ToRadians(FULL_CIRCLE_DEGREES),
             halfCircleRadians = fullCircleRadians / 2;
+
+
+        public static Vector2 ScreenPosition(this Entity entity) => entity.Center - Main.screenPosition;
+
+
+        public static void Shade<T>(this Entity entity) where T : ShaderEffect => Shade<T>(entity, Main.spriteBatch);
+
+        public static void Shade<T>(this Entity entity, SpriteBatch spriteBatch) where T : ShaderEffect
+        {
+            var shaderEffect = ShaderEffectsLoader.Instance.GetGeneric<T>();
+
+            shaderEffect.Apply(spriteBatch, entity.ScreenPosition());
+        }
 
 
         public static float VelocityRotation(this Entity entity, bool degrees = false)

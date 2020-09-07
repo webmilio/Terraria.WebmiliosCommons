@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Terraria.ModLoader;
@@ -42,8 +43,10 @@ namespace WebmilioCommons.Loaders
         /// <summary>Tries loading the current loader instance if it has not already been loaded.</summary>
         public void TryLoad()
         {
-            if (Loaded) return;
+            if (Loading || Loaded) 
+                return;
 
+            Loading = true;
             PreLoad();
 
             idByType = new Dictionary<Type, int>();
@@ -119,13 +122,23 @@ namespace WebmilioCommons.Loaders
 
             Type type = item.GetType();
 
+            if (idByType.ContainsKey(type))
+                Debugger.Break();
+
             idByType.Add(type, itemId);
             typeById.Add(itemId, type);
             modByType.Add(type, mod);
             genericByType.Add(type, item);
 
             if (TypeHasUnlocalizedName)
-                typeByUnlocalizedName.Add((item as IHasUnlocalizedName).UnlocalizedName, type);
+            {
+                string unlocalizedName = (item as IHasUnlocalizedName).UnlocalizedName;
+
+                if (typeByUnlocalizedName.ContainsKey(unlocalizedName))
+                    Debugger.Break();
+
+                typeByUnlocalizedName.Add(unlocalizedName, type);
+            }
 
             if (item is IAssociatedToMod asc)
                 asc.Mod = mod;
@@ -275,7 +288,10 @@ namespace WebmilioCommons.Loaders
 
 
         public Func<TypeInfo, bool> LoadCondition { get; }
+
+        public bool Loading { get; private set; }
         public bool Loaded { get; private set; }
+        
         public bool TypeHasUnlocalizedName { get; }
 
         /// <summary>How many subtypes of <see cref="T"/> have been loaded.</summary>

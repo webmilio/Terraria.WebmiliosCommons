@@ -8,7 +8,7 @@ Things this adds:
 - A bunch of extensions
 - Keyboard Manager: get the state of any keys (NotPressed, JustPressed, Pressed, JustReleased), regardless of Mod Hotkey.
 - Custom Achievements: you can add custom achievements in a less complex way than without the library.
-- Effects: screenshake (multiplayer compatible)
+- Effects: screenshake (multiplayer compatible), easy shaders
 
 Other Utilities:
 - Class which allows you to quickly create a tile-placing item once extended.
@@ -17,6 +17,8 @@ Credits (Team Members)
 - Scalie: ideas for
 	* Custom Achievements
 	* StandardTileItem
+- Blockaroz3349:
+	* Easy shader code cause I suck at doing them
 - "Stupid person with good ideas" who sometimes came up with good ideas but also stupid ones
 
 If you want an example mod that uses this better networking, check out the JoJo mod by HellGoesOn on https://github.com/ruskies/TerrarianBizzareAdventure or https://github.com/ruskies/TLoZ and search for ModPlayerNetworkPacket.
