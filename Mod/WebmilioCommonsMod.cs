@@ -47,6 +47,7 @@ namespace WebmilioCommons
 
             if (Main.netMode != NetmodeID.Server)
             {
+                LoadAchievementsMenuHookThingLMAO();
                 IdentityManager.Load();
                 KeyboardManager.Load();
             }
@@ -112,6 +113,7 @@ namespace WebmilioCommons
             // Server stuff
             if (Main.netMode != NetmodeID.Server)
             {
+                UnloadAchievementsMenuHookThingLMAO();
                 IdentityManager.Unload();
                 KeyboardManager.Unload();
             }

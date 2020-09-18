@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using WebmilioCommons.Effects.Shaders.Entities.ForceField;
 
 namespace WebmilioCommons.Effects.Shaders.ForceField
 {
@@ -14,7 +15,7 @@ namespace WebmilioCommons.Effects.Shaders.ForceField
         }
 
 
-        protected override int GetSphereWidth(Entity entity, Vector2 targetPositionPreOffset) => Radius;
+        protected override int GetSphereWidth(Entity entity, Vector2 preOffset) => Radius;
 
         protected override Texture2D GetTexture(Entity entity, Vector2 position) => Texture;
 

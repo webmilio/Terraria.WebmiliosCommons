@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terraria", "..\..\..\tModLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebmilioCommonsEnergy", "..\WebmilioCommonsEnergy\WebmilioCommonsEnergy.csproj", "{D6323883-A555-4CB7-881D-A4C5C087A873}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebmilioCommonsShadersRuntimeCompilation", "..\WebmilioCommonsShadersRuntimeCompilation\WebmilioCommonsShadersRuntimeCompilation.csproj", "{CAF0984C-442F-4C0A-ABF5-25F132577C08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,8 +59,7 @@ Global
 		{20DB889E-7420-4782-8526-5AF66BA764F7}.WindowsRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{20DB889E-7420-4782-8526-5AF66BA764F7}.WindowsServerDebug|Any CPU.ActiveCfg = Debug|Any CPU
 		{20DB889E-7420-4782-8526-5AF66BA764F7}.WindowsServerRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.Debug|Any CPU.ActiveCfg = WindowsServerDebug|Any CPU
-		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.Debug|Any CPU.Build.0 = WindowsServerDebug|Any CPU
+		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.Debug|Any CPU.ActiveCfg = WindowsDebug|Any CPU
 		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
 		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
 		{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}.LinuxServerRelease|Any CPU.ActiveCfg = LinuxServerRelease|Any CPU
@@ -97,6 +98,26 @@ Global
 		{D6323883-A555-4CB7-881D-A4C5C087A873}.WindowsServerDebug|Any CPU.Build.0 = Debug|Any CPU
 		{D6323883-A555-4CB7-881D-A4C5C087A873}.WindowsServerRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{D6323883-A555-4CB7-881D-A4C5C087A873}.WindowsServerRelease|Any CPU.Build.0 = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.LinuxServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.LinuxServerRelease|Any CPU.Build.0 = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.MacRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.MacRelease|Any CPU.Build.0 = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.MacServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.MacServerRelease|Any CPU.Build.0 = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.WindowsDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.WindowsDebug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.WindowsRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.WindowsRelease|Any CPU.Build.0 = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.WindowsServerDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.WindowsServerDebug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.WindowsServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF0984C-442F-4C0A-ABF5-25F132577C08}.WindowsServerRelease|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

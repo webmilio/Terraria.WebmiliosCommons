@@ -39,7 +39,8 @@ namespace WebmilioCommons.Extensions
 
             foreach (Player player in Main.player.Active())
             {
-                if (player.itemAnimation == 0 || player.HeldItem == null || player.hitTile != null || !IsHoldingMiningItem(player)) continue;
+                if (player.itemAnimation == 0 || player.HeldItem == null || player.hitTile == null || !IsHoldingMiningItem(player)) 
+                    continue;
 
                 float distance = Vector2.Distance(position, player.position / 16);
 

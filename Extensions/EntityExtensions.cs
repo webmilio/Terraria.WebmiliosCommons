@@ -22,13 +22,13 @@ namespace WebmilioCommons.Extensions
         public static Vector2 ScreenPosition(this Entity entity) => entity.Center - Main.screenPosition;
 
 
-        public static void Shade<T>(this Entity entity) where T : ShaderEffect => Shade<T>(entity, Main.spriteBatch);
+        public static void Shade<T>(this Entity entity) where T : EntityMiscShaderEffect => Shade<T>(entity, Main.spriteBatch);
 
-        public static void Shade<T>(this Entity entity, SpriteBatch spriteBatch) where T : ShaderEffect
+        public static void Shade<T>(this Entity entity, SpriteBatch spriteBatch) where T : EntityMiscShaderEffect
         {
             var shaderEffect = ShaderEffectsLoader.Instance.GetGeneric<T>();
 
-            shaderEffect.Apply(spriteBatch, entity.ScreenPosition());
+            shaderEffect.Apply(spriteBatch, entity);
         }
 
 

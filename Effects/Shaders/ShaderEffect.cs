@@ -9,15 +9,22 @@ namespace WebmilioCommons.Effects.Shaders
 {
     public abstract class ShaderEffect : IAssociatedToMod
     {
-        private static string _shaderRoot;
+        private const string VANILLA_MISC_BASE = "Images/Misc/";
+
+        public const string
+            PERLIN = VANILLA_MISC_BASE + "Perlin",
+            NOISE = VANILLA_MISC_BASE + "noise",
+            MiscShaderName = "ForceField";
+
+
+        private static Texture2D _streaks, _streaks2;
+
 
 
         protected ShaderEffect()
         {
+            
         }
-
-
-        public abstract void Apply(SpriteBatch spriteBatch, Vector2 positionPreOffset);
 
 
         internal static void RestoreSpriteBatch(SpriteBatch spriteBatch)
@@ -31,5 +38,8 @@ namespace WebmilioCommons.Effects.Shaders
 
 
         public Mod Mod { get; set; }
+
+        public static Texture2D StreaksTexture => _streaks ?? (_streaks = WebmilioCommonsMod.Instance.GetTexture($"{typeof(ShaderEffect).GetRootPath()}/streaks"));
+        public static Texture2D Streaks2Texture => _streaks2 ?? (_streaks2 = WebmilioCommonsMod.Instance.GetTexture($"{typeof(ShaderEffect).GetRootPath()}/streaks2"));
     }
 }

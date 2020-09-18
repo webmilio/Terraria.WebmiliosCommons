@@ -1,28 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
-using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
-using WebmilioCommons.Loaders;
 
-namespace WebmilioCommons.Effects.Shaders.ForceField
+namespace WebmilioCommons.Effects.Shaders.Entities.ForceField
 {
-    public abstract class ForceFieldEffect : ShaderEffect
+    public abstract class ForceFieldEffect : EntityMiscShaderEffect
     {
-        private const string VANILLA_MISC_BASE = "Images/Misc/";
-
-        public const string
-            PERLIN = VANILLA_MISC_BASE + "Perlin",
-            NOISE = "noise",
-            MISC_SHADER_NAME = "ForceField";
-
-
-        private static Texture2D _streaks, _streaks2;
-
-
         private MiscShaderData _shaderData;
         private readonly string _miscDictionaryKey;
 
@@ -37,20 +25,26 @@ namespace WebmilioCommons.Effects.Shaders.ForceField
             _miscDictionaryKey = key;
         }
 
-
-        public override void Apply(SpriteBatch spriteBatch, Vector2 positionPreOffset)
+        ~ForceFieldEffect()
         {
-            BeginForceFieldSpriteBatch(spriteBatch);
+            GameShaders.Misc.Remove(_miscDictionaryKey);
+        }
 
-            Entity entity = default;
 
+        public virtual bool PreDraw(SpriteBatch spriteBatch, Entity entity, ref Vector2 position) => true;
+
+        public override void Apply(SpriteBatch spriteBatch, Entity entity)
+        {
+            var positionPreOffset = entity.ScreenPosition();
             int
                 width = GetSphereWidth(entity, positionPreOffset),
                 height = GetSphereHeight(entity, positionPreOffset, width);
 
+            BeginForceFieldSpriteBatch(spriteBatch, GetBlendState(entity, positionPreOffset));
+
             if (_shaderData == default)
             {
-                _shaderData = new MiscShaderData(Main.PixelShaderRef, MISC_SHADER_NAME);
+                _shaderData = new MiscShaderData(Main.PixelShaderRef, MiscShaderName);
                 GameShaders.Misc[_miscDictionaryKey] = _shaderData;
             }
 
@@ -61,25 +55,34 @@ namespace WebmilioCommons.Effects.Shaders.ForceField
                 Color.White, GetRotation(entity, position),
                 Vector2.Zero, GetScale(entity, position), GetSpriteEffects(entity, position), 0);
 
-            _shaderData.UseColor(GetColor(entity, position));
+            _shaderData.UseColor(GetColor(entity, position).MultiplyRGBA(new Color(1f, 1f, 1f, 0f)));
             _shaderData.Apply(drawData);
-            drawData.Draw(spriteBatch);
+
+            if (PreDraw(spriteBatch, entity, ref position))
+            {
+                drawData.Draw(spriteBatch);
+                PostDraw(spriteBatch, entity, position);
+            }
 
             RestoreSpriteBatch(spriteBatch);
         }
 
+        public virtual void PostDraw(SpriteBatch spriteBatch, Entity entity, Vector2 position) { }
 
-        protected void BeginForceFieldSpriteBatch(SpriteBatch spriteBatch)
+
+        protected void BeginForceFieldSpriteBatch(SpriteBatch spriteBatch, BlendState blendState)
         {
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+            spriteBatch.Begin(SpriteSortMode.Immediate, blendState, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
         }
 
 
-        protected abstract int GetSphereWidth(Entity entity, Vector2 targetPositionPreOffset);
-        protected virtual int GetSphereHeight(Entity entity, Vector2 targetPositionPreOffset, int width) => width * 2 / 3;
+        protected virtual BlendState GetBlendState(Entity entity, Vector2 preOffset) => BlendState.NonPremultiplied;
 
-        protected virtual Vector2 GetSphereOffset(Entity entity, Vector2 targetPositionPreOffset, int width, int height) => new Vector2(width / 2, height / 2);
+        protected abstract int GetSphereWidth(Entity entity, Vector2 preOffset);
+        protected virtual int GetSphereHeight(Entity entity, Vector2 preOffset, int width) => width * 2 / 3;
+
+        protected virtual Vector2 GetSphereOffset(Entity entity, Vector2 preOffset, int width, int height) => new Vector2(width / 2, height / 2);
 
         protected virtual string GetTexturePath(Entity entity, Vector2 position) => NOISE;
         protected virtual Texture2D GetTexture(Entity entity, Vector2 position) => TextureManager.Load(GetTexturePath(entity, position));
@@ -92,9 +95,5 @@ namespace WebmilioCommons.Effects.Shaders.ForceField
         protected virtual SpriteEffects GetSpriteEffects(Entity entity, Vector2 position) => SpriteEffects.None;
 
         protected virtual Color GetColor(Entity entity, Vector2 position) => Color.White;
-
-
-        public static Texture2D StreaksTexture => _streaks ?? (_streaks = WebmilioCommonsMod.Instance.GetTexture($"{typeof(ForceFieldEffect).GetRootPath()}/streaks"));
-        public static Texture2D Streaks2Texture => _streaks2 ?? (_streaks2 = WebmilioCommonsMod.Instance.GetTexture($"{typeof(ForceFieldEffect).GetRootPath()}/streaks2"));
     }
 }

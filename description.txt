@@ -21,4 +21,7 @@ Credits (Team Members)
 	* Easy shader code cause I suck at doing them
 - "Stupid person with good ideas" who sometimes came up with good ideas but also stupid ones
 
+Special Thanks
+- Kazzymodus: being a gamer and hand-holding me with shaders until I understood them.
+
 If you want an example mod that uses this better networking, check out the JoJo mod by HellGoesOn on https://github.com/ruskies/TerrarianBizzareAdventure or https://github.com/ruskies/TLoZ and search for ModPlayerNetworkPacket.
