@@ -27,6 +27,11 @@ namespace WebmilioCommons.Effects.Shaders
         }
 
 
+        public virtual void Unload()
+        {
+
+        }
+
         internal static void RestoreSpriteBatch(SpriteBatch spriteBatch)
         {
             spriteBatch.End();
