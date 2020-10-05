@@ -11,6 +11,7 @@ using WebmilioCommons.Hooks;
 using WebmilioCommons.Hooks.Wiring;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
+using WebmilioCommons.ModCompatibilities;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.NPCs;
@@ -30,6 +31,7 @@ namespace WebmilioCommons
         {
             Instance = this;
 
+            ModCompatibilityLoader.Instance.TryLoad();
             NetworkTypeSerializers.Initialize();
         }
 
@@ -62,12 +64,13 @@ namespace WebmilioCommons
 
             #endregion
 
-
             #region Client Configuration
 
             //ClientConfiguration = ModContent.GetInstance<ClientConfiguration>();
 
             #endregion
+
+            ModCompatibilityLoader.Instance.OnWCLoadFinished();
         }
 
         /// <summary></summary>

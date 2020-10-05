@@ -1,29 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using Terraria.ModLoader;
 
 namespace WebmilioCommons.ModCompatibilities
 {
     public abstract class ModCompatibility
     {
-        protected ModCompatibility(Mod callerMod, string modName)
+        protected ModCompatibility(string modName)
         {
-            CallerMod = callerMod;
-
             ModName = modName;
         }
 
 
-        public ModCompatibility TryLoad()
+        internal ModCompatibility TryRegister()
         {
             ModInstance = ModLoader.GetMod(ModName);
 
-            if (ModInstance == null || !Load(ModInstance))
+            if (ModInstance == null || !TryRegister(ModInstance))
                 return null;
 
             return this;
         }
 
-        protected virtual bool Load(Mod mod) => true;
+        protected virtual bool TryRegister(Mod mod) => true;
+
+
+        public virtual void Load() { }
+
+        public virtual void PostSetupContent() { } 
 
 
         public void TryAddRecipes()
@@ -56,7 +60,7 @@ namespace WebmilioCommons.ModCompatibilities
         protected virtual void AddRecipeGroups() { }
 
 
-        public Mod CallerMod { get; }
+        public Mod CallerMod { get; internal set; }
 
         public string ModName { get; }
         public Mod ModInstance { get; private set; }
