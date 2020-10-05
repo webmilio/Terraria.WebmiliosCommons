@@ -9,6 +9,13 @@ namespace WebmilioCommons.NPCs
         protected int life, defense, value;
 
 
+        protected StandardNPC((GameCulture culture, string displayName)[] displayNames, int life, int defense, int value = 0) : 
+            this(new Dictionary<GameCulture, string>(), life, defense, value)
+        {
+            foreach (var str in displayNames)
+                DisplayNames.Add(str.culture, str.displayName);
+        }
+
         protected StandardNPC(string displayName, int life, int defense, int value = 0) : this(
             new Dictionary<GameCulture, string>()
             {
@@ -33,10 +40,13 @@ namespace WebmilioCommons.NPCs
             DisplayName.SetDefault(DisplayNames[GameCulture.English]);
 
             foreach (KeyValuePair<GameCulture, string> displayName in DisplayNames)
-                DisplayNames.Add(displayName.Key, displayName.Value);
+                DisplayName.AddTranslation(displayName.Key, displayName.Value);
 
             base.SetStaticDefaults();
+            ModStaticDefaults();
         }
+
+        public virtual void ModStaticDefaults() { }
 
 
         protected Dictionary<GameCulture, string> DisplayNames { get; }
