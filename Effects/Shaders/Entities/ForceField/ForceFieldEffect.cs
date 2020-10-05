@@ -40,7 +40,7 @@ namespace WebmilioCommons.Effects.Shaders.Entities.ForceField
                 width = GetSphereWidth(entity, positionPreOffset),
                 height = GetSphereHeight(entity, positionPreOffset, width);
 
-            BeginForceFieldSpriteBatch(spriteBatch, GetBlendState(entity, positionPreOffset));
+            BeginStandardSpriteBatch(spriteBatch, GetBlendState(entity, positionPreOffset));
 
             if (_shaderData == default)
             {
@@ -69,12 +69,6 @@ namespace WebmilioCommons.Effects.Shaders.Entities.ForceField
 
         public virtual void PostDraw(SpriteBatch spriteBatch, Entity entity, Vector2 position) { }
 
-
-        protected void BeginForceFieldSpriteBatch(SpriteBatch spriteBatch, BlendState blendState)
-        {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, blendState, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-        }
 
 
         protected virtual BlendState GetBlendState(Entity entity, Vector2 preOffset) => BlendState.NonPremultiplied;
