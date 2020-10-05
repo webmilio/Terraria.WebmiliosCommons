@@ -117,13 +117,13 @@ namespace WebmilioCommons.Loaders
         /// <returns></returns>
         protected T Add(Mod mod, T item)
         {
+            if (!PreAdd(mod, item))
+                return default;
+
             int itemId = NextIndex;
             NextIndex++;
 
             Type type = item.GetType();
-
-            if (idByType.ContainsKey(type))
-                Debugger.Break();
 
             idByType.Add(type, itemId);
             typeById.Add(itemId, type);
@@ -148,6 +148,9 @@ namespace WebmilioCommons.Loaders
 
             return item;
         }
+
+
+        protected virtual bool PreAdd(Mod mod, T modCompatibility) => true;
 
         /// <summary>Called after each time a subclass is added to the generic instances database.</summary>
         /// <param name="mod">The mod from which the generic instance originates.</param>
