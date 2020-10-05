@@ -187,7 +187,9 @@ namespace WebmilioCommons.Tinq
         /// <param name="divider">The divider for each entity's position. If the provided position is a world tile, this needs to be 16.</param>
         /// <returns>The nearest active entity to the provided point or <c>default</c> if the source <paramref name="entities"/> was empty.</returns>
         /// <exception cref="DivideByZeroException">Cannot divide an entity's position by zero.</exception>
-        public static T Nearest<T>(this IEnumerable<T> entities, Vector2 position, int divider = 1) where T : Entity
+        public static T Nearest<T>(this IEnumerable<T> entities, Vector2 position, int divider = 1) where T : Entity => Nearest(entities, position, out var _, divider);
+
+        public static T Nearest<T>(this IEnumerable<T> entities, Vector2 position, out float distanceSquared, int divider = 1) where T : Entity
         {
             T nearestEntity = default;
             float smallestDistance = float.MaxValue;
@@ -203,6 +205,7 @@ namespace WebmilioCommons.Tinq
                 }
             });
 
+            distanceSquared = smallestDistance;
             return nearestEntity;
         }
 
@@ -213,6 +216,8 @@ namespace WebmilioCommons.Tinq
         /// <param name="divider">The divider for each entity's position. If the provided position is a world tile, this needs to be 16.</param>
         /// <returns>The nearest active entity to the provided point or <c>default</c> if the source <paramref name="entities"/> was empty.</returns>
         public static T NearestActive<T>(this IEnumerable<T> entities, Vector2 position, int divider = 1) where T : Entity => entities.Active().Nearest(position, divider);
+
+        public static T NearestActive<T>(this IEnumerable<T> entities, Vector2 position, out float distanceSquared, int divider = 1) where T : Entity => entities.Active().Nearest(position, out distanceSquared, divider);
 
 
         /// <summary>Returns the only entity of a sequence that satisfies a specified condition and is active, and throws an exception if more than one such element exists.</summary>
