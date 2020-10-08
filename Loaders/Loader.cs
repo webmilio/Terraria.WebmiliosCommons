@@ -150,7 +150,7 @@ namespace WebmilioCommons.Loaders
         }
 
 
-        protected virtual bool PreAdd(Mod mod, T modCompatibility) => true;
+        protected virtual bool PreAdd(Mod mod, T item) => true;
 
         /// <summary>Called after each time a subclass is added to the generic instances database.</summary>
         /// <param name="mod">The mod from which the generic instance originates.</param>
