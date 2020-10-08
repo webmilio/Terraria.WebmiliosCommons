@@ -8,13 +8,11 @@ namespace WebmilioCommons.Extensions
 {
     public static class ItemExtensions
     {
-        public static void SetDefaults(this Item item, ModItem modItem)
+        public static Item SetDefaults(this Item item, ModItem modItem)
         {
-            var itemType = modItem.GetType();
-
-            item.SetDefaults(itemType.GetModFromType().ItemType(itemType.Name));
+            item.SetDefaults(modItem.item.type);
+			return item;
         }
-
 
         public static bool Consume(this Item item, int count = 1)
         {
@@ -188,7 +186,7 @@ namespace WebmilioCommons.Extensions
                     return i;
             }
 
-            return default;
+            return -1;
         }
 
 
