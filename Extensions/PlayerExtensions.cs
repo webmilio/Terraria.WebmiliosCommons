@@ -77,6 +77,9 @@ namespace WebmilioCommons.Extensions
         public static Tile GetTileOnCenter(this Entity entity) => Main.tile[(int) (entity.Center.X / 16), (int) (entity.Center.Y / 16)];
 
 
+        public static void QuickSpawnItem(this Player player, ModItem item) => player.QuickSpawnItem(new Item().SetDefaults(item));
+
+
         #region Packets
 
         public static void SendIfLocal(this Player player, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null) => DoIfLocal(player, plr => networkPacket.Send(fromWho, toWho));
