@@ -6,34 +6,52 @@ namespace WebmilioCommons.NPCs
 {
     public abstract class StandardNPC : ModNPC
     {
-        protected int life, defense, value;
+        protected int lifeMax, defense, value, width, height;
 
 
-        protected StandardNPC((GameCulture culture, string displayName)[] displayNames, int life, int defense, int value = 0) : 
-            this(new Dictionary<GameCulture, string>(), life, defense, value)
+        protected StandardNPC((GameCulture culture, string displayName)[] displayNames, int width, int height, int lifeMax, int defense, int value = 0) : 
+            this(new Dictionary<GameCulture, string>(), width, height, lifeMax, defense, value)
         {
             foreach (var str in displayNames)
                 DisplayNames.Add(str.culture, str.displayName);
         }
 
-        protected StandardNPC(string displayName, int life, int defense, int value = 0) : this(
+        protected StandardNPC(string displayName, int width, int height, int lifeMax, int defense, int value = 0) : this(
             new Dictionary<GameCulture, string>()
             {
                 { GameCulture.English, displayName }
             }, 
-            life, defense, value)
+            width, height, lifeMax, defense, value)
         {
         }
 
-        protected StandardNPC(Dictionary<GameCulture, string> displayNames, int life, int defense, int value = 0)
+        protected StandardNPC(Dictionary<GameCulture, string> displayNames, int width, int height, int lifeMax, int defense, int value = 0)
         {
             DisplayNames = displayNames;
 
-            this.life = life;
+            this.width = width;
+            this.height = height;
+
+            this.lifeMax = lifeMax;
             this.defense = defense;
             this.value = value;
         }
 
+
+        public override void SetDefaults()
+        {
+            npc.width = width;
+            npc.height = height;
+
+            npc.lifeMax = lifeMax;
+            npc.defense = defense;
+            npc.value = value;
+
+            base.SetDefaults();
+            ModDefaults();
+        }
+
+        public virtual void ModDefaults() { }
 
         public override void SetStaticDefaults()
         {
