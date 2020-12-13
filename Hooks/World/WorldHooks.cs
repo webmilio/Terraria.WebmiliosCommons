@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WebmilioCommons.Hooks.Wiring;
+using WebmilioCommons.TileEntities;
 using WebmilioCommons.Worlds;
+using WorldGen = On.Terraria.WorldGen;
 
-namespace WebmilioCommons.Hooks.Wiring
+namespace WebmilioCommons.Hooks.World
 {
-    public static class WorldHooksProxy
+    public static class WorldHooks
     {
         private static IList<ModWorld> _worlds;
         private static List<BetterModWorld> _betterWorlds;
@@ -17,9 +21,12 @@ namespace WebmilioCommons.Hooks.Wiring
 
         internal static void Load()
         {
+            WorldFileHooks.Load();
+            WorldGen.PlaceTile += WorldGen_OnPlaceTile;
+
             try
             {
-                _worlds = (IList<ModWorld>) typeof(WorldHooks).GetField("worlds", BindingFlags.Static | BindingFlags.NonPublic).GetValue(default);
+                _worlds = (IList<ModWorld>) typeof(Terraria.ModLoader.WorldHooks).GetField("worlds", BindingFlags.Static | BindingFlags.NonPublic).GetValue(default);
             }
             catch
             {
@@ -44,6 +51,9 @@ namespace WebmilioCommons.Hooks.Wiring
 
         internal static void Unload()
         {
+            WorldFileHooks.Unload();
+            WorldGen.PlaceTile -= WorldGen_OnPlaceTile;
+
             WireHooks.Unload();
             TreeHooks.Unload();
 
@@ -51,6 +61,23 @@ namespace WebmilioCommons.Hooks.Wiring
 
             _betterWorlds?.Clear();
             _betterWorlds = default;
+        }
+
+
+        private static bool WorldGen_OnPlaceTile(WorldGen.orig_PlaceTile orig, int i, int j, int type, bool mute, bool forced, int plr, int style)
+        {
+            bool result = orig(i, j, type, mute, forced, plr, style);
+
+            foreach (var te in TileEntity.ByID.Values)
+            {
+                if (!(te is StandardTileEntity std))
+                    continue;
+
+                if (!std.OnAnyTilePlaced(i, j, type, mute, forced, plr, style))
+                    return false;
+            }
+
+            return result;
         }
 
 

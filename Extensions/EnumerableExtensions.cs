@@ -100,6 +100,18 @@ namespace WebmilioCommons.Extensions
         }
 
 
+        public static List<T> NotNull<T>(this IList<object> source)
+        {
+            List<T> instances = new List<T>(source.Count);
+
+            for (var i = 0; i < source.Count; i++)
+                if (source[i] is T t)
+                    instances.Add(t);
+
+            return instances;
+        }
+
+
         public static string GenerateSlashedString(this List<float> values) => GenerateSlashedString(values.ToArray());
 
         public static string GenerateSlashedString(this float[] values)

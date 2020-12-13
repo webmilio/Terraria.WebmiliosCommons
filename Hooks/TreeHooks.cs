@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using On.Terraria;
 using WebmilioCommons.Hooks.Wiring;
+using WebmilioCommons.Hooks.World;
 
 namespace WebmilioCommons.Hooks
 {
@@ -25,21 +26,21 @@ namespace WebmilioCommons.Hooks
 
         private static void WorldGen_OnAddTrees(WorldGen.orig_AddTrees orig)
         {
-            bool result = WorldHooksProxy.PreAddTrees();
+            bool result = WorldHooks.PreAddTrees();
 
             if (result)
             {
                 orig();
-                WorldHooksProxy.PostAddTrees();
+                WorldHooks.PostAddTrees();
             }
         }
 
         private static bool WorldGen_OnGrowTree(WorldGen.orig_GrowTree orig, int i, int j)
         {
-            bool result = WorldHooksProxy.PreGrowTree(i, j) && orig(i, j);
+            bool result = WorldHooks.PreGrowTree(i, j) && orig(i, j);
 
             if (result)
-                WorldHooksProxy.PostGrowTree(i, j);
+                WorldHooks.PostGrowTree(i, j);
 
             return result;
         }

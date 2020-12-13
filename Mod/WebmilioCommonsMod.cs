@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ID;
+using Terraria.IO;
 using Terraria.ModLoader;
 using WebmilioCommons.Achievements.Helper;
 using WebmilioCommons.Commons;
@@ -53,7 +54,6 @@ namespace WebmilioCommons
                 IdentityManager.Load();
                 KeyboardManager.Load();
             }
-
 
             #region Hooks
 
@@ -152,6 +152,11 @@ namespace WebmilioCommons
         public override void PostUpdateInput()
         {
             KeyboardManager.Update();
+        }
+
+        public override void AddRecipes()
+        {
+            
         }
 
 

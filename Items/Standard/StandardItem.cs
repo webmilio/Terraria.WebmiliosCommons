@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -9,6 +10,11 @@ namespace WebmilioCommons.Items.Standard
     {
         protected readonly int width, height;
 
+
+        protected StandardItem((GameCulture culture, string displayName, string tooltip) str, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) :
+            this(new[] {str}, width, height, value, defense, rarity, maxStack)
+        {
+        }
 
         protected StandardItem((GameCulture culture, string displayName, string tooltip)[] strings, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) :
             this(new Dictionary<GameCulture, string>(), new Dictionary<GameCulture, string>(), width, height, value, defense, rarity, maxStack)
@@ -99,11 +105,15 @@ namespace WebmilioCommons.Items.Standard
 
         public static class TooltipLines
         {
-            public const string
-                ITEM_NAME = "ItemName",
-                TOOLTIP_LINE_NAME = "Tooltip";
+            [Obsolete("Use " + nameof(ItemName) + ".", true)]
+            public const string ITEM_NAME = ItemName;
+            public const string ItemName = "ItemName";
 
-            public static string GetTooltipLineName(int number = 0) => TOOLTIP_LINE_NAME + number;
+            [Obsolete("Use " + nameof(TooltipLineName) + ".", true)]
+            public const string TOOLTIP_LINE_NAME = TooltipLineName;
+            public const string TooltipLineName = "Tooltip";
+
+            public static string GetTooltipLineName(int number = 0) => TooltipLineName + number;
         }
     }
 }

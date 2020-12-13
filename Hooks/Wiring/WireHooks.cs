@@ -1,6 +1,8 @@
 ﻿using System;
 using On.Terraria;
 using Terraria.ModLoader;
+using WebmilioCommons.Hooks.World;
+using WorldHooks = WebmilioCommons.Hooks.World.WorldHooks;
 
 namespace WebmilioCommons.Hooks.Wiring
 {
@@ -45,10 +47,10 @@ namespace WebmilioCommons.Hooks.Wiring
 
         private static bool WorldGen_OnPlaceWire_Any(WorldGen_orig_PlaceKillWire_Any orig, WireColor color, int i, int j)
         {
-            bool result = WorldHooksProxy.PrePlaceWire(color, i, j) && orig(i, j);
+            bool result = WorldHooks.PrePlaceWire(color, i, j) && orig(i, j);
 
             if (result)
-                WorldHooksProxy.PostPlaceWire(color, i, j);
+                WorldHooks.PostPlaceWire(color, i, j);
 
             return result;
         }
@@ -64,10 +66,10 @@ namespace WebmilioCommons.Hooks.Wiring
 
         private static bool WorldGen_OnKillWire_Any(WorldGen_orig_PlaceKillWire_Any orig, WireColor color, int i, int j)
         {
-            bool result = WorldHooksProxy.PreKillWire(color, i, j) && orig(i, j);
+            bool result = WorldHooks.PreKillWire(color, i, j) && orig(i, j);
 
             if (result)
-                WorldHooksProxy.PostKillWire(color, i, j);
+                WorldHooks.PostKillWire(color, i, j);
 
             return result;
         }

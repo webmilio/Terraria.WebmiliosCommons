@@ -57,7 +57,7 @@ namespace WebmilioCommons.Tinq
         /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
         /// <param name="entities"></param>
         /// <returns><c>true</c> if the sequence contains any active entities; otherwise, <c>false</c>.</returns>
-        public static bool AnyActive<T>(this IEnumerable<T> entities) where T : Entity => entities.CountActive() > 0;
+        public static bool  AnyActive<T>(this IEnumerable<T> entities) where T : Entity => entities.CountActive() > 0;
 
         /// <summary>Determines whether any entity of a sequence is active and satisfies a condition.</summary>
         /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
@@ -231,7 +231,7 @@ namespace WebmilioCommons.Tinq
             T found = SingleActiveOrDefault(entities, predicate);
 
             if (found == default)
-                throw new InvalidOperationException("No element satisfies the condition in predicate.");
+                throw new InvalidOperationException($"No element satisfies the condition in {nameof(predicate)}.");
 
             return found;
         }
@@ -250,7 +250,7 @@ namespace WebmilioCommons.Tinq
                 if (Active(entity) && predicate(entity))
                 {
                     if (found != default)
-                        throw new InvalidOperationException("More than one element satisfies the condition in predicate.");
+                        throw new InvalidOperationException($"More than one element satisfies the condition in {nameof(predicate)}.");
 
                     found = entity;
                 }

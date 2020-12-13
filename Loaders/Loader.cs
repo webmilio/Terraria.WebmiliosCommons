@@ -140,8 +140,8 @@ namespace WebmilioCommons.Loaders
                 typeByUnlocalizedName.Add(unlocalizedName, type);
             }
 
-            if (item is IAssociatedToMod asc)
-                asc.Mod = mod;
+            if (item is IAssociatedToMod atm)
+                atm.Mod = mod;
 
             PostAdd(mod, item);
             PostAdd(mod, item, type);

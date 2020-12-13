@@ -7,7 +7,7 @@ namespace WebmilioCommons.Commons
 {
     public sealed class ResourceManager
     {
-        public const int DEFAULT_TTL = Constants.TICKS_PER_SECOND * 60;
+        public const int DEFAULT_TTL = Constants.TicksPerSecond * 60;
 
         private static ResourceManager _instance;
 

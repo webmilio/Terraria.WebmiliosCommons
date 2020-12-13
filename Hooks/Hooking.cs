@@ -1,4 +1,5 @@
 ﻿using WebmilioCommons.Hooks.Wiring;
+using WebmilioCommons.Hooks.World;
 
 namespace WebmilioCommons.Hooks
 {
@@ -6,17 +7,17 @@ namespace WebmilioCommons.Hooks
     {
         internal static void Load()
         {
-            WorldHooksProxy.Load();
+            WorldHooks.Load();
         }
 
         internal static void PostSetupContent()
         {
-            WorldHooksProxy.PostSetupContent();
+            WorldHooks.PostSetupContent();
         }
 
         internal static void Unload()
         {
-            WorldHooksProxy.Unload();
+            WorldHooks.Unload();
         }
     }
 }

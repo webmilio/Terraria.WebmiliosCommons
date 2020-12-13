@@ -52,7 +52,7 @@ namespace WebmilioCommons.Transformations
 
 
         /// <summary>
-        /// <c>true</c> if the only one instance of the transformation is allowed at a time per play; <c>false</c> otherwise.
+        /// <c>true</c> if the only one instance of the transformation is allowed at a time per player; <c>false</c> otherwise.
         /// Defaults to <c>true</c>.
         /// </summary>
         public virtual bool Unique { get; set; } = true;
