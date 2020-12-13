@@ -16,6 +16,7 @@ using WebmilioCommons.ModCompatibilities;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.NPCs;
+using WebmilioCommons.Players;
 using WebmilioCommons.Proxies;
 using WebmilioCommons.Rarities;
 using WebmilioCommons.Time;
@@ -31,6 +32,8 @@ namespace WebmilioCommons
         public WebmilioCommonsMod()
         {
             Instance = this;
+
+            BetterModPlayer.Load();
 
             ModCompatibilityLoader.Instance.TryLoad();
             NetworkTypeSerializers.Initialize();
@@ -95,6 +98,8 @@ namespace WebmilioCommons
         /// <summary></summary>
         public override void Unload()
         {
+            BetterModPlayer.Unload();
+
             // Events
 
             #region Hooks
