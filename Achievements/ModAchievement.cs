@@ -13,7 +13,7 @@ using WebmilioCommons.Extensions;
 namespace WebmilioCommons.Achievements
 {
     /// <summary>This class serves as the public surface linking the vanilla achievement system and the modded achievement system together.</summary>
-    public class ModAchievement
+    public abstract class ModAchievement
     {
         /// <summary>The name of the default completion flag.</summary>
         public const string DEFAULT_COMPLETION_FLAG = "Completed";
