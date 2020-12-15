@@ -19,7 +19,7 @@ using WebmilioCommons.Proxies.Players;
 namespace WebmilioCommons.Players
 {
     [AutoNetworkMapping]
-    public sealed partial class WCPlayer : BetterModPlayer
+    public sealed partial class WCPlayer : ModPlayer
     {
         public static WCPlayer Get() => Get(Main.LocalPlayer);
         public static WCPlayer Get(Player player) => player.GetModPlayer<WCPlayer>();

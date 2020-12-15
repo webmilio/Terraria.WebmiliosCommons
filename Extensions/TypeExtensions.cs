@@ -46,8 +46,8 @@ namespace WebmilioCommons.Extensions
 
 
         public static IEnumerable<TypeInfo> Concrete(this IEnumerable<TypeInfo> types) => types.Where(t => !t.IsAbstract && !t.IsInterface);
-
-        public static IEnumerable<TypeInfo> Concrete<T>(this IEnumerable<TypeInfo> types) => Concrete(types).Where(t => t.IsSubclassOf(typeof(T)));
+        public static IEnumerable<TypeInfo> Concrete(this IEnumerable<TypeInfo> types, Type filter) => Concrete(types).Where(t => t.IsSubclassOf(filter));
+        public static IEnumerable<TypeInfo> Concrete<T>(this IEnumerable<TypeInfo> types) => Concrete(types, typeof(T));
 
 
         public static string NamespaceAsPath(this Type type) => type.Namespace.Replace('.', '\\');

@@ -1,7 +1,12 @@
-﻿namespace WebmilioCommons.UI.Slots
+﻿using Terraria.UI;
+
+namespace WebmilioCommons.UI.Slots
 {
-    public class ItemSlot
+    public abstract class ItemSlot : UIElement
     {
-        
+        void X()
+        {
+            
+        }
     }
 }
