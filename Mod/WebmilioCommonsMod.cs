@@ -18,7 +18,6 @@ using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.NPCs;
 using WebmilioCommons.Players;
 using WebmilioCommons.Proxies;
-using WebmilioCommons.Rarities;
 using WebmilioCommons.Time;
 
 namespace WebmilioCommons
@@ -46,7 +45,6 @@ namespace WebmilioCommons
             Proxies.Proxies.Load();
 
             GlobalNPCSetupShopMethods.Load();
-            ModRarityLoader.Instance.TryLoad();
             TimeManagement.Load();
 
             SpecialNPCNamingBehavior.Load();
