@@ -80,7 +80,7 @@ namespace WebmilioCommons.Players
 
             if (_saveTypes.ContainsKey(type))
                 foreach (var property in _saveTypes[type])
-                    _saveProperties[property].Save(tag, property, this);
+                    _saveProperties[property].Save(this, tag, property);
 
             ModSave(tag);
 
@@ -103,7 +103,7 @@ namespace WebmilioCommons.Players
 
             if (_saveTypes.ContainsKey(type))
                 foreach (var property in _saveTypes[type])
-                    _saveProperties[property].Load(tag, property, this);
+                    _saveProperties[property].Load(this, tag, property);
 
             ModLoad(tag);
         }
