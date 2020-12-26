@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace WebmilioCommons.Extensions
@@ -31,5 +32,22 @@ namespace WebmilioCommons.Extensions
 
             return args;
         }
+
+        public static string SplitOn(this string orig, Func<char, StringBuilder, bool> predicate)
+        {
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < orig.Length; i++)
+            {
+                if (predicate(orig[i], sb))
+                    sb.Append(' ');
+
+                sb.Append(orig[i]);
+            }
+
+            return sb.ToString();
+        }
+
+        public static string SplitOnCapital(this string orig) => SplitOn(orig, (c, sb) => char.IsUpper(c) && sb.Length > 0);
     }
 }
