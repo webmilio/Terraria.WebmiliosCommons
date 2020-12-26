@@ -27,6 +27,7 @@ namespace WebmilioCommons.Proxies.Players
 
         internal static void Unload()
         {
+            _modPlayers?.Clear();
             _modPlayers = default;
         }
 
