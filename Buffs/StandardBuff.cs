@@ -33,6 +33,21 @@ namespace WebmilioCommons.Buffs
             CanBeCleared = canBeCleared;
         }
 
+        protected StandardBuff((GameCulture culture, string displayName, string description) str, bool hideTime = false, bool save = false, bool persistent = false, bool canBeCleared = true)
+            : this(new[] { str }, hideTime, save, persistent, canBeCleared)
+        {
+        }
+
+        protected StandardBuff((GameCulture culture, string displayName, string description)[] strings, bool hideTime = false, bool save = false, bool persistent = false, bool canBeCleared = true)
+            : this(new Dictionary<GameCulture, string>(), new Dictionary<GameCulture, string>(), hideTime, save, persistent, canBeCleared)
+        {
+            foreach (var str in strings)
+            {
+                DisplayNames.Add(str.culture, str.displayName);
+                Descriptions.Add(str.culture, str.description);
+            }
+        }
+
 
         public override void SetDefaults()
         {
