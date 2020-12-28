@@ -11,28 +11,18 @@ namespace WebmilioCommons.Players
 {
     public abstract class BetterModPlayer : ModPlayer
     {
-        private static List<Type> _types;
-        private static Dictionary<Type, List<PropertyInfo>> _saveTypes;
-        private static Dictionary<PropertyInfo, SaveAttribute> _saveProperties;
+        private static Dictionary<Type, List<(PropertyInfo property, SaveAttribute save)>> _saveTypes;
 
 
         internal static void Load()
         {
-            _types = new List<Type>();
-            _saveTypes = new Dictionary<Type, List<PropertyInfo>>();
-            _saveProperties = new Dictionary<PropertyInfo, SaveAttribute>();
+            _saveTypes = new Dictionary<Type, List<(PropertyInfo property, SaveAttribute save)>>();
         }
 
         internal static void Unload()
         {
-            _types?.Clear();
-            _types = default;
-
             _saveTypes?.Clear();
             _saveTypes = default;
-
-            _saveProperties?.Clear();
-            _saveProperties = default;
         }
 
 
@@ -40,10 +30,8 @@ namespace WebmilioCommons.Players
         {
             var type = GetType();
 
-            if (_types.Contains(type))
+            if (_saveTypes.ContainsKey(type))
                 return;
-
-            _types.Add(type);
 
             // Save Attribute
             type.GetProperties(BindingFlags.Instance | BindingFlags.Public).Do(property =>
@@ -53,38 +41,24 @@ namespace WebmilioCommons.Players
                 if (saveAttribute == default)
                     return;
 
-                if (!_saveTypes.TryGetValue(type, out List<PropertyInfo> properties))
+                if (!_saveTypes.TryGetValue(type, out var properties))
                 {
-                    properties = new List<PropertyInfo>();
+                    properties = new List<(PropertyInfo, SaveAttribute)>();
                     _saveTypes.Add(type, properties);
                 }
 
-                properties.Add(property);
-                _saveProperties.Add(property, saveAttribute);
+                properties.Add((property, saveAttribute));
             });
         }
 
 
-        public static bool IsInitialized<T>() => _types.Contains(typeof(T));
-        public static bool IsInitialized(Type type) => _types.Contains(type);
+        public static bool IsInitialized<T>() => _saveTypes.ContainsKey(typeof(T));
+        public static bool IsInitialized(Type type) => _saveTypes.ContainsKey(type);
 
 
         public override TagCompound Save()
         {
-            var tag = new TagCompound();
-
-            if (!PreSave(tag))
-                return tag;
-
-            var type = GetType();
-
-            if (_saveTypes.ContainsKey(type))
-                foreach (var property in _saveTypes[type])
-                    _saveProperties[property].Save(this, tag, property);
-
-            ModSave(tag);
-
-            return tag;
+            return SaveAttribute.SaveObject(this, _saveTypes, PreSave, ModSave);
         }
 
         protected virtual bool PreSave(TagCompound tag) => true;
@@ -96,16 +70,7 @@ namespace WebmilioCommons.Players
 
         public override void Load(TagCompound tag)
         {
-            if (!PreLoad(tag))
-                return;
-
-            var type = GetType();
-
-            if (_saveTypes.ContainsKey(type))
-                foreach (var property in _saveTypes[type])
-                    _saveProperties[property].Load(this, tag, property);
-
-            ModLoad(tag);
+            SaveAttribute.LoadObject(this, tag, _saveTypes, PreLoad, ModLoad);
         }
 
         protected virtual bool PreLoad(TagCompound tag) => true;
