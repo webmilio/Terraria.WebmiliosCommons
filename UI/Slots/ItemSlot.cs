@@ -35,7 +35,7 @@ namespace WebmilioCommons.UI.Slots
             {
                 Main.LocalPlayer.mouseInterface = true;
 
-                if (ValidItemFunction == null || ValidItemFunction(Main.mouseItem))
+                if (ValidItemFunction == null || ValidItemFunction(Main.mouseItem, Main.LocalPlayer))
                 {
                     Terraria.UI.ItemSlot.Handle(ref item, Context);
                     Item = item;
@@ -47,7 +47,7 @@ namespace WebmilioCommons.UI.Slots
         }
 
 
-        public Func<Item, bool> ValidItemFunction { get; set; }
+        public Func<Item, Player, bool> ValidItemFunction { get; set; }
 
 
         public int Context { get; }
