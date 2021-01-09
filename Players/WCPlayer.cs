@@ -101,6 +101,11 @@ namespace WebmilioCommons.Players
             PlayerHooksProxy.RegisterPlayersModPlayer(plr);
         }
 
+        internal void OnLastInteractionNPCLoot(NPC npc)
+        {
+            PlayerHooksProxy.Do<BetterModPlayer>(player, bmp => bmp.OnLastInteractionNPCLoot(npc));
+        }
+
         public override void PlayerConnect(Player plr)
         {
             PlayerHooksProxy.RegisterPlayersModPlayer(plr);
