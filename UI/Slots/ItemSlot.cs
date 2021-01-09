@@ -30,7 +30,7 @@ namespace WebmilioCommons.UI.Slots
 
             var rect = GetDimensions().ToRectangle();
             var item = Item;
-
+            
             if (ContainsPoint(Main.MouseScreen) && !PlayerInput.IgnoreMouseInterface)
             {
                 Main.LocalPlayer.mouseInterface = true;
