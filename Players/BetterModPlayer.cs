@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebmilioCommons.Commons.Saving;
@@ -67,7 +68,6 @@ namespace WebmilioCommons.Players
         {
         }
 
-
         public override void Load(TagCompound tag)
         {
             SaveAttribute.LoadObject(this, tag, _saveTypes, PreLoad, ModLoad);
@@ -81,5 +81,9 @@ namespace WebmilioCommons.Players
 
 
         public virtual bool CanInteractWithTownNPCs() => true;
+
+        public virtual void OnLastInteractionNPCLoot(NPC npc)
+        {
+        }
     }
 }
