@@ -12,7 +12,7 @@ namespace WebmilioCommons.NPCs
             if (CurrentRequest != TimeManagement.CurrentRequest)
                 CurrentRequest = !TimeManagement.TimeAltered ? null : TimeManagement.CurrentRequest;
 
-            if (CurrentRequest == null || !CurrentRequest.AlterNPCs || TimeManagement.IsNPCImmune(npc))
+            if (CurrentRequest == null || !CurrentRequest.AlterNPCs || TimeManagement.IsNPCImmune(npc) || npc.modNPC is INPCTimeImmune nti && nti.IsImmune(npc, CurrentRequest))
             {
                 if (State != null)
                 {
