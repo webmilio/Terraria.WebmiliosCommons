@@ -2,7 +2,7 @@
 
 namespace WebmilioCommons.Time
 {
-    public interface IIsNPCImmune
+    public interface INPCTimeImmune
     {
         bool IsImmune(NPC npc, TimeAlterationRequest request);
     }
