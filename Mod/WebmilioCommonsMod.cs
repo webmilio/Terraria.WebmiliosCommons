@@ -19,6 +19,7 @@ using WebmilioCommons.NPCs;
 using WebmilioCommons.Players;
 using WebmilioCommons.Proxies;
 using WebmilioCommons.Time;
+using WebmilioCommons.Worlds;
 
 namespace WebmilioCommons
 {
@@ -33,6 +34,8 @@ namespace WebmilioCommons
             Instance = this;
 
             BetterModPlayer.Load();
+            BetterModNPC.Load();
+            BetterModWorld.Load();
 
             ModCompatibilityLoader.Instance.TryLoad();
             NetworkTypeSerializers.Initialize();
@@ -97,6 +100,8 @@ namespace WebmilioCommons
         public override void Unload()
         {
             BetterModPlayer.Unload();
+            BetterModNPC.Unload();
+            BetterModWorld.Unload();
 
             // Events
 
