@@ -9,6 +9,10 @@ namespace WebmilioCommons.NPCs
         protected int lifeMax, defense, value, width, height;
 
 
+        protected StandardNPC()
+        {
+        }
+
         protected StandardNPC((GameCulture culture, string displayName)[] displayNames, int width, int height, int lifeMax, int defense, int value = 0) : 
             this(new Dictionary<GameCulture, string>(), width, height, lifeMax, defense, value)
         {
