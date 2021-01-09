@@ -196,7 +196,7 @@ namespace WebmilioCommons.Tinq
 
             EnumerableExtensions.Do(entities, entity =>
             {
-                float distance = Vector2.DistanceSquared(position, entity.position / divider);
+                float distance = Vector2.DistanceSquared(position, entity.Center / divider);
 
                 if (distance < smallestDistance)
                 {
