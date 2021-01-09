@@ -18,7 +18,8 @@ namespace WebmilioCommons.Extensions
         [Obsolete("Replaced by GetPath()")]
         public static string GetTexturePath(this Type type) => GetPath(type);
 
-        public static string GetRootPath(this Type type, bool includeMod = false)
+        public static string GetRootPath(this Type type) => GetRootPath(type, false);
+        public static string GetRootPath(this Type type, bool includeMod)
         {
             string[] segments = type.Namespace.Split('.');
             return string.Join("/", segments, includeMod ? 0 : 1, segments.Length - 1);
