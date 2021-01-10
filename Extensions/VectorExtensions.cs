@@ -12,5 +12,9 @@ namespace WebmilioCommons.Extensions
         public static Vector2 VelocityVector(this Vector2 start, Vector2 end, float speed = 1.0f) => (end - start).SafeNormalize(Vector2.UnitY) * speed;
 
         public static Vector2 VelocityVector(this Vector2 start, Vector2 end, float speed, Vector2 endOffset) => VelocityVector(start, end - endOffset, speed);
+
+
+        public static Vector2 PerpendicularClockwise(this Vector2 v) => new Vector2(-v.Y, v.X);
+        public static Vector2 PerpendicularCounterClockwise(this Vector2 v) => new Vector2(v.Y, -v.X);
     }
 }

@@ -9,14 +9,12 @@ Things this adds:
 - Keyboard Manager: get the state of any keys (NotPressed, JustPressed, Pressed, JustReleased), regardless of Mod Hotkey.
 - Custom Achievements: you can add custom achievements in a less complex way than without the library.
 - Effects: screenshake (multiplayer compatible), easy shaders
+- Math/Vector stuffs: velocity vector to point/mouse, checking if a point is inside a triangle/rectangle (since you can't with normal rectangles)
 
 Other Utilities:
 - Class which allows you to quickly create a tile-placing item once extended.
 
 Credits (Team Members)
-- Scalie: ideas for
-	* Custom Achievements
-	* StandardTileItem
 - Blockaroz3349:
 	* Easy shader code cause I suck at doing them
 - "Stupid person with good ideas" who sometimes came up with good ideas but also stupid ones
