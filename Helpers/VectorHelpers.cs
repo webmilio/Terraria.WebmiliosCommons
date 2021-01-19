@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Helpers
 {
@@ -37,34 +38,46 @@ namespace WebmilioCommons.Helpers
         }
 
 
+        // Taken from StackOverflow, forgot from where...
         public static bool PointInTriangle(Vector2 a, Vector2 b, Vector2 c, Vector2 p)
         {
             // Compute vectors        
-            Vector2 v0 = c - a;
-            Vector2 v1 = b - a;
-            Vector2 v2 = p - a;
+            Vector2 ca = c - a;
+            Vector2 ba = b - a;
+            Vector2 pa = p - a;
 
             // Compute dot products
-            float dot00 = Vector2.Dot(v0, v0);
-            float dot01 = Vector2.Dot(v0, v1);
-            float dot02 = Vector2.Dot(v0, v2);
-            float dot11 = Vector2.Dot(v1, v1);
-            float dot12 = Vector2.Dot(v1, v2);
+            float dotCACA = Vector2.Dot(ca, ca);
+            float dotCABA = Vector2.Dot(ca, ba);
+            float dotCAPA = Vector2.Dot(ca, pa);
+            float dotBABA = Vector2.Dot(ba, ba);
+            float dotBAPA = Vector2.Dot(ba, pa);
 
             // Compute barycentric coordinates
-            float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-            float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-            float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+            float inverseDominator = 1 / (dotCACA * dotBABA - dotCABA * dotCABA);
+            float u = (dotBABA * dotCAPA - dotCABA * dotBAPA) * inverseDominator;
+            float v = (dotCACA * dotBAPA - dotCABA * dotCAPA) * inverseDominator;
 
             // Check if point is in triangle
-            if (u >= 0 && v >= 0 && (u + v) < 1)
-            { return true; }
-            else { return false; }
+            return u >= 0 && v >= 0 && (u + v) < 1;
         }
 
         public static bool PointInRectangle(Vector2 a, Vector2 b, Vector2 c, Vector2 d, Vector2 p)
         {
             return PointInTriangle(a, b, c, p) || PointInTriangle(a, c, d, p);
+        }
+
+
+        public static Vector2[] MakeRectanglePointsOnCircle(Vector2 start, Vector2 end, float circleRadius, float width, float length, float circleOffsetRadius = 0)
+        {
+            var pointCenter = VectorHelpers.OnCircle(start, end, circleRadius, out var unitV, circleOffsetRadius);
+
+            var a = pointCenter + unitV.PerpendicularCounterClockwise() * width / 2;
+            var b = a + unitV * length;
+            var d = pointCenter + unitV.PerpendicularClockwise() * width / 2;
+            var c = d + unitV * length;
+
+            return new[] { a, b, c, d };
         }
     }
 }
