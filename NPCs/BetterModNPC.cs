@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Terraria.ModLoader;
-using WebmilioCommons.Commons.Saving;
 using WebmilioCommons.Extensions;
+using WebmilioCommons.Saving;
 
 namespace WebmilioCommons.NPCs
 {

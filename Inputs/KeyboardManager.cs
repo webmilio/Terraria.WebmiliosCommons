@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace WebmilioCommons.Inputs
 {
-    public static class KeyboardManager
+    public class KeyboardManager : ModSystem
     {
         private static bool _loaded;
 
@@ -35,7 +36,7 @@ namespace WebmilioCommons.Inputs
             _loaded = true;
         }
 
-        internal static void Unload()
+        public override void Unload()
         {
             _loaded = false;
             
@@ -45,8 +46,7 @@ namespace WebmilioCommons.Inputs
             _keyStates = null;
         }
 
-
-        internal static void Update()
+        public override void PostUpdateInput()
         {
             if (!_loaded)
                 return;

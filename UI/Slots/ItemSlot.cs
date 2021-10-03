@@ -18,8 +18,8 @@ namespace WebmilioCommons.UI.Slots
             Item = new Item();
             Item.SetDefaults();
 
-            Width.Set(Main.inventoryBack9Texture.Width * scale, 0f);
-            Height.Set(Main.inventoryBack9Texture.Height * scale, 0f);
+            Width.Set(52 * scale, 0f);
+            Height.Set(52 * scale, 0f);
         }
 
 
@@ -37,13 +37,21 @@ namespace WebmilioCommons.UI.Slots
 
                 if (ValidItemFunction == null || ValidItemFunction(Main.mouseItem, Main.LocalPlayer))
                 {
+                    var old = item;
                     Terraria.UI.ItemSlot.Handle(ref item, Context);
+
                     Item = item;
+                    ChangeItem(old, item);
                 }
             }
 
             Terraria.UI.ItemSlot.Draw(spriteBatch, ref item, Context, rect.TopLeft());
             Main.inventoryScale = oldScale;
+        }
+
+        public virtual void ChangeItem(Item old, Item @new)
+        {
+
         }
 
 

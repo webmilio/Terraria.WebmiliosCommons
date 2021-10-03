@@ -15,7 +15,7 @@ namespace WebmilioCommons.Networking.Packets
         {
         }
 
-        protected ModPlayerNetworkPacket(T modPlayer) : base(modPlayer.player)
+        protected ModPlayerNetworkPacket(T modPlayer) : base(modPlayer.Player)
         {
             ModPlayer = modPlayer;
         }
@@ -47,11 +47,11 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
-        [NotNetworkField]
+        [NotMapped]
         public virtual T ModPlayer { get; set; }
 
 
-        [NotNetworkField]
+        [NotMapped]
         public virtual Func<Player, T> ModPlayerGetter { get; } = player => player.GetModPlayer<T>();
     }
 }

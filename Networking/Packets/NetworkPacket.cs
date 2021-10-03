@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WebmilioCommons.Extensions;
 using WebmilioCommons.Networking.Attributes;
 using WebmilioCommons.Networking.Serializing;
 
@@ -14,12 +15,12 @@ namespace WebmilioCommons.Networking.Packets
 {
     public abstract class NetworkPacket
     {
-        [NotNetworkField]
+        [NotMapped]
         internal static Dictionary<Type, List<PropertyInfo>> GlobalReflectedPropertyInfos { get; set; }
 
-        [NotNetworkField]
+        [NotMapped]
         internal static Dictionary<Type, Dictionary<PropertyInfo, Action<NetworkPacket, ModPacket, object>>> GlobalPacketWriters { get; set; }
-        [NotNetworkField]
+        [NotMapped]
         internal static Dictionary<Type, Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>>> GlobalPacketReaders { get; set; }
 
 
@@ -296,17 +297,9 @@ namespace WebmilioCommons.Networking.Packets
 
             foreach (PropertyInfo propertyInfo in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                NotNetworkFieldAttribute nnfAttribute = propertyInfo.GetCustomAttribute<NotNetworkFieldAttribute>();
-
-                if (nnfAttribute != default && mappingBehavior == AutoNetworkMappingBehavior.OptOut)
+                if (mappingBehavior == AutoNetworkMappingBehavior.OptOut && propertyInfo.TryGetCustomAttribute<NotMappedAttribute>(out _) ||
+                    mappingBehavior == AutoNetworkMappingBehavior.OptIn && propertyInfo.TryGetCustomAttribute<NetworkFieldAttribute>(out _))
                     continue;
-
-
-                NetworkFieldAttribute nfAttribute = propertyInfo.GetCustomAttribute<NetworkFieldAttribute>();
-
-                if (mappingBehavior == AutoNetworkMappingBehavior.OptIn && nfAttribute == default)
-                    continue;
-
 
                 propertyInfos.Add(propertyInfo);
                 AddReaderWriter(propertyInfo);
@@ -342,30 +335,30 @@ namespace WebmilioCommons.Networking.Packets
         #region Not Synchronized
 
         /// <summary>The <see cref="Mod"/> to which this packet belongs to. Initialized after the constructor has been called.</summary>
-        [NotNetworkField]
+        [NotMapped]
         public Mod Mod => NetworkPacketLoader.Instance.GetMod(this);
 
         /// <summary>The ushort type of the packet, automatically assigned after the constructor has been called.</summary>
-        [NotNetworkField]
+        [NotMapped]
         public int Id => NetworkPacketLoader.Instance.GetId(GetType());
 
         /// <summary>The packet's behavior. See <see cref="NetworkPacketBehavior"/>'s documentation for more information.</summary>
-        [NotNetworkField]
+        [NotMapped]
         public virtual NetworkPacketBehavior Behavior { get; set; } = NetworkPacketBehavior.SendToAll;
 
         /// <summary>The entity to which this instance pertains.</summary>
-        [NotNetworkField]
+        [NotMapped]
         public object ContextEntity { get; protected set; }
 
 
         /// <summary>Don't touch this if you don't know what it does.</summary>
-        [NotNetworkField]
+        [NotMapped]
         public List<PropertyInfo> ReflectedPropertyInfos => GlobalReflectedPropertyInfos[GetType()];
 
-        [NotNetworkField]
+        [NotMapped]
         public Dictionary<PropertyInfo, Action<NetworkPacket, ModPacket, object>> PacketWriters => GlobalPacketWriters[GetType()];
 
-        [NotNetworkField]
+        [NotMapped]
         public Dictionary<PropertyInfo, Func<NetworkPacket, BinaryReader, object>> PacketReaders => GlobalPacketReaders[GetType()];
 
         #endregion

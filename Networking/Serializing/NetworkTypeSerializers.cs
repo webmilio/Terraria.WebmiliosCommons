@@ -14,7 +14,6 @@ namespace WebmilioCommons.Networking.Serializing
     {
         private static Dictionary<Type, NetworkTypeSerializer> _serializers;
 
-
         internal static void Initialize()
         {
             _serializers = new Dictionary<Type, NetworkTypeSerializer>
@@ -33,7 +32,7 @@ namespace WebmilioCommons.Networking.Serializing
                 { typeof(double), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadDouble, NetworkPacketIOExtensions.WriteDouble) },
                 { typeof(decimal), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadDecimal, NetworkPacketIOExtensions.WriteDecimal) },
                 { typeof(string), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadString, NetworkPacketIOExtensions.WriteString) },
-                { typeof(Item), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadItem, NetworkPacketIOExtensions.WriteItem) },
+                // { typeof(Item), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadItem, NetworkPacketIOExtensions.WriteItem) },
                 { typeof(Vector2), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadVector2, NetworkPacketIOExtensions.WriteVector2) },
                 { typeof(Color), new NetworkTypeSerializer(NetworkPacketIOExtensions.ReadRGB, NetworkPacketIOExtensions.WriteRGB) },
 
@@ -44,10 +43,9 @@ namespace WebmilioCommons.Networking.Serializing
 
         internal static void Unload()
         {
-            _serializers.Clear();
+            _serializers?.Clear();
             _serializers = null;
         }
-
 
         /// <summary>Add a network property serializer for the given type. Must be called in your <see cref="Mod.Load"/> method.</summary>
         /// <typeparam name="T">The property type.</typeparam>

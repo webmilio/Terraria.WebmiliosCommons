@@ -26,10 +26,10 @@ namespace WebmilioCommons.Networking.Packets.TileEntities
         protected override bool PreReceive(BinaryReader reader, int fromWho) => (TileEntity = TileEntity.ByID[SupposedTileEntityID = reader.ReadInt32()]) != default;
 
 
-        [NotNetworkField]
+        [NotMapped]
         public int SupposedTileEntityID { get; private set; }
 
-        [NotNetworkField]
+        [NotMapped]
         public TileEntity TileEntity
         {
             get => ContextEntity as TileEntity;

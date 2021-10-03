@@ -11,16 +11,16 @@ namespace WebmilioCommons.Projectiles
         /// <param name="frameCounterTime"></param>
         public void StandardAnimateFrame(int frameCount, int frameCounterTime)
         {
-            projectile.frameCounter++;
+            Projectile.frameCounter++;
 
-            if (projectile.frameCounter > frameCounterTime)
+            if (Projectile.frameCounter > frameCounterTime)
             {
-                projectile.frame++;
-                projectile.frameCounter = 0;
+                Projectile.frame++;
+                Projectile.frameCounter = 0;
             }
 
-            if (projectile.frame >= frameCount)
-                projectile.frame = 0;
+            if (Projectile.frame >= frameCount)
+                Projectile.frame = 0;
         }
 
 
@@ -28,7 +28,7 @@ namespace WebmilioCommons.Projectiles
         {
             get
             {
-                int owner = projectile.owner;
+                int owner = Projectile.owner;
 
                 if (owner < 0 || owner > Main.maxPlayers)
                     return default;
@@ -40,86 +40,86 @@ namespace WebmilioCommons.Projectiles
 
         public Vector2 Position
         {
-            get => projectile.position;
-            set => projectile.position = value;
+            get => Projectile.position;
+            set => Projectile.position = value;
         }
 
         public Vector2 Center
         {
-            get => projectile.Center;
-            set => projectile.Center = value;
+            get => Projectile.Center;
+            set => Projectile.Center = value;
         }
 
 
         public float Rotation
         {
-            get => projectile.rotation;
-            set => projectile.rotation = value;
+            get => Projectile.rotation;
+            set => Projectile.rotation = value;
         }
 
         public Vector2 Velocity
         {
-            get => projectile.velocity;
-            set => projectile.velocity = value;
+            get => Projectile.velocity;
+            set => Projectile.velocity = value;
         }
 
 
         public int Width
         {
-            get => projectile.width;
-            set => projectile.width = value;
+            get => Projectile.width;
+            set => Projectile.width = value;
         }
 
         public int Height
         {
-            get => projectile.height;
-            set => projectile.height = value;
+            get => Projectile.height;
+            set => Projectile.height = value;
         }
 
 
         public int Damage
         {
-            get => projectile.damage;
-            set => projectile.damage = value;
+            get => Projectile.damage;
+            set => Projectile.damage = value;
         }
 
         public int Penetrate
         {
-            get => projectile.penetrate;
-            set => projectile.penetrate = value;
+            get => Projectile.penetrate;
+            set => Projectile.penetrate = value;
         }
 
 
         public int TimeLeft
         {
-            get => projectile.timeLeft;
-            set => projectile.timeLeft = value;
+            get => Projectile.timeLeft;
+            set => Projectile.timeLeft = value;
         }
 
 
         public float AI0
         {
-            get => projectile.ai[0];
-            set => projectile.ai[0] = value;
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         public float AI1
         {
-            get => projectile.ai[1];
-            set => projectile.ai[1] = value;
+            get => Projectile.ai[1];
+            set => Projectile.ai[1] = value;
         }
 
 
         public int Frame
         {
-            get => projectile.frame;
-            set => projectile.frame = value;
+            get => Projectile.frame;
+            set => Projectile.frame = value;
         }
 
         public int FrameCounter
         {
-            get => projectile.frameCounter;
-            set => projectile.frameCounter = value;
+            get => Projectile.frameCounter;
+            set => Projectile.frameCounter = value;
         }
     }
 }

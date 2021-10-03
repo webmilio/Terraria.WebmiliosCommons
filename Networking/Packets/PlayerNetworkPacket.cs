@@ -38,10 +38,10 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
-        [NotNetworkField]
+        [NotMapped]
         public int SupposedPlayerID { get; private set; }
 
-        [NotNetworkField]
+        [NotMapped]
         public Player Player
         {
             get => ContextEntity as Player;

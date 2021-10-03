@@ -18,13 +18,13 @@ namespace WebmilioCommons.Commons
 
         private ResourceManager()
         {
-            Main.OnTick += MainOnOnTick;
+            Main.OnTickForInternalCodeOnly += MainOnOnTick;
         }
 
         /// <summary>Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.</summary>
         ~ResourceManager()
         {
-            Main.OnTick -= MainOnOnTick;
+            Main.OnTickForInternalCodeOnly -= MainOnOnTick;
         }
 
 

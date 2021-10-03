@@ -12,7 +12,7 @@ namespace WebmilioCommons.Projectiles
             if (CurrentRequest != TimeManagement.CurrentRequest)
                 CurrentRequest = !TimeManagement.TimeAltered ? null : TimeManagement.CurrentRequest;
 
-            if (CurrentRequest == null || !CurrentRequest.AlterNPCs || TimeManagement.IsProjectileImmune(projectile) || projectile.modProjectile is IProjectileTimeImmune pti && pti.IsImmune(projectile, CurrentRequest))
+            if (CurrentRequest == null || !CurrentRequest.AlterNPCs || TimeManagement.IsProjectileImmune(projectile) || projectile.ModProjectile is IProjectileTimeImmune pti && pti.IsImmune(projectile, CurrentRequest))
             {
                 if (State != null)
                 {

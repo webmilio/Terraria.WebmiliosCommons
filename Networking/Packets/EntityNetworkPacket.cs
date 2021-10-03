@@ -61,10 +61,10 @@ namespace WebmilioCommons.Networking.Packets
             set => EntityType = (EntityType) value;
         }
 
-        [NotNetworkField]
+        [NotMapped]
         public EntityType EntityType { get; set; }
 
-        [NotNetworkField]
+        [NotMapped]
         public Entity Entity
         {
             get => (Entity) ContextEntity;

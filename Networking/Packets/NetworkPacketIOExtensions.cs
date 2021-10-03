@@ -25,7 +25,7 @@ namespace WebmilioCommons.Networking.Packets
         public static void WriteUInt(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.Write((uint)value);
         public static void WriteULong(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.Write((ulong)value);
         public static void WriteUShort(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.Write((ushort)value);
-        public static void WriteItem(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.WriteItem((Item) value, true, true);
+        //public static void WriteItem(this NetworkPacket networkPacket, ModPacket modPacket, object value) => ItemIO.Send((Item) value, true, true);
         public static void WriteVector2(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.WriteVector2((Vector2) value);
         public static void WriteRGB(this NetworkPacket networkPacket, ModPacket modPacket, object value) => modPacket.WriteRGB((Color) value);
 
@@ -78,7 +78,7 @@ namespace WebmilioCommons.Networking.Packets
         public static object ReadUInt(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadUInt32();
         public static object ReadULong(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadUInt64();
         public static object ReadUShort(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadUInt16();
-        public static object ReadItem(this NetworkPacket networkPacket, BinaryReader reader) => ItemIO.Receive(reader, true, true);
+        //public static object ReadItem(this NetworkPacket networkPacket, BinaryReader reader) => ItemIO.Receive(reader, true, true);
         public static object ReadVector2(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadVector2();
         public static object ReadRGB(this NetworkPacket networkPacket, BinaryReader reader) => reader.ReadRGB();
 

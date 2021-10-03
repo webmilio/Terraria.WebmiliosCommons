@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
+using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Effects.Shaders.Entities.ForceField
@@ -50,7 +52,7 @@ namespace WebmilioCommons.Effects.Shaders.Entities.ForceField
 
             var position = positionPreOffset - GetSphereOffset(entity, positionPreOffset, width, height);
 
-            var drawData = new DrawData(GetTexture(entity, position),
+            var drawData = new DrawData(GetTexture(entity, position).Value,
                 position, GetSphereBoundingBox(entity, position, width, height),
                 Color.White, GetRotation(entity, position),
                 Vector2.Zero, GetScale(entity, position), GetSpriteEffects(entity, position), 0);
@@ -79,7 +81,7 @@ namespace WebmilioCommons.Effects.Shaders.Entities.ForceField
         protected virtual Vector2 GetSphereOffset(Entity entity, Vector2 preOffset, int width, int height) => new Vector2(width / 2, height / 2);
 
         protected virtual string GetTexturePath(Entity entity, Vector2 position) => NOISE;
-        protected virtual Texture2D GetTexture(Entity entity, Vector2 position) => TextureManager.Load(GetTexturePath(entity, position));
+        protected virtual Asset<Texture2D> GetTexture(Entity entity, Vector2 position) => ModContent.Request<Texture2D>(GetTexturePath(entity, position));
 
         protected virtual Rectangle GetSphereBoundingBox(Entity entity, Vector2 position, int width, int height) => new Rectangle(0, 0, width, height);
 

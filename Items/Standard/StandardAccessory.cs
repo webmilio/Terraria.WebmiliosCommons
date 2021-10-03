@@ -31,7 +31,7 @@ namespace WebmilioCommons.Items.Standard
         {
             base.SetDefaults();
 
-            item.accessory = true;
+            Item.accessory = true;
         }
     }
 }

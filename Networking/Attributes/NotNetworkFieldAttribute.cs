@@ -2,8 +2,8 @@
 
 namespace WebmilioCommons.Networking.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = true)]
-    public class NotNetworkFieldAttribute : Attribute
+    [Obsolete("Moved to WebmilioCommons.NotMapped.", true)]
+    public class NotNetworkFieldAttribute : NotMappedAttribute
     {
     }
 }

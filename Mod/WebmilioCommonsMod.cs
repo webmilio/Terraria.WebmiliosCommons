@@ -3,50 +3,40 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ID;
-using Terraria.IO;
+using Terraria.Localization;
 using Terraria.ModLoader;
-using WebmilioCommons.Achievements.Helper;
 using WebmilioCommons.Commons;
-using WebmilioCommons.Configurations;
-using WebmilioCommons.Hooks;
-using WebmilioCommons.Hooks.Wiring;
 using WebmilioCommons.Identity;
 using WebmilioCommons.Inputs;
 using WebmilioCommons.ModCompatibilities;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.NPCs;
-using WebmilioCommons.Players;
-using WebmilioCommons.Proxies;
 using WebmilioCommons.Time;
-using WebmilioCommons.Worlds;
 
 namespace WebmilioCommons
 {
     public sealed partial class WebmilioCommonsMod : Mod
     {
-        private ulong _ticks;
-        internal List<IUnloadOnModUnload> unloadOnModUnload = new List<IUnloadOnModUnload>();
+        public static GameCulture EnglishCulture { get; } = GameCulture.FromName(GameCulture.CultureName.English.ToString());
 
+        internal List<IUnloadOnModUnload> unloadOnModUnload = new();
 
         public WebmilioCommonsMod()
         {
             Instance = this;
-
-            BetterModPlayer.Load();
+            
             BetterModNPC.Load();
-            BetterModWorld.Load();
-
-            ModCompatibilityLoader.Instance.TryLoad();
-            NetworkTypeSerializers.Initialize();
+            //BetterModWorld.Unload();
         }
 
 
         /// <summary></summary>
         public override void Load()
         {
-            Proxies.Proxies.Load();
-
+            ModCompatibilityLoader.Instance.TryLoad();
+            NetworkTypeSerializers.Initialize();
+            
             GlobalNPCSetupShopMethods.Load();
             TimeManagement.Load();
 
@@ -54,24 +44,14 @@ namespace WebmilioCommons
 
             if (Main.netMode != NetmodeID.Server)
             {
-                LoadAchievementsMenuHookThingLMAO();
                 IdentityManager.Load();
                 KeyboardManager.Load();
             }
 
             #region Hooks
 
-            Main.OnTick += UpdateTick;
             On.Terraria.WorldGen.SaveAndQuit += WorldGen_OnSaveAndQuit;
-
-            Hooking.Load();
-
-            #endregion
-
-            #region Client Configuration
-
-            //ClientConfiguration = ModContent.GetInstance<ClientConfiguration>();
-
+            
             #endregion
 
             ModCompatibilityLoader.Instance.OnWCLoadFinished();
@@ -87,10 +67,7 @@ namespace WebmilioCommons
             {
                 IdentityManager.PostSetupContent();
             }
-
-            Proxies.Proxies.PostSetupContent();
-            Hooking.PostSetupContent();
-
+            
             NetworkPacketLoader.Instance.TryLoad();
 
             //PlayerSynchronizationPacket.Construct();
@@ -99,21 +76,14 @@ namespace WebmilioCommons
         /// <summary></summary>
         public override void Unload()
         {
-            BetterModPlayer.Unload();
             BetterModNPC.Unload();
-            BetterModWorld.Unload();
 
             // Events
-
             #region Hooks
-
-            Hooking.Unload();
-
-            Main.OnTick -= UpdateTick;
+            
             On.Terraria.WorldGen.SaveAndQuit -= WorldGen_OnSaveAndQuit;
 
             #endregion
-
 
             GlobalNPCSetupShopMethods.Unload();
             NetworkTypeSerializers.Unload();
@@ -126,7 +96,7 @@ namespace WebmilioCommons
             {
                 UnloadAchievementsMenuHookThingLMAO();
                 IdentityManager.Unload();
-                KeyboardManager.Unload();
+                //KeyboardManager.Unload();
             }
 
 
@@ -134,15 +104,11 @@ namespace WebmilioCommons
             List<IUnloadOnModUnload> originalUnloadList = new List<IUnloadOnModUnload>(unloadOnModUnload);
             originalUnloadList.ForEach(toUnload => toUnload.Unload());
 
-
             #region Configuration
 
             //ClientConfiguration = null;
 
             #endregion
-
-
-            Proxies.Proxies.Unload();
 
             Instance = default;
         }
@@ -156,32 +122,14 @@ namespace WebmilioCommons
             NetworkPacketLoader.Instance.HandlePacket(reader, whoAmI);
         }
 
-        /// <summary></summary>
-        public override void PostUpdateInput()
-        {
-            KeyboardManager.Update();
-        }
-
-        public override void AddRecipes()
-        {
-            
-        }
-
-
         private void WorldGen_OnSaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
             orig(callback);
 
-            Proxies.Proxies.WorldGen_OnSaveAndQuit();
             TimeManagement.ForceUnalter(false);
         }
 
-        private void UpdateTick() => _ticks++;
-
-
         /// <summary>The current loaded instance of <see cref="WebmilioCommonsMod"/>.</summary>
         public static WebmilioCommonsMod Instance { get; private set; }
-
-        //public ClientConfiguration ClientConfiguration { get; private set; }
     }
 }

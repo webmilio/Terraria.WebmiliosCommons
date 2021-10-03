@@ -18,11 +18,9 @@ namespace WebmilioCommons.Networking
         public delegate void PacketReceivedDelegate(NetworkPacket packet, BinaryReader reader);
         public delegate void PacketSentDelegate(NetworkPacket packet);
 
-
         public NetworkPacketLoader() : base(typeInfo => typeInfo.GetCustomAttribute<ObsoleteAttribute>() == null)
         {
         }
-
 
         public override void PreLoad()
         {
@@ -69,7 +67,6 @@ namespace WebmilioCommons.Networking
             packet.Receive(reader, fromWho);
         }
 
-
         /// <summary>Sends a tile entity packet, providing it a tile entity.</summary>
         /// <typeparam name="TPacket">The type of packet to send.</typeparam>
         /// <param name="tileEntity">The associated tile entity.</param>
@@ -79,7 +76,6 @@ namespace WebmilioCommons.Networking
         /// <param name="packet">The packet to send.</param>
         /// <param name="tileEntity">The associated tile entity.</param>
         public void SendTileEntityPacket(TileEntityNetworkPacket packet, TileEntity tileEntity) => packet.Send(tileEntity);
-
 
         /// <summary>Sends the given packet. The packet must not be a child of <see cref="TileEntityNetworkPacket"/>.</summary>
         /// <param name="packet">The packet to send.</param>
@@ -111,13 +107,11 @@ namespace WebmilioCommons.Networking
         /// <param name="toWho">To who should the packet be sent. Leaving this to its default value will make the packet rely on <see cref="NetworkPacket.AssignInitialValues"/>.</param>
         public void SendPacket<TPacket>(int? fromWho = null, int? toWho = null) where TPacket : NetworkPacket => SendPacket(typeof(TPacket), fromWho, toWho);
 
-
         /// <summary>The reader which is used to determine the packet id. Dynamically scales with how many packets (from 0 to 255, 255 to 65536, etc...).</summary>
         public Func<NetworkPacket, BinaryReader, object> PacketIdReader { get; private set; }
 
         /// <summary>The reader which is used to determine the packet id. Dynamically scales with how many packets (from 0 to 255, 255 to 65536, etc...).</summary>
         public Action<NetworkPacket, ModPacket, object> PacketIdWriter { get; private set; }
-
 
         internal static void OnPacketSent(NetworkPacket packet) => PacketSent?.Invoke(packet);
 

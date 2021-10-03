@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System;
+using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
 
@@ -12,9 +13,14 @@ namespace WebmilioCommons.Commands
             Type = type;
         }
 
-
-        public override bool Autoload(ref string name) => true;
-
+        /// <summary></summary>
+        /// <param name="mod"></param>
+        /// <returns></returns>
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            string x = null;
+            return Autoload(ref x);
+        }
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
@@ -29,5 +35,8 @@ namespace WebmilioCommons.Commands
 
         public override string Command { get; }
         public override CommandType Type { get; }
+
+        [Obsolete("Override IsLoadingEnabled.")]
+        public virtual bool Autoload(ref string name) => true;
     }
 }

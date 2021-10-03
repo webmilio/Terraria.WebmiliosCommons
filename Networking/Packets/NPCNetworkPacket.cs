@@ -29,7 +29,7 @@ namespace WebmilioCommons.Networking.Packets
         }
 
 
-        [NotNetworkField]
+        [NotMapped]
         public NPC NPC
         {
             get => (NPC) ContextEntity;

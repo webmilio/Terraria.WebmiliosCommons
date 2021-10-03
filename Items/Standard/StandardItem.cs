@@ -30,11 +30,11 @@ namespace WebmilioCommons.Items.Standard
             this(
                 new Dictionary<GameCulture, string>()
                 {
-                    { GameCulture.English, displayName }
+                    { WebmilioCommonsMod.EnglishCulture, displayName }
                 },
                 new Dictionary<GameCulture, string>()
                 {
-                    { GameCulture.English, tooltip }
+                    { WebmilioCommonsMod.EnglishCulture, tooltip }
                 }, width, height, value, defense, rarity, maxStack)
         {
         }
@@ -59,8 +59,8 @@ namespace WebmilioCommons.Items.Standard
         {
             base.SetStaticDefaults();
 
-            DisplayName.SetDefault(DisplayNames[GameCulture.English]);
-            Tooltip.SetDefault(Tooltips[GameCulture.English]);
+            DisplayName.SetDefault(DisplayNames[WebmilioCommonsMod.EnglishCulture]);
+            Tooltip.SetDefault(Tooltips[WebmilioCommonsMod.EnglishCulture]);
 
             foreach (KeyValuePair<GameCulture, string> displayName in DisplayNames)
                 DisplayName.AddTranslation(displayName.Key, displayName.Value);
@@ -78,14 +78,14 @@ namespace WebmilioCommons.Items.Standard
         {
             base.SetDefaults();
 
-            item.width = width;
-            item.height = height;
+            Item.width = width;
+            Item.height = height;
 
-            item.value = Value;
-            item.defense = Defense;
-            item.rare = Rarity;
+            Item.value = Value;
+            Item.defense = Defense;
+            Item.rare = Rarity;
 
-            item.maxStack = MaxStack;
+            Item.maxStack = MaxStack;
 
             PostSetDefaults();
         }

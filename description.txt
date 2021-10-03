@@ -1,5 +1,9 @@
 Webmilio's Commons Library adds a couple of things I use in all of my mods. You can extract the DLL from the Mod. 
 
+THE 1.4 IS A HEAVY ALPHA THAT HAS NOT BEEN TESTED.
+Anything related to Worlds has been disabled.
+Had to remove the Network methods for Reading/Writing items since the good people at tMod thought it wise to remove the method ¯\_(^.^)_/¯.
+
 Things this adds:
 - Better Networking (in my opinion, at least).
 - Managers (manual or singletons that handle classes that could be seen as static, but need inheritance)

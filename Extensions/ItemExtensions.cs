@@ -10,7 +10,7 @@ namespace WebmilioCommons.Extensions
     {
         public static Item SetDefaults(this Item item, ModItem modItem)
         {
-            item.SetDefaults(modItem.item.type);
+            item.SetDefaults(modItem.Item.type);
 			return item;
         }
 
@@ -27,10 +27,10 @@ namespace WebmilioCommons.Extensions
             return true;
         }
 
-        public static bool Consume(this ModItem modItem, int count = 1) => Consume(modItem.item, count);
+        public static bool Consume(this ModItem modItem, int count = 1) => Consume(modItem.Item, count);
 
 
-        public static void Synchronize(this ModItem modItem) => Synchronize(modItem.item);
+        public static void Synchronize(this ModItem modItem) => Synchronize(modItem.Item);
 
         public static void Synchronize(this Item item) => NetMessage.SendData(MessageID.SyncItem, number: item.whoAmI);
 
@@ -61,7 +61,7 @@ namespace WebmilioCommons.Extensions
 
             if (accessories)
             {
-                Item[] accessorySlots = new Item[ACCESSORY_SLOTS_COUNT + player.extraAccessorySlots];
+                Item[] accessorySlots = new Item[ACCESSORY_SLOTS_COUNT + player.GetAmountOfExtraAccessorySlotsToShow()];
                 Array.Copy(player.armor, ARMOR_SLOTS_COUNT, accessorySlots, 0, accessorySlots.Length);
 
                 SearchItems(ref filteredItems, accessorySlots, unique, condition);
@@ -77,7 +77,7 @@ namespace WebmilioCommons.Extensions
 
             if (accessoriesSocial)
             {
-                Item[] accessorySlots = new Item[ACCESSORY_SLOTS_COUNT + player.extraAccessorySlots];
+                Item[] accessorySlots = new Item[ACCESSORY_SLOTS_COUNT + player.GetAmountOfExtraAccessorySlotsToShow()];
                 Array.Copy(player.armor, SOCIAL_ARMOR_START_INDEX + ARMOR_SLOTS_COUNT, accessorySlots, 0, accessorySlots.Length);
 
                 SearchItems(ref filteredItems, accessorySlots, unique, condition);
@@ -103,7 +103,7 @@ namespace WebmilioCommons.Extensions
 
             if (accessories)
             {
-                Item[] accessorySlots = new Item[ACCESSORY_SLOTS_COUNT + player.extraAccessorySlots];
+                Item[] accessorySlots = new Item[ACCESSORY_SLOTS_COUNT + player.GetAmountOfExtraAccessorySlotsToShow()];
                 Array.Copy(player.armor, ARMOR_SLOTS_COUNT, accessorySlots, 0, accessorySlots.Length);
 
                 SearchItems(ref filteredItems, accessorySlots, type, unique, condition);
@@ -119,7 +119,7 @@ namespace WebmilioCommons.Extensions
 
             if (accessoriesSocial)
             {
-                Item[] accessorySlots = new Item[ACCESSORY_SLOTS_COUNT + player.extraAccessorySlots];
+                Item[] accessorySlots = new Item[ACCESSORY_SLOTS_COUNT + player.GetAmountOfExtraAccessorySlotsToShow()];
                 Array.Copy(player.armor, SOCIAL_ARMOR_START_INDEX + ARMOR_SLOTS_COUNT, accessorySlots, 0, accessorySlots.Length);
 
                 SearchItems(ref filteredItems, accessorySlots, type, unique, condition);
@@ -138,9 +138,9 @@ namespace WebmilioCommons.Extensions
                 if (unique && foundTypes.Contains(item.type))
                     continue;
 
-                if (item?.modItem != null && item.IsOfType<T>() && (condition == default || condition(item)))
+                if (item?.ModItem != null && item.IsOfType<T>() && (condition == default || condition(item)))
                 {
-                    filtered.Add(item.modItem as T);
+                    filtered.Add(item.ModItem as T);
                     foundTypes.Add(item.type);
                 }
             }
@@ -190,7 +190,7 @@ namespace WebmilioCommons.Extensions
         }
 
 
-        public static bool IsOfType<T>(this Item item) where T : class => item.modItem is T;
+        public static bool IsOfType<T>(this Item item) where T : class => item.ModItem is T;
 
         #endregion
     }

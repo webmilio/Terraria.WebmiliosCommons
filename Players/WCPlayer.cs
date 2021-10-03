@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebmilioCommons.Effects.ScreenShaking;
-using WebmilioCommons.Extensions;
 using WebmilioCommons.Items;
-using WebmilioCommons.Items.Standard;
 using WebmilioCommons.Items.Starting;
 using WebmilioCommons.Networking.Attributes;
 using WebmilioCommons.NPCs;
-using WebmilioCommons.Proxies.Players;
 
 #pragma warning disable 1591
 
@@ -23,22 +19,19 @@ namespace WebmilioCommons.Players
     {
         public static WCPlayer Get() => Get(Main.LocalPlayer);
         public static WCPlayer Get(Player player) => player.GetModPlayer<WCPlayer>();
-        public static WCPlayer Get(ModPlayer modPlayer) => Get(modPlayer.player);
+        public static WCPlayer Get(ModPlayer modPlayer) => Get(modPlayer.Player);
 
 
         #region Hooks
 
         #region Save/Load
 
-        public override TagCompound Save()
+        public override void SaveData(TagCompound tag)
         {
-            return new TagCompound
-            {
-                { nameof(UniqueID), UniqueID.ToString() }
-            };
+            tag.Add(nameof(UniqueID), UniqueID.ToString());
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadData(TagCompound tag)
         {
             if (tag.ContainsKey(nameof(UniqueID)))
             {
@@ -55,18 +48,11 @@ namespace WebmilioCommons.Players
 
         public override bool CanSellItem(NPC vendor, Item[] shopInventory, Item item)
         {
-            if (!(item.modItem is ICanBeSold cbs))
+            if (!(item.ModItem is ICanBeSold cbs))
                 return true;
 
             return cbs.CanBeSold(this, vendor, shopInventory);
         }
-
-
-        public override void Initialize()
-        {
-            InitializeAnimations();
-        }
-
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
@@ -74,13 +60,13 @@ namespace WebmilioCommons.Players
 
 
             if (damageSource.SourceNPCIndex > -1)
-                opdm = Main.npc[damageSource.SourceNPCIndex]?.modNPC as IOverridesPlayerDeathMessage;
+                opdm = Main.npc[damageSource.SourceNPCIndex]?.ModNPC as IOverridesPlayerDeathMessage;
             else if (damageSource.SourceProjectileIndex > -1)
-                opdm = Main.projectile[damageSource.SourceProjectileIndex]?.modProjectile as IOverridesPlayerDeathMessage;
+                opdm = Main.projectile[damageSource.SourceProjectileIndex]?.ModProjectile as IOverridesPlayerDeathMessage;
 
 
             if (opdm != default)
-                damageSource.SourceCustomReason = opdm.GetDeathMessage(player, damage, hitDirection, pvp, damageSource);
+                damageSource.SourceCustomReason = opdm.GetDeathMessage(Player, damage, hitDirection, pvp, damageSource);
         }
 
 
@@ -95,103 +81,42 @@ namespace WebmilioCommons.Players
             ScreenShake.TickScreenShakes();
         }
 
-
-        public override void OnEnterWorld(Player plr)
-        {
-            PlayerHooksProxy.RegisterPlayersModPlayer(plr);
-        }
-
-        internal void OnLastInteractionNPCLoot(NPC npc)
-        {
-            PlayerHooksProxy.Do<BetterModPlayer>(player, bmp => bmp.OnLastInteractionNPCLoot(npc));
-        }
-
-        public override void PlayerConnect(Player plr)
-        {
-            PlayerHooksProxy.RegisterPlayersModPlayer(plr);
-        }
-
-        public override void PlayerDisconnect(Player plr)
-        {
-            PlayerHooksProxy.UnRegisterPlayersModPlayer(plr);
-        }
-
-
-        public override void PostUpdate() => ForAllAnimations(animation => animation.HandlePostUpdate());
-
-
         public override void PreUpdate()
         {
             if (!PreUpdateTime())
                 return;
-
-            if (player.talkNPC != -1 && !PlayerHooksProxy.All<BetterModPlayer>(player, bmp => bmp.CanInteractWithTownNPCs()))
-                player.talkNPC = -1;
-
-            ForAllAnimations(animation => animation.HandlePreUpdate());
         }
 
-        public override void PreUpdateBuffs() => ForAllAnimations(animation => animation.HandlePreUpdateBuffs());
-        public override void PreUpdateMovement() => ForAllAnimations(animation => animation.HandlePreUpdateMovements());
-
-
-        public override void ProcessTriggers(TriggersSet triggersSet)
+        public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
         {
-            /*KeyStates keyState = KeyboardManager.GetKeyState(Keys.U);
+            List<Item> items = new();
 
-            if (keyState != KeyStates.NotPressed)
-                Main.NewText($"Key U State: {keyState}");*/
+            foreach (var mod in ModStore.Mods)
+            foreach (var modItem in mod.GetContent<ModItem>())
+            {
+                if (modItem is not IPlayerStartsWith)
+                    continue;
+
+                if (modItem is IPlayerCanStartWith c && !c.ShouldStartWith(this, Player, mediumCoreDeath))
+                    continue;
+
+                Item item = new(modItem.Type);
+
+                if (modItem is IPlayerStartsWithStack s)
+                    item.stack = s.StartStack;
+                else
+                    item.stack = 1;
+                
+                items.Add(item);
+            }
+
+            return items;
         }
-
-
-        public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
-        {
-            foreach (var _mod in ModLoader.Mods.StandardModFilter())
-                foreach (var type in _mod.Code.Concrete<IPlayerStartsWith>())
-                {
-                    var modItem = Activator.CreateInstance(type) as ModItem;
-
-                    if (modItem is IPlayerCanStartWith c && !c.ShouldStartWith(this, player, mediumcoreDeath))
-                        continue;
-
-
-                    modItem.item.SetDefaults(modItem);
-
-                    if (modItem is IPlayerStartsWithStack s)
-                        modItem.item.stack = s.StartStack;
-
-
-                    items.Add(modItem.item);
-                }
-        }
-
 
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             new WCPlayerOnJoinWorld(this).Send(fromWho, toWho);
         }
-
-
-        public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff)
-        {
-            bool
-                wallSpeedBuffs2 = wallSpeedBuff,
-                tileSpeedBuffs2 = tileSpeedBuff,
-                tileRangeBuff2 = tileRangeBuff;
-
-            ForAllAnimations(animation => animation.HandleUpdateEquips(wallSpeedBuffs2, tileSpeedBuffs2, tileRangeBuff2));
-        }
-
-
-        #region LifeRegen
-
-        public override void UpdateBadLifeRegen() => UpdateBadLifeRegenTransformation();
-
-        public override void UpdateLifeRegen() => UpdateLifeRegenTransformation();
-
-        public override void UpdateDead() => UpdateDeadTransformation();
-
-        #endregion
 
         #endregion
 

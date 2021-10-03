@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
@@ -16,16 +17,13 @@ namespace WebmilioCommons.Effects.Shaders
             NOISE = VANILLA_MISC_BASE + "noise",
             MiscShaderName = "ForceField";
 
-
-        private static Texture2D _streaks, _streaks2;
-
+        private static Asset<Texture2D> _streaks, _streaks2;
 
 
         protected ShaderEffect()
         {
             
         }
-
 
         public virtual void Unload()
         {
@@ -44,7 +42,7 @@ namespace WebmilioCommons.Effects.Shaders
 
         public Mod Mod { get; set; }
 
-        public static Texture2D StreaksTexture => _streaks ?? (_streaks = WebmilioCommonsMod.Instance.GetTexture($"{typeof(ShaderEffect).GetRootPath()}/streaks"));
-        public static Texture2D Streaks2Texture => _streaks2 ?? (_streaks2 = WebmilioCommonsMod.Instance.GetTexture($"{typeof(ShaderEffect).GetRootPath()}/streaks2"));
+        public static Asset<Texture2D> StreaksTexture => _streaks ?? (_streaks = WebmilioCommonsMod.Instance.Assets.Request<Texture2D>($"{typeof(ShaderEffect).GetRootPath()}/streaks"));
+        public static Asset<Texture2D> Streaks2Texture => _streaks2 ?? (_streaks2 = WebmilioCommonsMod.Instance.Assets.Request<Texture2D>($"{typeof(ShaderEffect).GetRootPath()}/streaks2"));
     }
 }

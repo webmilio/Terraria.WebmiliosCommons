@@ -21,14 +21,18 @@ namespace WebmilioCommons.TileEntities
         {
         }
 
-
-        public override bool ValidTile(int i, int j)
+        public override bool IsTileValidForEntity(int x, int y)
         {
             return true;
         }
 
+        [Obsolete("Moved to IsTileValidForEntity.", true)]
+        public virtual bool ValidTile(int i, int j)
+        {
+            return IsTileValidForEntity(i, j);
+        }
 
-        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction)
+        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {
             if (!Mod_AfterPlacement(i, j, type, style, direction))
                 return -1;
@@ -141,6 +145,25 @@ namespace WebmilioCommons.TileEntities
             }
 
             return Directions.Up;
+        }
+
+        public bool TryGetSide(object entity, out Directions side)
+        {
+            side = Directions.Up;
+
+            if (entity == default)
+                return false;
+
+            for (int i = 0; i < neighbors.Length; i++)
+            {
+                if (neighbors[i] == entity)
+                {
+                    side = (Directions) i;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 

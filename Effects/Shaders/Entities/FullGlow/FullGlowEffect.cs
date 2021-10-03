@@ -16,7 +16,7 @@ namespace WebmilioCommons.Effects.Shaders.Entities.FullGlow
 
             if (shaderData == default)
             {
-                shaderData = new MiscShaderData(new Ref<Effect>(WebmilioCommonsMod.Instance.GetEffect("Effects/FullGlow/FullGlow")), "FullGlow");
+                shaderData = new MiscShaderData(new Ref<Effect>(WebmilioCommonsMod.Instance.Assets.Request<Effect>("Effects/FullGlow/FullGlow").Value), "FullGlow");
                 GameShaders.Misc[miscDictionaryKey] = shaderData;
             }
 

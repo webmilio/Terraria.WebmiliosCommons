@@ -12,11 +12,11 @@ namespace WebmilioCommons.Extensions
     public static class PlayerExtensions
     {
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
-        public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.player);
+        public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.Player);
 
 
         public static bool IsServerOwner(this Player player) => Main.netMode == NetmodeID.SinglePlayer || Netplay.Connection.Socket.GetRemoteAddress().IsLocalHost();
-        public static bool IsServerOwner(this ModPlayer modPlayer) => IsServerOwner(modPlayer.player);
+        public static bool IsServerOwner(this ModPlayer modPlayer) => IsServerOwner(modPlayer.Player);
 
 
         public static void DoIfLocal(this Player player, Action<Player> action)
@@ -67,12 +67,12 @@ namespace WebmilioCommons.Extensions
             return item.pick > 0 || item.axe > 0 || item.hammer > 0;
         }
 
-        public static bool IsHoldingMiningItem(this ModPlayer modPlayer) => IsHoldingMiningItem(modPlayer.player);
+        public static bool IsHoldingMiningItem(this ModPlayer modPlayer) => IsHoldingMiningItem(modPlayer.Player);
 
 
-        public static Tile GetTileOnCenter(this ModPlayer modPlayer) => GetTileOnCenter(modPlayer.player);
-        public static Tile GetTileOnCenter(this ModNPC modNPC) => GetTileOnCenter(modNPC.npc);
-        public static Tile GetTileOnCenter(this ModProjectile modProjectile) => GetTileOnCenter(modProjectile.projectile);
+        public static Tile GetTileOnCenter(this ModPlayer modPlayer) => GetTileOnCenter(modPlayer.Player);
+        public static Tile GetTileOnCenter(this ModNPC modNPC) => GetTileOnCenter(modNPC.NPC);
+        public static Tile GetTileOnCenter(this ModProjectile modProjectile) => GetTileOnCenter(modProjectile.Projectile);
 
         public static Tile GetTileOnCenter(this Entity entity) => Main.tile[(int) (entity.Center.X / 16), (int) (entity.Center.Y / 16)];
 
@@ -84,12 +84,12 @@ namespace WebmilioCommons.Extensions
 
         public static void SendIfLocal(this Player player, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null) => DoIfLocal(player, plr => networkPacket.Send(fromWho, toWho));
 
-        public static void SendIfLocal(this ModPlayer modPlayer, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null) => SendIfLocal(modPlayer.player, networkPacket, fromWho, toWho);
+        public static void SendIfLocal(this ModPlayer modPlayer, NetworkPacket networkPacket, int? fromWho = null, int? toWho = null) => SendIfLocal(modPlayer.Player, networkPacket, fromWho, toWho);
 
 
         public static void SendIfLocal<T>(this Player player, int? fromWho = null, int? toWho = null) where T : NetworkPacket => DoIfLocal(player, plr => NetworkPacketLoader.Instance.SendPacket<T>(fromWho, toWho));
 
-        public static void SendIfLocal<T>(this ModPlayer modPlayer, int? fromWho = null, int? toWho = null) where T : NetworkPacket => SendIfLocal<T>(modPlayer.player, fromWho, toWho);
+        public static void SendIfLocal<T>(this ModPlayer modPlayer, int? fromWho = null, int? toWho = null) where T : NetworkPacket => SendIfLocal<T>(modPlayer.Player, fromWho, toWho);
 
         #endregion
     }

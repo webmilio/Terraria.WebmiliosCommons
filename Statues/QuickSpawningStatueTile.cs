@@ -30,9 +30,9 @@ namespace WebmilioCommons.Statues
         }
 
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-            base.SetDefaults();
+            base.SetStaticDefaults();
 
             Main.tileFrameImportant[Type] = true;
             Main.tileObsidianKill[Type] = true;
@@ -41,11 +41,14 @@ namespace WebmilioCommons.Statues
             TileObjectData.addTile(Type);
 
             AddMapEntry(MapEntryColor, GetMapEntryName());
-            dustType = 11;
-
-            disableSmartCursor = true;
+            DustType = 11;
         }
 
+
+        public override bool HasSmartInteract()
+        {
+            return true;
+        }
 
         public virtual ModTranslation GetMapEntryName()
         {

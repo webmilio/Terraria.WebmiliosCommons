@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Achievements;
 using Terraria.GameContent.UI.Elements;
@@ -168,7 +169,7 @@ namespace WebmilioCommons.Achievements.Helper
                 
                 
             GetAchievementIcon(self).Remove();
-            UIImageFramed achievementIcon = new UIImageFramed(ModContent.GetTexture(_loadedAchievements[achievement].TexturePath), (Rectangle)_iconFrame.GetValue(self));
+            UIImageFramed achievementIcon = new UIImageFramed(ModContent.Request<Texture2D>(_loadedAchievements[achievement].TexturePath), (Rectangle)_iconFrame.GetValue(self));
 
 
             bool large = (bool)_large.GetValue(self);

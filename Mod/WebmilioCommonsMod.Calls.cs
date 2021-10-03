@@ -3,7 +3,7 @@ using WebmilioCommons.Time;
 
 namespace WebmilioCommons
 {
-    public sealed partial class WebmilioCommonsMod : Mod
+    public sealed partial class WebmilioCommonsMod
     {
         public override object Call(params object[] args)
         {

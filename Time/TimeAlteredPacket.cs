@@ -42,7 +42,7 @@ namespace WebmilioCommons.Time
 
         public TimeAlterationRequest Request { get; set; }
 
-        [NotNetworkField]
+        [NotMapped]
         internal static Assembly ExecutingAssembly { get; set; }
     }
 }

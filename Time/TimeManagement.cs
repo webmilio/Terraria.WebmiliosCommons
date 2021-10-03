@@ -67,7 +67,7 @@ namespace WebmilioCommons.Time
 
 
         public static bool IsProjectileImmune<T>() where T : ModProjectile => IsProjectileImmune(ModContent.ProjectileType<T>());
-        public static bool IsProjectileImmune(ModProjectile modProjectile) => IsProjectileImmune(modProjectile.projectile);
+        public static bool IsProjectileImmune(ModProjectile modProjectile) => IsProjectileImmune(modProjectile.Projectile);
         public static bool IsProjectileImmune(Projectile projectile) => IsProjectileImmune(projectile.type);
 
         public static bool IsProjectileImmune(int type)
@@ -99,7 +99,7 @@ namespace WebmilioCommons.Time
 
 
         public static bool IsItemImmune<T>() where T : ModItem => IsItemImmune(ModContent.ItemType<T>());
-        public static bool IsItemImmune(ModItem modItem) => IsItemImmune(modItem.item);
+        public static bool IsItemImmune(ModItem modItem) => IsItemImmune(modItem.Item);
         public static bool IsItemImmune(Item item) => IsItemImmune(item.type);
 
         public static bool IsItemImmune(int type)
@@ -284,6 +284,6 @@ namespace WebmilioCommons.Time
         public static bool TimeAltered => TimeAlteredFor > 0 && CurrentRequest != null;
 
         public static double MainTime { get; internal set; }
-        public static int MainRainTime { get; internal set; }
+        public static double MainRainTime { get; internal set; }
     }
 }

@@ -23,7 +23,7 @@ namespace WebmilioCommons.NPCs
         protected StandardNPC(string displayName, int width, int height, int lifeMax, int defense, int value = 0) : this(
             new Dictionary<GameCulture, string>()
             {
-                { GameCulture.English, displayName }
+                { WebmilioCommonsMod.EnglishCulture, displayName }
             }, 
             width, height, lifeMax, defense, value)
         {
@@ -44,12 +44,12 @@ namespace WebmilioCommons.NPCs
 
         public override void SetDefaults()
         {
-            npc.width = width;
-            npc.height = height;
+            NPC.width = width;
+            NPC.height = height;
 
-            npc.lifeMax = lifeMax;
-            npc.defense = defense;
-            npc.value = value;
+            NPC.lifeMax = lifeMax;
+            NPC.defense = defense;
+            NPC.value = value;
 
             base.SetDefaults();
             ModDefaults();
@@ -59,7 +59,7 @@ namespace WebmilioCommons.NPCs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault(DisplayNames[GameCulture.English]);
+            DisplayName.SetDefault(DisplayNames[WebmilioCommonsMod.EnglishCulture]);
 
             foreach (KeyValuePair<GameCulture, string> displayName in DisplayNames)
                 DisplayName.AddTranslation(displayName.Key, displayName.Value);

@@ -3,12 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria.ModLoader;
+using WebmilioCommons.Saving;
 
 namespace WebmilioCommons.Extensions
 {
     public static class TypeExtensions
     {
+        public static List<MemberProxy> GetFieldsAndProperties(this TypeInfo type) => GetFieldsAndProperties(type, _ => true);
+        public static List<MemberProxy> GetFieldsAndProperties(this TypeInfo type, BindingFlags flags) => GetFieldsAndProperties(type, flags, _ => true);
+        public static List<MemberProxy> GetFieldsAndProperties(this TypeInfo type, Predicate<MemberInfo> predicate) => GetFieldsAndProperties(type, BindingFlags.Public | BindingFlags.Instance, predicate);
+
+        public static List<MemberProxy> GetFieldsAndProperties(this TypeInfo type, BindingFlags flags, Predicate<MemberInfo> predicate)
+        {
+            var properties = type.GetProperties(flags);
+            var fields = type.GetFields(flags);
+
+            List<MemberProxy> proxies = new();
+
+            properties.Do(p =>
+            {
+                if (predicate(p))
+                    proxies.Add(MemberProxy.ForProperty(p));
+            });
+
+            fields.Do(f =>
+            {
+                if (predicate(f))
+                    proxies.Add(MemberProxy.ForField(f));
+            });
+
+            return proxies;
+        }
+
         public static string GetPath(this Type type)
         {
             string[] segments = type.Namespace.Split('.');
@@ -31,11 +59,11 @@ namespace WebmilioCommons.Extensions
         /// <summary>Finds the appropriate texture based solely on the type and its associated mod.</summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static Texture2D GetTexture(this Type type) => type.GetModFromType().GetTexture(type.GetPath());
+        public static Asset<Texture2D> GetTexture(this Type type) => GetTexture(type.GetModFromType(), type);
 
-        public static Texture2D GetTexture(this Mod mod, Type type) => mod.GetTexture(type.GetPath());
+        public static Asset<Texture2D> GetTexture(this Mod mod, Type type) => mod.Assets.Request<Texture2D>(type.GetPath());
 
-        public static Texture2D GetTexture(this Type type, Mod mod) => mod.GetTexture(type);
+        public static Asset<Texture2D> GetTexture(this Type type, Mod mod) => mod.GetTexture(type);
 
         public static Mod GetModFromType(this Type type) => ModLoader.GetMod(type.Namespace.Split('.')[0]);
 

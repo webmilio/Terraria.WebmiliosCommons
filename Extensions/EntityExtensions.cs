@@ -27,7 +27,7 @@ namespace WebmilioCommons.Extensions
 
         public static void Shade<T>(this Entity entity, SpriteBatch spriteBatch) where T : EntityMiscShaderEffect
         {
-            var shaderEffect = ShaderEffectsLoader.Instance.GetGeneric<T>();
+            var shaderEffect = ShaderEffectsLoader.Instance.Get<T>();
 
             shaderEffect.Apply(spriteBatch, entity);
         }

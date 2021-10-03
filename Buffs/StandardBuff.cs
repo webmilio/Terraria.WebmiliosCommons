@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -11,11 +12,11 @@ namespace WebmilioCommons.Buffs
             this(
                 new Dictionary<GameCulture, string>()
                 {
-                    {GameCulture.English, displayName}
+                    {WebmilioCommonsMod.EnglishCulture, displayName}
                 },
                 new Dictionary<GameCulture, string>()
                 {
-                    {GameCulture.English, description}
+                    {WebmilioCommonsMod.EnglishCulture, description}
                 },
                 hideTime, save, persistent, canBeCleared)
         {
@@ -31,6 +32,8 @@ namespace WebmilioCommons.Buffs
             Persistent = persistent;
 
             CanBeCleared = canBeCleared;
+
+            this.Register();
         }
 
         protected StandardBuff((GameCulture culture, string displayName, string description) str, bool hideTime = false, bool save = false, bool persistent = false, bool canBeCleared = true)
@@ -49,12 +52,12 @@ namespace WebmilioCommons.Buffs
         }
 
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-            base.SetDefaults();
+            base.SetStaticDefaults();
 
-            DisplayName.SetDefault(DisplayNames[GameCulture.English]);
-            Description.SetDefault(Descriptions[GameCulture.English]);
+            DisplayName.SetDefault(DisplayNames.First().Value);
+            Description.SetDefault(Descriptions.First().Value);
 
             foreach (KeyValuePair<GameCulture, string> displayName in DisplayNames)
                 DisplayName.AddTranslation(displayName.Key, displayName.Value);
@@ -65,8 +68,6 @@ namespace WebmilioCommons.Buffs
             Main.buffNoTimeDisplay[Type] = HideTime;
             Main.buffNoSave[Type] = !Save;
             Main.persistentBuff[Type] = Persistent;
-
-            canBeCleared = CanBeCleared;
         }
 
 
@@ -76,6 +77,5 @@ namespace WebmilioCommons.Buffs
         public bool HideTime { get; }
         public bool Save { get; }
         public bool Persistent { get; }
-        public bool CanBeCleared { get; }
     }
 }

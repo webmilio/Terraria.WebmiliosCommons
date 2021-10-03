@@ -44,7 +44,7 @@ namespace WebmilioCommons.Networking.Packets.TileEntities
         }
 
 
-        [NotNetworkField]
+        [NotMapped]
         public TTileEntity ModTileEntity { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
@@ -19,7 +20,7 @@ namespace WebmilioCommons.Achievements
         public const string DEFAULT_COMPLETION_FLAG = "Completed";
         internal readonly List<AchievementCondition> conditions = new List<AchievementCondition>();
 
-        private Texture _texture;
+        private Asset<Texture2D> _texture;
 
 
         /// <summary></summary>
@@ -208,7 +209,7 @@ namespace WebmilioCommons.Achievements
         /// <summary>The path to the texture for the achievement.</summary>
         public virtual string TexturePath { get; }
 
-        public Texture Texture => _texture ?? (_texture = ModContent.GetTexture(TexturePath));
+        public Asset<Texture2D> Texture => _texture ?? (_texture = ModContent.Request<Texture2D>(TexturePath));
 
         /// <summary>true if the achievement be automatically created upon loading all <see cref="ModAchievement"/>.</summary>
         public virtual bool Autoload { get; protected set; } = true;

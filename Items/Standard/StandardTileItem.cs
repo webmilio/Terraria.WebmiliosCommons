@@ -14,13 +14,13 @@ namespace WebmilioCommons.Items.Standard
 
 
         protected StandardTileItem((GameCulture culture, string displayName, string tooltip) str, int width, int height, int placedTileType, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999,
-            int itemUseStyle = ItemUseStyleID.SwingThrow, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) :
+            int itemUseStyle = ItemUseStyleID.Swing, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) :
             this(new [] { str }, width, height, value, defense, rarity, rarity, maxStack, itemUseStyle, itemUseTime, useAnimation, autoReuse, consumable)
         {
         }
 
         protected StandardTileItem((GameCulture culture, string displayName, string tooltip)[] strings, int width, int height, int placedTileType, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999,
-            int itemUseStyle = ItemUseStyleID.SwingThrow, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) :
+            int itemUseStyle = ItemUseStyleID.Swing, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) :
             base(strings, width, height, value, defense, rarity, maxStack)
         {
             PlacedTileType = placedTileType;
@@ -34,22 +34,22 @@ namespace WebmilioCommons.Items.Standard
         }
 
         protected StandardTileItem(string displayName, string tooltip, int width, int height, int placedTileType, int rarity = ItemRarityID.White, int value = 0, int maxStack = 999, 
-            int itemUseStyle = ItemUseStyleID.SwingThrow, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) : 
+            int itemUseStyle = ItemUseStyleID.Swing, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) : 
             this(
                 new Dictionary<GameCulture, string>()
                 {
-                    { GameCulture.English, displayName }
+                    { WebmilioCommonsMod.EnglishCulture, displayName }
                 },
                 new Dictionary<GameCulture, string>()
                 {
-                    { GameCulture.English, tooltip }
+                    { WebmilioCommonsMod.EnglishCulture, tooltip }
                 }, 
                 width, height, placedTileType, rarity, value, maxStack, itemUseStyle, itemUseTime, useAnimation, autoReuse, consumable)
         {
         }
 
         protected StandardTileItem(Dictionary<GameCulture, string> displayNames, Dictionary<GameCulture, string> tooltips, int width, int height, int placedTileType, int rarity = ItemRarityID.White, int value = 0, int maxStack = 999,
-            int itemUseStyle = ItemUseStyleID.SwingThrow, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) :
+            int itemUseStyle = ItemUseStyleID.Swing, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) :
             base(displayNames, tooltips, width, height, rarity: rarity, value: value, maxStack: maxStack)
         {
             PlacedTileType = placedTileType;
@@ -67,18 +67,18 @@ namespace WebmilioCommons.Items.Standard
         {
             base.SetDefaults();
 
-            item.maxStack = MaxStack;
+            Item.maxStack = MaxStack;
 
-            item.createTile = PlacedTileType;
+            Item.createTile = PlacedTileType;
 
-            item.useStyle = ItemUseStyle;
-            item.useTime = ItemUseTime;
-            item.useAnimation = ItemUseAnimation;
+            Item.useStyle = ItemUseStyle;
+            Item.useTime = ItemUseTime;
+            Item.useAnimation = ItemUseAnimation;
 
-            item.autoReuse = AutoReuse;
-            item.consumable = Consumable;
+            Item.autoReuse = AutoReuse;
+            Item.consumable = Consumable;
 
-            item.useTurn = true;
+            Item.useTurn = true;
         }
 
 

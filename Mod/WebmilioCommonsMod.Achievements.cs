@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using MonoMod.RuntimeDetour.HookGen;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -32,7 +33,7 @@ namespace WebmilioCommons
 
             if (selectedMenu == buttonIndex)
             {
-                Main.PlaySound(SoundID.MenuOpen);
+                SoundEngine.PlaySound(SoundID.MenuOpen);
                 Main.MenuUI.SetState(Main.AchievementsMenu); //I forgot what the achievementmenu is actually called :shrug:
                 Main.menuMode = 888;
             }
