@@ -6,11 +6,16 @@ namespace WebmilioCommons.UI.Catalogs
 {
     public interface ICatalogEntry
     {
+        public void Update();
+
         public void Draw(SpriteBatch spriteBatch, EntryIconDrawSettings settings);
 
-        public bool Unlocked { get; set; }
-        public string GetSearchString { get; }
+        public int ProgressState { get; set; }
+        public bool Unlocked => ProgressState > 0;
 
-        public IList<ICatalogEntryUIInfoProvider> UIInfoProviders { get; }
+        public string SearchString { get; }
+        public string HoverText { get; }
+
+        public IList<IEntryInfoProvider> UIInfoProviders { get; }
     }
 }

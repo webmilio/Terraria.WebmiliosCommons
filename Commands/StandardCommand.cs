@@ -18,8 +18,7 @@ namespace WebmilioCommons.Commands
         /// <returns></returns>
         public override bool IsLoadingEnabled(Mod mod)
         {
-            string x = null;
-            return Autoload(ref x);
+            return true;
         }
 
         public override void Action(CommandCaller caller, string input, string[] args)
@@ -36,7 +35,7 @@ namespace WebmilioCommons.Commands
         public override string Command { get; }
         public override CommandType Type { get; }
 
-        [Obsolete("Override IsLoadingEnabled.")]
+        [Obsolete("Override IsLoadingEnabled.", true)]
         public virtual bool Autoload(ref string name) => true;
     }
 }

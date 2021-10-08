@@ -27,7 +27,7 @@ namespace WebmilioCommons.UI.Catalogs
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            Entry.Update();
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)

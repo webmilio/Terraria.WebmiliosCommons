@@ -7,3 +7,4 @@ hideCode = false
 includeSource = false
 includePDB = false
 buildIgnore = *.csproj, *.user, *.bin, *.vs, *.exe, *.force, *.cache, *.FileListAbsolute.txt, *.xml, *.suo, obj\*, bin\*, .vs\*, .idea\*, .git\*, packages\*
+tags = library

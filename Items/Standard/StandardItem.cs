@@ -10,12 +10,13 @@ namespace WebmilioCommons.Items.Standard
     {
         protected readonly int width, height;
 
-
+        [Obsolete("To be removed in a future version, now uses 'displayName' and 'tooltip' string constructors.", true)]
         protected StandardItem((GameCulture culture, string displayName, string tooltip) str, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) :
             this(new[] {str}, width, height, value, defense, rarity, maxStack)
         {
         }
 
+        [Obsolete("To be removed in a future version, now uses 'displayName' and 'tooltip' string constructors.", true)]
         protected StandardItem((GameCulture culture, string displayName, string tooltip)[] strings, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1) :
             this(new Dictionary<GameCulture, string>(), new Dictionary<GameCulture, string>(), width, height, value, defense, rarity, maxStack)
         {
@@ -39,6 +40,7 @@ namespace WebmilioCommons.Items.Standard
         {
         }
 
+        [Obsolete("To be removed in a future version, now uses 'displayName' and 'tooltip' string constructors.")]
         protected StandardItem(Dictionary<GameCulture, string> displayNames, Dictionary<GameCulture, string> tooltips, int width, int height, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 1)
         {
             DisplayNames = displayNames;

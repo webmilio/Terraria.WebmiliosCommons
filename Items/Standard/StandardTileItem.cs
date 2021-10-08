@@ -12,27 +12,6 @@ namespace WebmilioCommons.Items.Standard
         public const int USE_TIME = UseTime;
         public const int UseTime = 10;
 
-
-        protected StandardTileItem((GameCulture culture, string displayName, string tooltip) str, int width, int height, int placedTileType, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999,
-            int itemUseStyle = ItemUseStyleID.Swing, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) :
-            this(new [] { str }, width, height, value, defense, rarity, rarity, maxStack, itemUseStyle, itemUseTime, useAnimation, autoReuse, consumable)
-        {
-        }
-
-        protected StandardTileItem((GameCulture culture, string displayName, string tooltip)[] strings, int width, int height, int placedTileType, int value = 0, int defense = 0, int rarity = ItemRarityID.White, int maxStack = 999,
-            int itemUseStyle = ItemUseStyleID.Swing, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) :
-            base(strings, width, height, value, defense, rarity, maxStack)
-        {
-            PlacedTileType = placedTileType;
-
-            ItemUseStyle = itemUseStyle;
-            ItemUseTime = itemUseTime;
-            ItemUseAnimation = useAnimation;
-
-            AutoReuse = autoReuse;
-            Consumable = consumable;
-        }
-
         protected StandardTileItem(string displayName, string tooltip, int width, int height, int placedTileType, int rarity = ItemRarityID.White, int value = 0, int maxStack = 999, 
             int itemUseStyle = ItemUseStyleID.Swing, int itemUseTime = UseTime, int useAnimation = UseTime, bool autoReuse = true, bool consumable = true) : 
             this(

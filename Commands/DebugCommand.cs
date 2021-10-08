@@ -8,7 +8,9 @@ namespace WebmilioCommons.Commands
         {
         }
 
-
-        public override bool Autoload(ref string name) => false;
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return false;
+        }
     }
 }

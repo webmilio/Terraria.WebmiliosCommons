@@ -281,5 +281,13 @@ namespace WebmilioCommons.Tinq
 
             return result;
         }
+
+        /// <summary>Filters given collection for active town NPCs.</summary>
+        /// <param name="npcs"></param>
+        /// <returns></returns>
+        public static List<NPC> TownNPCs(this IEnumerable<NPC> npcs)
+        {
+            return npcs.WhereActive(n => n.townNPC);
+        }
     }
 }

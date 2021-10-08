@@ -36,18 +36,16 @@ namespace WebmilioCommons.UI.Catalogs
             public const int
                 StandardPadding = 20,
                 SearchBarHeight = 24;
-        #pragma warning restore 1591
-    }
+#pragma warning restore 1591
 
-    public class Catalog<T> : Catalog where T : ICatalogEntry<T>
-    {
-        private readonly T[] _originalEntries;
-        private readonly List<T> _workingEntries;
+        private readonly ICatalogEntry[] _originalEntries;
+        private readonly List<ICatalogEntry> _workingEntries;
 
-        private CatalogEntryInfoPanel<T> _infoPanel;
-        private CatalogEntryGrid<T> _entryGrid;
+        private UIText _rangeText;
+        private CatalogEntryInfoPanel _infoPanel;
+        private CatalogEntryGrid _entryGrid;
 
-        public Catalog(T[] entries)
+        public Catalog(ICatalogEntry[] entries)
         {
             _originalEntries = entries;
             _workingEntries = new(_originalEntries);
@@ -57,14 +55,16 @@ namespace WebmilioCommons.UI.Catalogs
 
         public void BuildCatalog()
         {
+            RemoveAllChildren();
+
             const int
                 topPadding = 220,
                 extraSize = 100,
                 minWidth = 600 + extraSize,
                 maxWidth = 800 + extraSize;
 
-                UIPanel mainPanel;
-                UIElement innerContainer;
+            UIPanel mainPanel;
+            UIElement innerContainer;
 
             {
                 UIElement root = new()
@@ -107,7 +107,7 @@ namespace WebmilioCommons.UI.Catalogs
             }
 
             {
-                _infoPanel = new CatalogEntryInfoPanel<T>
+                _infoPanel = new CatalogEntryInfoPanel
                 {
                     Height = new(12, 1),
                     HAlign = 1
@@ -125,14 +125,18 @@ namespace WebmilioCommons.UI.Catalogs
 
                 innerContainer.Append(entryContainer);
 
-                _entryGrid = new CatalogEntryGrid<T>(_originalEntries);
+                _entryGrid = new CatalogEntryGrid(_originalEntries);
                 _entryGrid.GridEntryClicked += EntryGrid_OnEntryClicked;
+                _entryGrid.GridContentsChanged += EntryGrid_OnContentsChanged;
 
                 entryContainer.Append(_entryGrid);
                 innerContainer.Append(_infoPanel);
             }
 
-            mainPanel.Append(MakeTopBar(_entryGrid, _infoPanel));
+            var topBar = MakeTopBar(_entryGrid, _infoPanel);
+            mainPanel.Append(topBar.bar);
+
+            _rangeText = topBar.rangeText;
 
             if (HasProgressBar)
             {
@@ -146,11 +150,12 @@ namespace WebmilioCommons.UI.Catalogs
         ~Catalog()
         {
             _entryGrid.GridEntryClicked -= EntryGrid_OnEntryClicked;
+            _entryGrid.GridContentsChanged -= EntryGrid_OnContentsChanged;
         }
 
         #region Top Bar
 
-        public static UIElement MakeTopBar(CatalogEntryGrid grid, CatalogEntryInfoPanel infoPanel)
+        public static (UIElement bar, UIText rangeText) MakeTopBar(CatalogEntryGrid grid, CatalogEntryInfoPanel infoPanel)
         {
             UIElement topBar = new()
             {
@@ -158,11 +163,13 @@ namespace WebmilioCommons.UI.Catalogs
                 Height = new StyleDimension(SearchBarHeight, 0)
             };
 
-            AddNavigationButtons(topBar, grid);
+            topBar.SetPadding(0);
+
+            var navigationButtons = AddNavigationButtons(topBar, grid);
             AddSortAndFilterButtons(topBar, -infoPanel.Width.Pixels);
             AddSearchContainer(topBar, -infoPanel.Width.Pixels);
 
-            return topBar;
+            return (topBar, navigationButtons.Item3.textRange);
         }
 
         public static UIImageButton MakeButton(Asset<Texture2D> image, Asset<Texture2D> hover, string snapPoint)
@@ -177,7 +184,7 @@ namespace WebmilioCommons.UI.Catalogs
 
         #region Navigation Buttons
 
-        public static void AddNavigationButtons(UIElement container, CatalogEntryGrid grid)
+        public static (UIImageButton back, UIImageButton next, (UIPanel textPanel, UIText textRange)) AddNavigationButtons(UIElement container, CatalogEntryGrid grid)
         {
             var hoverImage = Main.Assets.Request<Texture2D>(ButtonBorderPath);
 
@@ -193,6 +200,11 @@ namespace WebmilioCommons.UI.Catalogs
 
             container.Append(back);
             container.Append(next);
+
+            var text = MakeRangeText(back.Width.Pixels + next.Width.Pixels + 4);
+            container.Append(text.textPanel);
+
+            return (back, next, text);
         }
 
         public static UIImageButton MakeNavigationButton(Asset<Texture2D> image, Asset<Texture2D> hover, string snapPoint)
@@ -205,6 +217,31 @@ namespace WebmilioCommons.UI.Catalogs
             grid.MakeButtonGoByOffset(button, direction);
         }
 
+        public static (UIPanel textPanel, UIText textRange) MakeRangeText(float xOffset)
+        {
+            UIPanel panel = new()
+            {
+                Left = new StyleDimension(xOffset, 0),
+
+                Width = new StyleDimension(135, 0),
+                Height = StyleDimension.Fill,
+
+                VAlign = 0.5f,
+
+                BackgroundColor = new(35, 40, 83),
+                BorderColor = new(35, 40, 83)
+            };
+
+            UIText text = new("9000-9999 (9001)", 0.8f)
+            {
+                HAlign = 0.5f,
+                VAlign = 0.5f
+            };
+
+            panel.Append(text);
+            return (panel, text);
+        }
+
         #endregion
 
         #region Sort & Filter Buttons
@@ -213,7 +250,7 @@ namespace WebmilioCommons.UI.Catalogs
         {
             const int padding = 17;
             var hover = Main.Assets.Request<Texture2D>(ButtonWideBorderPath);
-            
+
             var filter = MakeSortOrFilterButton(Main.Assets.Request<Texture2D>(FilterButtonPath), hover, "FilterButton", xOffset - padding);
             container.Append(filter);
 
@@ -366,12 +403,21 @@ namespace WebmilioCommons.UI.Catalogs
 
         #endregion
 
-        private void EntryGrid_OnEntryClicked(UIMouseEvent evt, UIElement element, T entry)
+        private void EntryGrid_OnEntryClicked(UIMouseEvent evt, UIElement element, ICatalogEntry entry)
         {
             SelectEntry(entry);
         }
 
-        public void SelectEntry(T entry)
+        private void EntryGrid_OnContentsChanged()
+        {
+            if (_rangeText == null)
+                return;
+
+            var text = _entryGrid.GetPaginationText();
+            _rangeText.SetText(text);
+        }
+
+        public void SelectEntry(ICatalogEntry entry)
         {
             _infoPanel.FillInfoForEntry(entry);
         }
