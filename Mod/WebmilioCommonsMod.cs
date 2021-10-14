@@ -45,7 +45,6 @@ namespace WebmilioCommons
             if (Main.netMode != NetmodeID.Server)
             {
                 IdentityManager.Load();
-                KeyboardManager.Load();
             }
 
             #region Hooks

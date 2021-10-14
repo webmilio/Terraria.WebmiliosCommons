@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
@@ -8,6 +9,14 @@ namespace WebmilioCommons
     public class ModStore
     {
         private static Mod[] _mods;
+
+        public static List<TypeInfo> OfType<T>()
+        {
+            List<TypeInfo> types = new();
+
+            ForTypes<T>((m, t) => types.Add(t));
+            return types;
+        }
 
         public static void ForTypes<T>(Action<Mod, TypeInfo> action)
         {

@@ -16,7 +16,7 @@ namespace WebmilioCommons.Commands
         {
             Main.player.DoActive(plr =>
             {
-                Main.NewText($"{plr.name}: {WCPlayer.Get(plr).UniqueID}");
+                Main.NewText($"{plr.name}: {WCPlayer.Get(plr).UniqueId}");
             });
         }
     }

@@ -15,8 +15,8 @@ namespace WebmilioCommons.Players
 
         public string Guid
         {
-            get => ModPlayer.UniqueID.ToString();
-            set => ModPlayer.UniqueID = System.Guid.Parse(value);
+            get => ModPlayer.UniqueId.ToString();
+            set => ModPlayer.UniqueId = System.Guid.Parse(value);
         }
     }
 }

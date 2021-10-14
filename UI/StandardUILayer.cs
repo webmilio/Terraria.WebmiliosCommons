@@ -10,12 +10,10 @@ namespace WebmilioCommons.UI
             UIState = uiState;
         }
 
-
         protected override bool DrawSelf()
         {
             if (UIState.Visible)
             {
-                UIState.Update(Main._drawInterfaceGameTime);
                 UIState.Draw(Main.spriteBatch);
             }
 

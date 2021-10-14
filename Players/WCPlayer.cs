@@ -28,19 +28,19 @@ namespace WebmilioCommons.Players
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Add(nameof(UniqueID), UniqueID.ToString());
+            tag.Add(nameof(UniqueId), UniqueId.ToString());
         }
 
         public override void LoadData(TagCompound tag)
         {
-            if (tag.ContainsKey(nameof(UniqueID)))
+            if (tag.ContainsKey(nameof(UniqueId)))
             {
-                string uniqueId = tag.GetString(nameof(UniqueID));
+                string uniqueId = tag.GetString(nameof(UniqueId));
 
-                UniqueID = !string.IsNullOrWhiteSpace(uniqueId) && uniqueId != Guid.Empty.ToString() ? Guid.Parse(uniqueId) : Guid.NewGuid();
+                UniqueId = !string.IsNullOrWhiteSpace(uniqueId) && uniqueId != Guid.Empty.ToString() ? Guid.Parse(uniqueId) : Guid.NewGuid();
             }
             else
-                UniqueID = Guid.NewGuid();
+                UniqueId = Guid.NewGuid();
         }
 
         #endregion
@@ -121,6 +121,9 @@ namespace WebmilioCommons.Players
         #endregion
 
 
-        public Guid UniqueID { get; internal set; }
+        [Obsolete("Moved to UniqueId", true)]
+        public Guid UniqueID => UniqueId;
+
+        public Guid UniqueId { get; internal set; }
     }
 }
