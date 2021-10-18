@@ -2,6 +2,6 @@
 {
     internal interface IUnloadOnModUnload
     {
-        void Unload();
+        public void Unload();
     }
 }
