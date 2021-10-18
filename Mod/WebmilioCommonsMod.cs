@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
@@ -6,8 +5,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WebmilioCommons.Commons;
-using WebmilioCommons.Identity;
-using WebmilioCommons.ModCompatibilities;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.NPCs;
