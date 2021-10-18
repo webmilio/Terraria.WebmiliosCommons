@@ -4,7 +4,7 @@
     {
         public override object Call(params object[] args)
         {
-            
+            return null;
         }
     }
 }
