@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Terraria.ModLoader;
+using WebmilioCommons.Commons;
 using WebmilioCommons.Extensions;
-using WebmilioCommons.Managers;
 
 namespace WebmilioCommons.Loaders
 {
@@ -30,7 +30,7 @@ namespace WebmilioCommons.Loaders
         public Loader(Func<TypeInfo, bool> loadCondition)
         {
             LoadCondition = loadCondition;
-            TypeHasUnlocalizedName = typeof(IHasUnlocalizedName).IsAssignableFrom(typeof(T));
+            TypeHasUnlocalizedName = typeof(IIdentifiable<string>).IsAssignableFrom(typeof(T));
 
             NextIndex = FirstIndex;
         }
@@ -128,7 +128,7 @@ namespace WebmilioCommons.Loaders
             modByType.Add(type, mod);
             genericByType.Add(type, item);
 
-            var name = TypeHasUnlocalizedName ? (item as IHasUnlocalizedName).UnlocalizedName : item.GetType().FullName;
+            var name = TypeHasUnlocalizedName ? (item as IIdentifiable<string>).Identifier : item.GetType().FullName;
             typeByName.Add(name, type);
 
             if (item is IAssociatedToMod atm)
