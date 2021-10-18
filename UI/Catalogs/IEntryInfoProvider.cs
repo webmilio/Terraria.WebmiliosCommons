@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Terraria.UI;
+﻿using Terraria.UI;
 
 namespace WebmilioCommons.UI.Catalogs
 {

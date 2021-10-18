@@ -81,12 +81,6 @@ namespace WebmilioCommons.Players
             ScreenShake.TickScreenShakes();
         }
 
-        public override void PreUpdate()
-        {
-            if (!PreUpdateTime())
-                return;
-        }
-
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
         {
             List<Item> items = new();

@@ -1,28 +1,90 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.ModLoader;
+using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Inputs
 {
     public class KeyboardManager : ModSystem
     {
-        private static bool _loaded;
+        private readonly Keys[] _keys;
+
+        public readonly bool[] pressed;
+        public readonly bool[] justPressed;
+
+        public readonly bool[] released;
+        public readonly bool[] justReleased;
+
+        public KeyboardManager()
+        {
+            _keys = Enum.GetValues<Keys>();
+            var maxId = _keys.Max(k => (int)k);
+
+            pressed = InitializeArray(maxId);
+            justPressed = InitializeArray(maxId);
+
+            released = InitializeArray(maxId);
+            justReleased = InitializeArray(maxId);
+        }
+
+        private static bool[] InitializeArray(int max) => new bool[max + 1];
+
+        public override void PostUpdateInput()
+        {
+            _keys.Do(UpdateKey);
+        }
+
+        private void UpdateKey(Keys key)
+        {
+            var state = Main.keyState[key];
+            int iKey = (int)key;
+
+            justPressed[iKey] = false; // Keys can only be pressed for one tick.
+            justReleased[iKey] = false; // Keys can only be just-released for one tick.
+
+            if (state == KeyState.Down) // The key is pressed.
+            {
+                if (!pressed[iKey]) // We didn't know it was pressed before right now.
+                {
+                    justPressed[iKey] = true;
+                }
+
+                pressed[iKey] = true; // We now know that the key is pressed.
+                released[iKey] = false;
+            }
+            else // They key is not pressed.
+            {
+                if (!released[iKey])
+                {
+                    justReleased[iKey] = true;
+                }
+
+                released[iKey] = true; // We know that the key is released.
+                pressed[iKey] = false;
+            }
+        }
+
+        /*private bool _loaded;
 
         public delegate void KeyStateChanged(Keys key);
 
-        private static Keys[] _allKeys;
-        private static Dictionary<Keys, KeyStates> _keyStates;
+        private Keys[] _allKeys;
+        private Dictionary<Keys, KeyStates> _keyStates;
 
-        public static readonly List<Keys>
-            notPressed = new List<Keys>(),
-            pressed = new List<Keys>(),
-            justPressed = new List<Keys>(),
-            justReleased = new List<Keys>();
+        public readonly List<Keys>
+            notPressed = new(),
+            pressed = new(),
+            justPressed = new(),
+            justReleased = new();
 
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return Main.netMode != NetmodeID.Server;
+        }
 
-        internal static void Load()
+        public override void Load()
         {
             _loaded = false;
 
@@ -75,7 +137,7 @@ namespace WebmilioCommons.Inputs
         }
 
 
-        private static void SetState(Keys key, KeyStates keyState)
+        private void SetState(Keys key, KeyStates keyState)
         {
             _keyStates[key] = keyState;
 
@@ -109,20 +171,20 @@ namespace WebmilioCommons.Inputs
         }
 
 
-        public static KeyStates GetKeyState(Keys key, bool ignoreBlockInput = false) => 
+        public KeyStates GetKeyState(Keys key, bool ignoreBlockInput = false) => 
             (!Main.blockInput || ignoreBlockInput) ? _keyStates[key] : KeyStates.NotPressed;
 
 
-        public static bool IsNotPressed(Keys key, bool ignoreBlockInput = false) =>Is(key, KeyStates.NotPressed, ignoreBlockInput);
-        public static bool IsPressed(Keys key, bool ignoreBlockInput = false) => Is(key, KeyStates.Pressed, ignoreBlockInput);
-        public static bool IsJustPressed(Keys key, bool ignoreBlockInput = false) => Is(key, KeyStates.JustPressed, ignoreBlockInput);
-        public static bool IsJustReleased(Keys key, bool ignoreBlockInput = false) => Is(key, KeyStates.JustReleased, ignoreBlockInput);
+        public bool IsNotPressed(Keys key, bool ignoreBlockInput = false) =>Is(key, KeyStates.NotPressed, ignoreBlockInput);
+        public bool IsPressed(Keys key, bool ignoreBlockInput = false) => Is(key, KeyStates.Pressed, ignoreBlockInput);
+        public bool IsJustPressed(Keys key, bool ignoreBlockInput = false) => Is(key, KeyStates.JustPressed, ignoreBlockInput);
+        public bool IsJustReleased(Keys key, bool ignoreBlockInput = false) => Is(key, KeyStates.JustReleased, ignoreBlockInput);
 
 
-        public static bool Is(Keys key, KeyStates keyState, bool ignoreBlockInput = false) =>
+        public bool Is(Keys key, KeyStates keyState, bool ignoreBlockInput = false) =>
             (!Main.blockInput || ignoreBlockInput) && _keyStates[key].HasFlag(keyState);
 
 
-        public static event KeyStateChanged KeyPressed, KeyReleased;
+        public event KeyStateChanged KeyPressed, KeyReleased;*/
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Microsoft.Xna.Framework.Input;
 using MonoMod.RuntimeDetour.HookGen;
 using Terraria;
 using Terraria.Audio;

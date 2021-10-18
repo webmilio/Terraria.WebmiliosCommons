@@ -1,5 +1,4 @@
-﻿using Terraria.ModLoader;
-using WebmilioCommons.Loaders;
+﻿using WebmilioCommons.Loaders;
 
 namespace WebmilioCommons.Hair
 {

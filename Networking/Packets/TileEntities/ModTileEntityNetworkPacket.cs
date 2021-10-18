@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Terraria.DataStructures;
-using WebmilioCommons.Networking.Attributes;
 
 namespace WebmilioCommons.Networking.Packets.TileEntities
 {

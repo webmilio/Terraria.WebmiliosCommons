@@ -1,5 +1,4 @@
 ﻿using Terraria.ModLoader;
-using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Networking.Attributes
 {

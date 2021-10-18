@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using WebmilioCommons.Commons;
 using WebmilioCommons.Extensions;
 using WebmilioCommons.Players;
 

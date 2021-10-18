@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using WebmilioCommons.Commons;
 using WebmilioCommons.Extensions;
 

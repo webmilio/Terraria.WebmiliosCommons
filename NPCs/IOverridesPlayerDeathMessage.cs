@@ -1,6 +1,5 @@
 ﻿using Terraria;
 using Terraria.DataStructures;
-using WebmilioCommons.Players;
 
 namespace WebmilioCommons.NPCs
 {

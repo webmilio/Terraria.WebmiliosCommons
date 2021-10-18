@@ -7,12 +7,10 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using WebmilioCommons.Commons;
 using WebmilioCommons.Identity;
-using WebmilioCommons.Inputs;
 using WebmilioCommons.ModCompatibilities;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.NPCs;
-using WebmilioCommons.Time;
 
 namespace WebmilioCommons
 {

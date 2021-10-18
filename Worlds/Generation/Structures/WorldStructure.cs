@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using WebmilioCommons.Extensions;
 

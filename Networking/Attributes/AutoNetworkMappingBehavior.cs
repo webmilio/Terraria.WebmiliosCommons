@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WebmilioCommons.Networking.Attributes
+﻿namespace WebmilioCommons.Networking.Attributes
 {
     public enum AutoNetworkMappingBehavior
     {

@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using WebmilioCommons.Effects.Shaders;
 using WebmilioCommons.Effects.Shaders.Entities;
-using WebmilioCommons.Tinq;
 
 namespace WebmilioCommons.Extensions
 {

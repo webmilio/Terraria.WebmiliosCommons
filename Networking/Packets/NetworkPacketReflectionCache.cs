@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Terraria.ModLoader;
-using WebmilioCommons.Networking.Attributes;
 
 namespace WebmilioCommons.Networking.Packets
 {

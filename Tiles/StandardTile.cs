@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
-using WebmilioCommons.Commons;
-using WebmilioCommons.TileEntities;
+﻿using Terraria.ModLoader;
 
 namespace WebmilioCommons.Tiles
 {

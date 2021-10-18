@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using Terraria.ModLoader;
-using WebmilioCommons.Networking.Packets;
 
 namespace WebmilioCommons.Networking
 {

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Terraria.ModLoader;
-using WebmilioCommons.Extensions;
-
-namespace WebmilioCommons
+﻿namespace WebmilioCommons
 {
     /*public abstract class BetterMod : Mod
     {

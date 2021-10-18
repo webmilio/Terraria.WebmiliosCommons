@@ -1,10 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using WebmilioCommons.Networking.Serializing;
 
 namespace WebmilioCommons.Networking.Packets
 {

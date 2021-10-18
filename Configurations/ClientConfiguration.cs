@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using Terraria.ModLoader.Config;
-
-namespace WebmilioCommons.Configurations
+﻿namespace WebmilioCommons.Configurations
 {
     /*public class ClientConfiguration : ModConfig
     {

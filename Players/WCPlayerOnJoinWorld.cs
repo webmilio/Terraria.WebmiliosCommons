@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using WebmilioCommons.Networking.Packets;
+﻿using WebmilioCommons.Networking.Packets;
 
 namespace WebmilioCommons.Players
 {

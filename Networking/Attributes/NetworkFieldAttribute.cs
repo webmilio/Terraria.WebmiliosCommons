@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using MonoMod.RuntimeDetour;
-using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Networking.Attributes
 {
