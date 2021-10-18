@@ -36,20 +36,12 @@ namespace WebmilioCommons
             NetworkTypeSerializers.Initialize();
             
             GlobalNPCSetupShopMethods.Load();
-            TimeManagement.Load();
-
             SpecialNPCNamingBehavior.Load();
 
             if (Main.netMode != NetmodeID.Server)
             {
                 IdentityManager.Load();
             }
-
-            #region Hooks
-
-            On.Terraria.WorldGen.SaveAndQuit += WorldGen_OnSaveAndQuit;
-            
-            #endregion
 
             ModCompatibilityLoader.Instance.OnWCLoadFinished();
         }
@@ -75,16 +67,8 @@ namespace WebmilioCommons
         {
             BetterModNPC.Unload();
 
-            // Events
-            #region Hooks
-            
-            On.Terraria.WorldGen.SaveAndQuit -= WorldGen_OnSaveAndQuit;
-
-            #endregion
-
             GlobalNPCSetupShopMethods.Unload();
             NetworkTypeSerializers.Unload();
-            TimeManagement.Unload();
 
             SpecialNPCNamingBehavior.Unload();
 
@@ -117,13 +101,6 @@ namespace WebmilioCommons
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             NetworkPacketLoader.Instance.HandlePacket(reader, whoAmI);
-        }
-
-        private void WorldGen_OnSaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
-        {
-            orig(callback);
-
-            TimeManagement.ForceUnalter(false);
         }
 
         /// <summary>The current loaded instance of <see cref="WebmilioCommonsMod"/>.</summary>
