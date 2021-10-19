@@ -29,18 +29,10 @@ namespace WebmilioCommons
         /// <summary></summary>
         public override void Load()
         {
-            ModCompatibilityLoader.Instance.TryLoad();
             NetworkTypeSerializers.Initialize();
             
             GlobalNPCSetupShopMethods.Load();
             SpecialNPCNamingBehavior.Load();
-
-            if (Main.netMode != NetmodeID.Server)
-            {
-                IdentityManager.Load();
-            }
-
-            ModCompatibilityLoader.Instance.OnWCLoadFinished();
         }
 
         /// <summary></summary>
@@ -49,11 +41,6 @@ namespace WebmilioCommons
             // In theory, you don't need to call the 'TryLoad()' method on any singletons since the instance is loaded the second its created.
             // I only put it there to make it obvious.
 
-            if (Main.netMode != NetmodeID.Server)
-            {
-                IdentityManager.PostSetupContent();
-            }
-            
             NetworkPacketLoader.Instance.TryLoad();
 
             //PlayerSynchronizationPacket.Construct();
@@ -68,15 +55,6 @@ namespace WebmilioCommons
             NetworkTypeSerializers.Unload();
 
             SpecialNPCNamingBehavior.Unload();
-
-            // Server stuff
-            if (Main.netMode != NetmodeID.Server)
-            {
-                UnloadAchievementsMenuHookThingLMAO();
-                IdentityManager.Unload();
-                //KeyboardManager.Unload();
-            }
-
 
             // Unload all lazy-loaded singletons.
             List<IUnloadOnModUnload> originalUnloadList = new List<IUnloadOnModUnload>(unloadOnModUnload);
