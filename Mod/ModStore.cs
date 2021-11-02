@@ -18,6 +18,11 @@ namespace WebmilioCommons
             return types;
         }
 
+        public static void ForTypes<T>(Action<TypeInfo> action)
+        {
+            ForTypes<T>((_, info) => action(info));
+        }
+
         public static void ForTypes<T>(Action<Mod, TypeInfo> action)
         {
             Mods.Do(m => m.Code.Concrete<T>().Do(t => action(m, t)));

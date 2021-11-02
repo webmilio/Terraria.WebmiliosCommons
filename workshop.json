@@ -2,5 +2,8 @@
   "WorkshopPublishedVersion": 1,
   "ContentType": "Mod",
   "SteamEntryId": 2596745437,
+  "Tags": [
+    "library"
+  ],
   "Publicity": 2
 }

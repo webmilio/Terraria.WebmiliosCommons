@@ -3,19 +3,21 @@ using System.IO;
 using System.Reflection;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using WebmilioCommons.Extensions;
 using WebmilioCommons.Loaders;
 using WebmilioCommons.Networking.Packets;
 using WebmilioCommons.Networking.Packets.TileEntities;
 
 namespace WebmilioCommons.Networking
 {
-    public sealed class NetworkPacketLoader : SingletonLoader<NetworkPacketLoader, NetworkPacket>
+    public sealed class NetworkPacketLoader : SingletonPrototypeLoader<NetworkPacketLoader, NetworkPacket>
     {
         public delegate void PacketReceivedDelegate(NetworkPacket packet, BinaryReader reader);
         public delegate void PacketSentDelegate(NetworkPacket packet);
 
-        public NetworkPacketLoader() : base(typeInfo => typeInfo.GetCustomAttribute<ObsoleteAttribute>() == null)
+        public NetworkPacketLoader() : base(typeInfo => !typeInfo.TryGetCustomAttribute(out ObsoleteAttribute _))
         {
+            nextIndex = 1;
         }
 
         public override void PreLoad()
@@ -25,7 +27,7 @@ namespace WebmilioCommons.Networking
 
         public override void PostLoad()
         {
-            int lastPacketIndex = NextIndex - 1;
+            int lastPacketIndex = nextIndex - 1;
 
             if (lastPacketIndex <= byte.MaxValue)
             {

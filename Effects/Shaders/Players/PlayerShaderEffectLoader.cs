@@ -2,7 +2,7 @@
 
 namespace WebmilioCommons.Effects.Shaders.Players
 {
-    public class PlayerShaderEffectLoader : SingletonLoader<PlayerShaderEffectLoader, PlayerShaderEffect>
+    public class PlayerShaderEffectLoader : SingletonPrototypeLoader<PlayerShaderEffectLoader, PlayerShaderEffect>
     {
         
     }

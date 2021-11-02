@@ -35,15 +35,9 @@ namespace WebmilioCommons
             SpecialNPCNamingBehavior.Load();
         }
 
-        /// <summary></summary>
         public override void PostSetupContent()
         {
-            // In theory, you don't need to call the 'TryLoad()' method on any singletons since the instance is loaded the second its created.
-            // I only put it there to make it obvious.
-
-            NetworkPacketLoader.Instance.TryLoad();
-
-            //PlayerSynchronizationPacket.Construct();
+            Logger.InfoFormat("Initialized {0} with {1} network packets.", nameof(NetworkPacketLoader), NetworkPacketLoader.Instance.Count);
         }
 
         /// <summary></summary>
