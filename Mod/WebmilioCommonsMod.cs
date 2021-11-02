@@ -29,6 +29,8 @@ namespace WebmilioCommons
         /// <summary></summary>
         public override void Load()
         {
+            LoadHooks();
+
             NetworkTypeSerializers.Initialize();
             
             GlobalNPCSetupShopMethods.Load();
@@ -59,6 +61,8 @@ namespace WebmilioCommons
             //ClientConfiguration = null;
 
             #endregion
+
+            UnloadHooks();
 
             Instance = default;
         }

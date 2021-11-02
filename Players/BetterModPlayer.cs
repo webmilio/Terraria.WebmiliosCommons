@@ -31,6 +31,13 @@ namespace WebmilioCommons.Players
         protected virtual bool PreLoad(TagCompound tag) => true;
         protected virtual void ModLoad(TagCompound tag) { }
 
+        /// <summary>Only called on the local client.</summary>
+        /// <param name="recipe"></param>
+        /// <returns><c>true</c> to continue with the item crafting; otherwise <c>false</c>.</returns>
+        public virtual bool PreCraftItem(Recipe recipe) => true;
+
+        public virtual void CraftItem()
+
         public virtual bool CanInteractWithTownNPCs() => true;
 
         public virtual void OnLastInteractionNPCLoot(NPC npc)
