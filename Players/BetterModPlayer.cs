@@ -35,8 +35,7 @@ namespace WebmilioCommons.Players
         /// <param name="recipe"></param>
         /// <returns><c>true</c> to continue with the item crafting; otherwise <c>false</c>.</returns>
         public virtual bool PreCraftItem(Recipe recipe) => true;
-
-        public virtual void CraftItem()
+        public virtual void CraftItem(Recipe recipe, Item item) { }
 
         public virtual bool CanInteractWithTownNPCs() => true;
 

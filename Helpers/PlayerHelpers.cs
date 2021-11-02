@@ -44,11 +44,31 @@ public class PlayerHelpers : ModSystem
         return items;
     }
 
-    public static void ForModPlayers(Action<ModPlayer> action)
+    public static bool All<T>(Predicate<T> predicate) => All(player => player is not T t || predicate(t));
+    public static bool All(Predicate<ModPlayer> predicate)
     {
-        _players.Do(action);
+        for (int i = 0; i < _players.Count; i++)
+        {
+            if (!predicate(_players[i]))
+                return false;
+        }
+
+        return true;
     }
 
+    public static bool Any<T>(Predicate<T> predicate) => Any(player => player is T t && predicate(t));
+    public static bool Any(Predicate<ModPlayer> predicate)
+    {
+        for (int i = 0; i < _players.Count; i++)
+        {
+            if (predicate(_players[i]))
+                return true;
+        }
+
+        return false;
+    }
+
+    public static void ForModPlayers(Action<ModPlayer> action) => _players.Do(action);
     public static void ForModPlayers<T>(Action<T> action)
     {
         _players.Do(delegate(ModPlayer player)
