@@ -1,27 +1,29 @@
 ﻿using On.Terraria;
 using WebmilioCommons.Helpers;
-using WebmilioCommons.Players;
+using WebmilioCommons.Items;
 using Recipe = Terraria.Recipe;
 
 namespace WebmilioCommons;
 
 public partial class WebmilioCommonsMod
 {
-    private void Main_OnCraftItem(Main.orig_CraftItem orig, Recipe r)
+    private static void Main_OnCraftItem(Main.orig_CraftItem orig, Recipe recipe)
     {
-        if (!PlayerHelpers.All<BetterModPlayer>(player => player.PreCraftItem(r)))
+        if (!PlayersProxy.PreCraftItem(recipe))
             return;
 
-        orig(r);
-        PlayerHelpers.ForModPlayers<BetterModPlayer>(player => player.CraftItem(r, Terraria.Main.mouseItem));
+        orig(recipe);
+
+        GlobalItemsProxy.Do<BetterGlobalItem>(g => g.OnItemCrafted(recipe, Terraria.Main.mouseItem));
+        PlayersProxy.CraftItem(recipe, Terraria.Main.mouseItem);
     }
 
-    private void LoadHooks()
+    private static void LoadHooks()
     {
         Main.CraftItem += Main_OnCraftItem;
     }
 
-    private void UnloadHooks()
+    private static void UnloadHooks()
     {
         Main.CraftItem -= Main_OnCraftItem;
     }
