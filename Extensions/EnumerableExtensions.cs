@@ -47,6 +47,15 @@ namespace WebmilioCommons.Extensions
             return entries;
         }
 
+        public static TValue AddOrGet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, out TValue value, Func<TValue> provider)
+        {
+            if (dictionary.TryGetValue(key, out value))
+                return value;
+            
+            dictionary.Add(key, value = provider());
+            return value;
+        }
+
         /// <summary>Executes a provided action on a sequence of elements. If the provided sequence implements <see cref="IList{T}"/>, the iteration is done through a <c>for</c>, otherwise it is done through a <c>foreach</c>.</summary>
         /// <typeparam name="T">The type of <paramref name="source"/>.</typeparam>
         /// <param name="source"></param>
