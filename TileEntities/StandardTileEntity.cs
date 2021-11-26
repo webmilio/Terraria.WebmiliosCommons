@@ -10,9 +10,7 @@ namespace WebmilioCommons.TileEntities
     public abstract class StandardTileEntity : ModTileEntity, IStandardTileEntity
     {
         public const int SideCount = 4;
-
         public StandardTileEntity[] neighbors = new StandardTileEntity[SideCount];
-
 
         protected StandardTileEntity()
         {
@@ -21,12 +19,6 @@ namespace WebmilioCommons.TileEntities
         public override bool IsTileValidForEntity(int x, int y)
         {
             return true;
-        }
-
-        [Obsolete("Moved to IsTileValidForEntity.", true)]
-        public virtual bool ValidTile(int i, int j)
-        {
-            return IsTileValidForEntity(i, j);
         }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
@@ -91,10 +83,6 @@ namespace WebmilioCommons.TileEntities
         public virtual void OnNeighborKilled(StandardTileEntity te, Directions side) { }
 
         public virtual void OnNeighborChange(StandardTileEntity changed, Directions side) { }
-
-
-        public virtual bool OnAnyTilePlaced(int i, int j, int type, bool mute, bool forced, int plr, int style) => true;
-
 
         public static StandardTileEntity[] GetNeighboringTiles(Point16 position)
         {
@@ -162,7 +150,6 @@ namespace WebmilioCommons.TileEntities
 
             return false;
         }
-
 
         public static StandardTileEntity GetOrDefault(Point16 position) => GetOrDefault<StandardTileEntity>(position);
 
@@ -259,7 +246,6 @@ namespace WebmilioCommons.TileEntities
 
         /// <summary>The amount of neighboring <see cref="StandardTileEntity"/> tiles.</summary>
         public int NeighborCount { get; private set; }
-
 
         public int Id => ID;
 
