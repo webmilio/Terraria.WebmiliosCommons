@@ -10,13 +10,35 @@ namespace WebmilioCommons.Helpers;
 
 public class WiringHelper : ModSystem
 {
+    private static WireColor[] _colors = Enum.GetValues<WireColor>();
+
     private static Action<DoubleStack<Point16>, int> _hitWireDelegate;
     private static Action<int, int> _hitWireSingleDelegate;
 
     // internal static Dictionary<WireColor, MethodInfo> wireMethods;
 
-    public static void HitWire(int i, int j, int wireType) => HitWire(new Point16(i, j), wireType);
+    public static void ForAllColors(int i, int j, Action<WireColor> action)
+    {
+        for (var k = 0; k < _colors.Length; k++)
+        {
+            if (HasWire(i, j, _colors[k]))
+            {
+                action(_colors[k]);
+            }
+        }
+    }
+    
+    public static void ForAllWires(int i, int j, Action<Tile, WireColor> action)
+    {
+        var tile = Main.tile[i, j];
 
+        for (int k = 0; k < _colors.Length; k++)
+        {
+            action(tile, _colors[k]);
+        }
+    }
+
+    public static void HitWire(int i, int j, int wireType) => HitWire(new Point16(i, j), wireType);
     public static void HitWire(Point16 point, int wireType)
     {
         var stack = new DoubleStack<Point16>();
@@ -33,6 +55,20 @@ public class WiringHelper : ModSystem
     public static void HitWireSingle(int i, int j)
     {
         _hitWireSingleDelegate(i, j);
+    }
+
+    public static bool HasWire(int i, int j, WireColor color)
+    {
+        var tile = Main.tile[i, j];
+
+        return color switch
+        {
+            WireColor.Red => tile.RedWire,
+            WireColor.Green => tile.GreenWire,
+            WireColor.Blue => tile.BlueWire,
+            WireColor.Yellow => tile.YellowWire,
+            _ => false
+        };
     }
 
     public override void Load()
