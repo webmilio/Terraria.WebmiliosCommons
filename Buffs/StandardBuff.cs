@@ -5,7 +5,7 @@ namespace WebmilioCommons.Buffs
 {
     public abstract class StandardBuff : ModBuff
     {
-        protected StandardBuff(string displayName, string description, bool hideTime = false, bool save = false, bool persistent = false, bool canBeCleared = true)
+        protected StandardBuff(string displayName, string description, bool hideTime = false, bool save = false, bool persistent = false)
         {
             DefaultDisplayName = displayName;
             DefaultDescription = description;
@@ -13,7 +13,6 @@ namespace WebmilioCommons.Buffs
             HideTime = hideTime;
             Save = save;
             Persistent = persistent;
-            CanBeCleared = canBeCleared;
         }
 
 

@@ -47,6 +47,19 @@ namespace WebmilioCommons.Extensions
             return entries;
         }
 
+        public static T Find<T>(this T[] array, Predicate<T> predicate)
+        {
+            for (var i = 0; i < array.Length; i++)
+            {
+                if (predicate(array[i]))
+                {
+                    return array[i];
+                }
+            }
+
+            return default;
+        }
+
         public static TValue AddOrGet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, out TValue value, Func<TValue> provider)
         {
             if (dictionary.TryGetValue(key, out value))
