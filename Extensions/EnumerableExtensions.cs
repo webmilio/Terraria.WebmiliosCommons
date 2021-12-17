@@ -8,6 +8,16 @@ namespace WebmilioCommons.Extensions
 {
     public static class EnumerableExtensions
     {
+        public static void Fill<T>(this T[] array, T value)
+        {
+            Array.Fill(array, value);
+        }
+
+        public static void Fill<T>(this T[] array, T value, int startIndex, int count)
+        {
+            Array.Fill(array, value, startIndex, count);
+        }
+
         /// <summary>
         /// Transforms a given chance dictionary into an array compromised of X of each element.
         ///
