@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Reflection;
+using Terraria;
 using WebmilioCommons.Extensions;
 
 #pragma warning disable CS1591
@@ -20,6 +21,7 @@ public class SimpleServices : IServiceContainer
     public SimpleServices()
     {
         AddService(typeof(SimpleServices), this);
+        AddProvider(Main.instance.Services);
     }
 
     // Getting Services
