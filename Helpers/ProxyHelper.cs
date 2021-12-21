@@ -6,22 +6,22 @@ using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Helpers;
 
-public abstract class ProxyHelper<T> : ModSystem
+public abstract class ProxyHelper<TGlobal, TBound> : ModSystem
 {
     public override void Load()
     {
         try
         {
-            Items = GetOriginal();
+            Items = GetSource();
         }
         catch
         {
-            Mod.Logger.ErrorFormat($"Error while fetching the internal list for {typeof(T).Name}. None of the additional player hooks will be triggered.");
-            Items = Array.Empty<T>();
+            Mod.Logger.ErrorFormat($"Error while fetching the internal list for {typeof(TGlobal).Name}. None of the additional player hooks will be triggered.");
+            Items = new List<TGlobal>();
         }
     }
 
-    protected abstract IList<T> GetOriginal();
+    protected abstract IList<TGlobal> GetSource();
 
     public override void Unload()
     {
@@ -35,7 +35,7 @@ public abstract class ProxyHelper<T> : ModSystem
     {
         List<V> items = new(Items.Count);
 
-        Items.Do(delegate (T player)
+        Items.Do(delegate (TGlobal player)
         {
             if (player is V v)
                 items.Add(v);
@@ -45,7 +45,7 @@ public abstract class ProxyHelper<T> : ModSystem
     }
 
     public static bool All<V>(Predicate<V> predicate) => All(item => item is not V v || predicate(v));
-    public static bool All(Predicate<T> predicate)
+    public static bool All(Predicate<TGlobal> predicate)
     {
         for (int i = 0; i < Items.Count; i++)
         {
@@ -57,7 +57,7 @@ public abstract class ProxyHelper<T> : ModSystem
     }
 
     public static bool Any<V>(Predicate<V> predicate) => Any(item => item is V v && predicate(v));
-    public static bool Any(Predicate<T> predicate)
+    public static bool Any(Predicate<TGlobal> predicate)
     {
         for (int i = 0; i < Items.Count; i++)
         {
@@ -68,15 +68,25 @@ public abstract class ProxyHelper<T> : ModSystem
         return false;
     }
 
-    public static void Do(Action<T> action) => Items.Do(action);
+    public static void Do(Action<TGlobal> action) => Items.Do(action);
     public static void Do<V>(Action<V> action)
     {
-        Items.Do(delegate (T player)
+        Items.Do(delegate (TGlobal player)
         {
             if (player is V v)
                 action(v);
         });
     }
 
-    protected static IList<T> Items { get; set; }
+    public void Add(TGlobal item)
+    {
+        Items.Add(item);
+    }
+
+    public bool Remove(TGlobal item)
+    {
+        return Items.Remove(item);
+    }
+
+    protected static IList<TGlobal> Items { get; set; }
 }

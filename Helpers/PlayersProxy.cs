@@ -8,9 +8,9 @@ using WebmilioCommons.Players;
 
 namespace WebmilioCommons.Helpers;
 
-public class PlayersProxy : ProxyHelper<ModPlayer>
+public class PlayersProxy : ProxyHelper<ModPlayer, Player>
 {
-    protected override IList<ModPlayer> GetOriginal()
+    protected override IList<ModPlayer> GetSource()
     { 
         return (IList<ModPlayer>)typeof(PlayerLoader).GetField("players", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
     }

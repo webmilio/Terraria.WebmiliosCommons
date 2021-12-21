@@ -13,29 +13,29 @@ namespace WebmilioCommons.UI.Catalogs
 {
     public class Catalog : StandardUIState
     {
-        #pragma warning disable 1591
-            public const string
-                BestiaryPath = "Images/UI/Bestiary",
-                __BestiaryButton = BestiaryPath + "/Button_";
+#pragma warning disable 1591
+        public const string
+            BestiaryPath = "Images/UI/Bestiary",
+            __BestiaryButton = BestiaryPath + "/Button_";
 
-            public const string
-                BackButtonPath = __BestiaryButton + "Back",
-                NextButtonPath = __BestiaryButton + "Forward",
-                ButtonBorderPath = __BestiaryButton + "Border",
+        public const string
+            BackButtonPath = __BestiaryButton + "Back",
+            NextButtonPath = __BestiaryButton + "Forward",
+            ButtonBorderPath = __BestiaryButton + "Border",
 
-                ButtonWideBorderPath = __BestiaryButton + "Wide_Border";
+            ButtonWideBorderPath = __BestiaryButton + "Wide_Border";
 
-            public const string
-                SearchButtonPath = __BestiaryButton + "Search",
-                SearchButtonBorderPath = SearchButtonPath + "_Border";
+        public const string
+            SearchButtonPath = __BestiaryButton + "Search",
+            SearchButtonBorderPath = SearchButtonPath + "_Border";
 
-            public const string
-                FilterButtonPath = __BestiaryButton + "Filtering",
-                SortButtonPath = __BestiaryButton + "Sorting";
+        public const string
+            FilterButtonPath = __BestiaryButton + "Filtering",
+            SortButtonPath = __BestiaryButton + "Sorting";
 
-            public const int
-                StandardPadding = 20,
-                SearchBarHeight = 24;
+        public const int
+            StandardPadding = 20,
+            SearchBarHeight = 24;
 #pragma warning restore 1591
 
         private readonly ICatalogEntry[] _originalEntries;
