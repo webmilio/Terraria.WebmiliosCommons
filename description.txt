@@ -1,10 +1,11 @@
 Webmilio's Commons Library adds a couple of things I use in all of my mods. You can extract the DLL from the Mod. 
 
-THE 1.4 IS A HEAVY ALPHA THAT HAS NOT BEEN TESTED.
+THE 1.4 IS A HEAVY ALPHA THAT HAS kinda been tested and it seems to work so far.
 Anything related to Worlds has been disabled.
 Had to remove the Network methods for Reading/Writing items since the good people at tMod thought it wise to remove the method ¯\_(^.^)_/¯.
 
 Things this adds:
+- Tags for Mods when uploading them.
 - Better Networking (in my opinion, at least).
 - Loaders (manual or singletons that handle loading all found classes within the Terraria assembly, including mods)
 - A bunch of extensions

@@ -1,0 +1,38 @@
+Mods: {
+	WebmilioCommons: {
+		ModTags: {
+			QualityofLife: quality of life
+			QualityofLifeDescription: Adjustments that improve the gameplay and/or feel of the game.
+
+			Tweaks: tweaks
+			TweaksDescription: Adjustments that change the gameplay and/or feel of the game.
+
+			Utility: utility
+			UtilityDescription: Adds utility-oriented content or features.
+
+			NewContent: new content
+			NewContentDescription: Adds new content (i.e. items, weapons, npcs, etc.) to the game.
+
+			TotalConversion: total conversion
+			TotalConversionDescription: Drastically changes the way the game is supposed to be played.
+
+			Worldgen: world gen
+			WorldgenDescription: Changes the way the world is generated (i.e. ores, new structures, etc.)
+
+			Interface: interface
+			InterfaceDescription: Adds new interfaces or changes existing ones (i.e. menu, inventory, etc.)
+
+			Localization: localization
+			LocalizationDescription: Adds language support to the game or to other mods.
+
+			ClientsideOnly: clientside-only
+			ClientsideOnlyDescription: The mod only modifies clients and does nothing on a server.
+
+			ServersideOnly: serverside-only
+			ServersideOnlyDescription: The mod only modifies servers and does nothing on a client.
+
+			Library: library
+			LibraryDescription: Utilities or features that other mods use. Does not modify the game's content.
+		}
+	}
+}
