@@ -98,15 +98,6 @@ namespace WebmilioCommons.Tinq
             return count;
         }
 
-
-        /// <summary>Executes a provided action on a sequence of elements. If the provided sequence implements <see cref="IList{T}"/>, the iteration is done through a <c>for</c>, otherwise it is done through a <c>foreach</c>.</summary>
-        /// <typeparam name="T">The type of <paramref name="source"/>.</typeparam>
-        /// <param name="source"></param>
-        /// <param name="action">The action to execute on each element of the sequence.</param>
-        [Obsolete("Moved to WebmiliosCommons.Extensions namespace.")]
-        public static void Do<T>(this IEnumerable<T> source, Action<T> action) => EnumerableExtensions.Do(source, action);
-
-
         /// <summary>Executes a provided action on a sequence of entities. The sequence is filtered by active before the action is executed.</summary>
         /// <typeparam name="T">The entity type of <paramref name="entities"/>.</typeparam>
         /// <param name="entities"></param>
@@ -175,6 +166,37 @@ namespace WebmilioCommons.Tinq
             foreach (T entity in entities)
                 if (Active(entity) && predicate(entity))
                     return entity;
+
+            return default;
+        }
+
+
+        public static T LastActive<T>(this IList<T> entities) where T : Entity => LastActive(entities, t => true);
+
+        public static T LastActive<T>(this IList<T> entities, Func<T, bool> predicate) where T : Entity
+        {
+            for (int i = entities.Count - 1; i >= 0; i--)
+            {
+                var entity = entities[i];
+
+                if (Active(entity) && predicate(entity))
+                    return entity;
+            }
+
+            throw new InvalidOperationException($"No element satisfies the condition in {nameof(predicate)}.");
+        }
+
+        public static T LastActiveOrDefault<T>(this IList<T> entities) where T : Entity => LastActiveOrDefault(entities, t => true);
+
+        public static T LastActiveOrDefault<T>(this IList<T> entities, Func<T, bool> predicate) where T : Entity
+        {
+            for (int i = entities.Count - 1; i >= 0; i--)
+            {
+                var entity = entities[i];
+
+                if (Active(entity) && predicate(entity))
+                    return entity;
+            }
 
             return default;
         }
