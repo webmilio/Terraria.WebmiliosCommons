@@ -305,6 +305,9 @@ namespace WebmilioCommons.Networking.Packets
 
             foreach (PropertyInfo propertyInfo in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
+                if (propertyInfo.SetMethod == null)
+                    continue;
+
                 if (mappingBehavior == AutoNetworkMappingBehavior.OptOut && propertyInfo.TryGetCustomAttribute<NotMappedAttribute>(out _) ||
                     mappingBehavior == AutoNetworkMappingBehavior.OptIn && propertyInfo.TryGetCustomAttribute<NetworkFieldAttribute>(out _))
                     continue;
