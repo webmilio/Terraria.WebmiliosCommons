@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using WebmilioCommons.Commons;
 using WebmilioCommons.Effects.Shaders;
 using WebmilioCommons.Effects.Shaders.Entities;
 
@@ -16,6 +18,40 @@ namespace WebmilioCommons.Extensions
             fullCircleRadians = MathHelper.ToRadians(FULL_CIRCLE_DEGREES),
             halfCircleRadians = fullCircleRadians / 2;
 
+
+        public static EntityType GetEntityType(this Entity entity)
+        {
+            switch (entity)
+            {
+                case NPC:
+                    return EntityType.NPC;
+                case Player:
+                    return EntityType.Player;
+                case Projectile:
+                    return EntityType.Projectile;
+                case Item:
+                    return EntityType.Item;
+            }
+
+            throw new InvalidOperationException("No corresponding Entity type found.");
+        }
+
+        public static Entity[] GetMainEntities(this EntityType entityType)
+        {
+            switch (entityType)
+            {
+                case EntityType.NPC:
+                    return Main.npc;
+                case EntityType.Player:
+                    return Main.player;
+                case EntityType.Projectile:
+                    return Main.projectile;
+                case EntityType.Item:
+                    return Main.item;
+            }
+
+            return null;
+        }
 
         public static Vector2 ScreenPosition(this Entity entity) => entity.Center - Main.screenPosition;
 
