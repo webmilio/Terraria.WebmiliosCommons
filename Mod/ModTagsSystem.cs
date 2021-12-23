@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Terraria;
 using Terraria.Localization;
 using Terraria.Social.Steam;
 using Terraria.ModLoader;
@@ -27,6 +28,11 @@ internal class ModTagsSystem : ModSystem
         {
             Mod.Logger.Warn("Failed to add supported mod workshop tags. Adding tags to mods via Webmilio's Commons is currently unsupported.", e);
         }
+    }
+
+    public override bool IsLoadingEnabled(Mod mod)
+    {
+        return !Main.dedServ;
     }
 
     public override void Load()

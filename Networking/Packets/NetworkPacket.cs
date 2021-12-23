@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
 using WebmilioCommons.Networking.Attributes;
 using WebmilioCommons.Networking.Serializing;
+using Exception = System.Exception;
 
 namespace WebmilioCommons.Networking.Packets
 {
@@ -232,8 +233,16 @@ namespace WebmilioCommons.Networking.Packets
                 confirmedFromWho = fromWho.Value,
                 confirmedToWho = toWho.Value;
 
+            try
+            {
+                PrePopulatePacket(modPacket, ref confirmedFromWho, ref confirmedToWho);
+            }
+            catch (Exception e)
+            {
+                WebmilioCommonsMod.Instance.Logger.Warn($"Tried pre-populating a packet of type {GetType().Name} but failed.", e);
+                return;
+            }
 
-            PrePopulatePacket(modPacket, ref confirmedFromWho, ref confirmedToWho);
             PopulatePacket(modPacket, confirmedFromWho, confirmedToWho);
 
 
