@@ -14,13 +14,6 @@ namespace WebmilioCommons.Worlds.Generation.Structures
         /// <param name="y">The Y coordinate of the origin tile.</param>
         public void Generate(int x, int y)
         {
-            if (x < 0)
-                throw new ArgumentOutOfRangeException(string.Format(COORDINATE_OOB_EXCEPTION, "X", Main.tile.GetLength(0)));
-
-            if (y < 0)
-                throw new ArgumentOutOfRangeException(string.Format(COORDINATE_OOB_EXCEPTION, "Y", Main.tile.GetLength(1)));
-
-
         }
 
 

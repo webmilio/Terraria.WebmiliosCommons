@@ -142,6 +142,9 @@ public class SimpleServices : IServiceContainer
     }
 
     // Removing Services
+    public void RemoveService<T>() => RemoveService(typeof(T));
+    public void RemoveService<T>(bool promote) => RemoveService(typeof(T), promote);
+
     public void RemoveService(Type serviceType) => RemoveService(serviceType, false);
 
     public void RemoveService(Type serviceType, bool promote)
@@ -179,6 +182,12 @@ public class SimpleServices : IServiceContainer
         return this;
     }
 
+    public SimpleServices RemoveProvider(IServiceContainer provider)
+    {
+        providers.Remove(provider);
+        return this;
+    }
+
     public SimpleServices AddContainer(IServiceContainer container)
     {
         if (containers.Contains(container))
@@ -188,6 +197,14 @@ public class SimpleServices : IServiceContainer
 
         containers.Add(container);
         return AddProvider(container);
+    }
+
+    public SimpleServices RemoveContainer(IServiceContainer container)
+    {
+        containers.Remove(container);
+        RemoveProvider(container);
+
+        return this;
     }
 
     public SimpleServices EnableModContentProvider()
@@ -310,4 +327,6 @@ public class SimpleServices : IServiceContainer
 
         return true;
     }
+
+    public static SimpleServices Common { get; } = new();
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WebmilioCommons.Networking;
@@ -11,6 +12,9 @@ namespace WebmilioCommons.Extensions
 {
     public static class PlayerExtensions
     {
+        public static ProjectileSource_Item AsItemProjectileSource(this Player player) => new(player, player.HeldItem);
+
+
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
         public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.Player);
 

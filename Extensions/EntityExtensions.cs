@@ -96,7 +96,7 @@ namespace WebmilioCommons.Extensions
 
             if (feetXRadius == 0)
             {
-                if (Main.tile[tileUnder.X, tileUnder.Y].type == 0)
+                if (Main.tile[tileUnder.X, tileUnder.Y].TileType == 0)
                     return false;
             }
 

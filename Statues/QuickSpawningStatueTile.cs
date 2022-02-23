@@ -66,8 +66,8 @@ namespace WebmilioCommons.Statues
         public override void HitWire(int wireHitX, int wireHitY)
         {
             int
-                x = wireHitX - Main.tile[wireHitX, wireHitY].frameX / 18,
-                y = wireHitY - Main.tile[wireHitX, wireHitY].frameY / 18;
+                x = wireHitX - Main.tile[wireHitX, wireHitY].TileFrameX / 18,
+                y = wireHitY - Main.tile[wireHitX, wireHitY].TileFrameY / 18;
 
 
             for (int i = 0; i <= 1; i++)

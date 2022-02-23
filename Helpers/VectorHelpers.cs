@@ -6,6 +6,9 @@ namespace WebmilioCommons.Helpers
 {
     public static class VectorHelpers
     {
+        public static Vector2 FromDirection(float angle, float magnitude) =>
+            new(magnitude * (float)Math.Cos(angle), magnitude * (float)Math.Sin(angle));
+
         /// <summary>Creates a point on a radius in a given direction. The point will always be on the circle, wether or not <paramref name="b">b</paramref> is inside or outside the radius.</summary>
         /// <param name="a"></param>
         /// <param name="b"></param>

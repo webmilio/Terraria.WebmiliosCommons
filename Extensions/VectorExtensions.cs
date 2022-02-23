@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
+using WebmilioCommons.Helpers;
 
 namespace WebmilioCommons.Extensions;
 
 public static class VectorExtensions
 {
+    public static float ToNormalRotation(this Vector2 vector)
+    {
+        return MathHelpers.ToNormalRadians(vector.ToRotation());
+    }
+
     public static Vector2 VelocityVectorToMouse(this Vector2 start, float speed = 1.0f) => VelocityVector(start, Main.MouseWorld, speed);
 
     public static Vector2 VelocityVectorToMouse(this Vector2 start, float speed, Vector2 endOffset) => VelocityVector(start, Main.MouseWorld, speed, endOffset);
