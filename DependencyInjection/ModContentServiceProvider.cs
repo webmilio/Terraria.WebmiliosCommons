@@ -7,7 +7,14 @@ namespace WebmilioCommons.DependencyInjection;
 
 internal class ModContentServiceProvider : IServiceProvider
 {
+    private readonly MethodInfo _method;
     protected readonly Dictionary<Type, object> instances = new();
+
+    public ModContentServiceProvider()
+    {
+        _method = typeof(ModContent).GetMethod(nameof(ModContent.GetInstance),
+            BindingFlags.Public | BindingFlags.Static);
+    }
 
     public object GetService(Type serviceType)
     {
@@ -16,8 +23,7 @@ internal class ModContentServiceProvider : IServiceProvider
             return instance;
         }
 
-        var genericGet = typeof(ModContent).GetMethod(nameof(ModContent.GetInstance), BindingFlags.Public | BindingFlags.Static)
-            .MakeGenericMethod(serviceType);
+        var genericGet = _method.MakeGenericMethod(serviceType);
 
         instance = genericGet.Invoke(null, null);
         instances.Add(serviceType, instance);

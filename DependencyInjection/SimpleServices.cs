@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Reflection;
 using Terraria;
+using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
 
 #pragma warning disable CS1591
@@ -21,7 +22,6 @@ public class SimpleServices : IServiceContainer
     public SimpleServices()
     {
         AddService(typeof(SimpleServices), this);
-        AddProvider(Main.instance.Services);
     }
 
     // Getting Services
@@ -213,6 +213,19 @@ public class SimpleServices : IServiceContainer
         return this;
     }
 
+    public SimpleServices MapServices(Mod mod) => MapServices(mod.Code);
+    
+    public SimpleServices MapServices(Assembly assembly)
+    {
+        foreach (var type in assembly.DefinedTypes)
+        {
+            if (type.GetCustomAttribute<ServiceAttribute>() != default)
+                AddSingleton(type);
+        }
+
+        return this;
+    }
+
     // Making
     public object Make(Type type)
     {
@@ -327,6 +340,4 @@ public class SimpleServices : IServiceContainer
 
         return true;
     }
-
-    public static SimpleServices Common { get; } = new();
 }
