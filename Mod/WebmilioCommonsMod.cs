@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WebmilioCommons.Commons;
+using WebmilioCommons.DependencyInjection;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Serializing;
 using WebmilioCommons.NPCs;
@@ -23,6 +24,9 @@ namespace WebmilioCommons
             
             BetterModNPC.Load();
             //BetterModWorld.Unload();
+
+            CommonServices = new();
+            CommonServices.AddProvider(Main.instance.Services);
         }
 
 
@@ -64,6 +68,7 @@ namespace WebmilioCommons
 
             UnloadHooks();
 
+            CommonServices = default;
             Instance = default;
         }
 
@@ -75,6 +80,8 @@ namespace WebmilioCommons
         {
             NetworkPacketLoader.Instance.HandlePacket(reader, whoAmI);
         }
+
+        public static SimpleServices CommonServices { get; private set; } = new();
 
         /// <summary>The current loaded instance of <see cref="WebmilioCommonsMod"/>.</summary>
         public static WebmilioCommonsMod Instance { get; private set; }
