@@ -11,7 +11,7 @@ using Terraria.UI;
 
 namespace WebmilioCommons.UI.Catalogs
 {
-    public class Catalog : StandardUIState
+    public class Catalog : UIState
     {
 #pragma warning disable 1591
         public const string
