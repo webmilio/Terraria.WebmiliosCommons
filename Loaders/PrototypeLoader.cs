@@ -95,9 +95,9 @@ public class PrototypeLoader<T> : Loader<T>
     protected virtual void PostAdd(Mod mod, T item, Type type) { }
 
 
-    public TSub New<TSub>(TSub prototype) where TSub : T
+    public T New(T prototype)
     {
-        TSub item = (TSub)Activator.CreateInstance(typeof(TSub));
+        T item = (T)Activator.CreateInstance(prototype.GetType());
 
         if (item is IModLinked atm)
             atm.Mod = ((IModLinked) prototype).Mod;
