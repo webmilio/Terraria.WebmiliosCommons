@@ -79,6 +79,17 @@ namespace WebmilioCommons.Extensions
             return value;
         }
 
+        public static Dictionary<TKey, TValue[]> ToArrayDictionary<TKey, TValue>(
+            this IDictionary<TKey, List<TValue>> dictionary)
+        {
+            Dictionary<TKey, TValue[]> converted = new();
+
+            foreach (var (key, value) in dictionary)
+                converted.Add(key, value.ToArray());
+
+            return converted;
+        }
+
         /// <summary>Executes a provided action on a sequence of elements. If the provided sequence implements <see cref="IList{T}"/>, the iteration is done through a <c>for</c>, otherwise it is done through a <c>foreach</c>.</summary>
         /// <typeparam name="T">The type of <paramref name="source"/>.</typeparam>
         /// <param name="source"></param>
