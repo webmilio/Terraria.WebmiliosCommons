@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -86,6 +87,17 @@ namespace WebmilioCommons.Extensions
 
             foreach (var (key, value) in dictionary)
                 converted.Add(key, value.ToArray());
+
+            return converted;
+        }
+
+        public static Dictionary<TKey, ReadOnlyCollection<TValue>> ToReadOnlyListDictionary<TKey, TValue>(
+            this IDictionary<TKey, List<TValue>> dictionary)
+        {
+            Dictionary<TKey, ReadOnlyCollection<TValue>> converted = new();
+
+            foreach (var (key, value) in dictionary)
+                converted.Add(key, new(value));
 
             return converted;
         }
