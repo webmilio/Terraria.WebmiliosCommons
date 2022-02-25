@@ -71,7 +71,7 @@ public class PrototypeLoader<T> : Loader<T>
         modByType.Add(type, mod);
         genericByType.Add(type, item);
 
-        if (item is IAssociatedToMod atm)
+        if (item is IModLinked atm)
             atm.Mod = mod;
 
         PostAdd(mod, item, type);
@@ -95,21 +95,31 @@ public class PrototypeLoader<T> : Loader<T>
     protected virtual void PostAdd(Mod mod, T item, Type type) { }
 
 
+    public TSub New<TSub>(TSub prototype) where TSub : T
+    {
+        TSub item = (TSub)Activator.CreateInstance(typeof(TSub));
+
+        if (item is IModLinked atm)
+            atm.Mod = ((IModLinked) prototype).Mod;
+
+        return item;
+    }
+
     /// <summary>Creates a new instance of the requested type.</summary>
     /// <param name="id">The auto-assigned Id of the generic instance.</param>
     /// <returns>The newly instantiated type.</returns>
     public T New(int id) => New(typeById[id]);
 
     /// <summary>Creates a new instance of the requested type.</summary>
-    /// <typeparam name="TType">The type of the generic instance to create; must be a child of <typeparamref name="T"/> and a non-abstract <c>class</c>.</typeparam>
+    /// <typeparam name="TSub">The type of the generic instance to create; must be a child of <typeparamref name="T"/> and a non-abstract <c>class</c>.</typeparam>
     /// <returns>The newly instantiated object.</returns>
-    public TType New<TType>() where TType : class, T => New(typeof(TType)) as TType;
+    public TSub New<TSub>() where TSub : class, T => New(typeof(TSub)) as TSub;
 
     public T New(Type type)
     {
         T item = (T)Activator.CreateInstance(type);
 
-        if (item is IAssociatedToMod atm)
+        if (item is IModLinked atm)
             atm.Mod = GetMod(type);
 
         return item;

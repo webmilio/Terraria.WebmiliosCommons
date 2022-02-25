@@ -2,12 +2,13 @@
 using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
+using WebmilioCommons.Commons;
 using WebmilioCommons.Extensions;
 using WebmilioCommons.Loaders;
 
 namespace WebmilioCommons.Effects.Shaders
 {
-    public abstract class ShaderEffect : IAssociatedToMod
+    public abstract class ShaderEffect : IModLinked
     {
         private const string VANILLA_MISC_BASE = "Images/Misc/";
 
