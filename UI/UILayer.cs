@@ -6,14 +6,23 @@ using Terraria.UI;
 
 namespace WebmilioCommons.UI;
 
-public class UILayer : GameInterfaceLayer
+public class UILayer<T> : UILayer where T : UIState
 {
-    public UILayer(UIState state, string name, InterfaceScaleType scaleType) : base(name, scaleType)
+    public UILayer(T state, string name, InterfaceScaleType scaleType) : base(name, scaleType)
     {
         State = state;
-        
+
         Interface = new();
         Interface.SetState(State);
+    }
+
+    public T State { get; }
+}
+
+public class UILayer : GameInterfaceLayer
+{
+    public UILayer(string name, InterfaceScaleType scaleType) : base(name, scaleType)
+    {
     }
 
     public virtual void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -46,8 +55,7 @@ public class UILayer : GameInterfaceLayer
         set => Interface.IsVisible = value;
     }
     
-    public UIState State { get; }
-    public UserInterface Interface { get; }
+    public UserInterface Interface { get; protected init; }
 
     public Func<List<GameInterfaceLayer>, int> IndexProvider { get; init; } = list => VanillaLayers.Cursor_Id;
     public Func<bool> ShouldUpdate => () => IsVisible;
