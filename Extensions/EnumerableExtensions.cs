@@ -19,6 +19,11 @@ namespace WebmilioCommons.Extensions
             Array.Fill(array, value, startIndex, count);
         }
 
+        public static void Fill<T>(this T[] array, Func<T> value)
+        {
+            Array.Fill(array, value());
+        }
+
         /// <summary>
         /// Transforms a given chance dictionary into an array compromised of X of each element.
         ///
