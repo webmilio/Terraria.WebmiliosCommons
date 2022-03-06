@@ -14,6 +14,7 @@ namespace WebmilioCommons.Extensions
     {
         public static EntitySource_Parent AsItemProjectileSource(this Player player) => new(player.HeldItem);
 
+        public static EntitySource_Parent AsEntitySource(this Player player) => new(player);
 
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
         public static bool IsLocalPlayer(this ModPlayer modPlayer) => IsLocalPlayer(modPlayer.Player);
