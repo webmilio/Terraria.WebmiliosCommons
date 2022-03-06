@@ -80,10 +80,13 @@ namespace WebmilioCommons.Extensions
 
         public static Tile GetTileOnCenter(this Entity entity) => Main.tile[(int) (entity.Center.X / 16), (int) (entity.Center.Y / 16)];
 
-
+        [Obsolete("Replaced with signature (this Player, IEntitySource, ModItem).", true)]
         public static void QuickSpawnItem(this Player player, ModItem item) => player.QuickSpawnItem(
             new EntitySource_Parent(player), new Item().SetDefaults(item));
 
+
+        public static void QuickSpawnItem(this Player player, IEntitySource source, ModItem item) => player.QuickSpawnItem(
+            source, new Item().SetDefaults(item));
 
         #region Packets
 
