@@ -12,7 +12,7 @@ namespace WebmilioCommons.Extensions
 {
     public static class PlayerExtensions
     {
-        public static ProjectileSource_Item AsItemProjectileSource(this Player player) => new(player, player.HeldItem);
+        public static EntitySource_Parent AsItemProjectileSource(this Player player) => new(player.HeldItem);
 
 
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
@@ -81,7 +81,8 @@ namespace WebmilioCommons.Extensions
         public static Tile GetTileOnCenter(this Entity entity) => Main.tile[(int) (entity.Center.X / 16), (int) (entity.Center.Y / 16)];
 
 
-        public static void QuickSpawnItem(this Player player, ModItem item) => player.QuickSpawnItem(new Item().SetDefaults(item));
+        public static void QuickSpawnItem(this Player player, ModItem item) => player.QuickSpawnItem(
+            new EntitySource_Parent(player), new Item().SetDefaults(item));
 
 
         #region Packets

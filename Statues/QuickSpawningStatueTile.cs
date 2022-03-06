@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using WebmilioCommons.Entities;
@@ -58,9 +59,8 @@ namespace WebmilioCommons.Statues
             return name;
         }
 
-
         public override void KillMultiTile(int i, int j, int frameX, int frameY) =>
-            Item.NewItem(i * 16, j * 16, 32, 48, DroppedItemType);
+            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 48, DroppedItemType);
 
 
         public override void HitWire(int wireHitX, int wireHitY)
@@ -122,7 +122,8 @@ namespace WebmilioCommons.Statues
             PostSpawnItem(Main.item[itemIndex]);
         }
 
-        public int DoSpawnItem(int wireHitX, int wireHitY, int spawnX, int spawnY, int itemType) => Item.NewItem(spawnX, spawnY, 0, 0, itemType, GetItemStack(itemType), false, GetItemPrefix(itemType), false);
+        public int DoSpawnItem(int wireHitX, int wireHitY, int spawnX, int spawnY, int itemType) => Item.NewItem(
+            Wiring.GetItemSource(wireHitX, wireHitY), spawnX, spawnY, 0, 0, itemType, GetItemStack(itemType), false, GetItemPrefix(itemType), false);
 
         public virtual void PostSpawnItem(Item item) { }
 
@@ -167,7 +168,7 @@ namespace WebmilioCommons.Statues
         /// <param name="npcType"></param>
         /// <returns>-1 to stop the execution of <see cref="SpawnNPC"/>; otherwise the NPC index in the world.</returns>
         public virtual int DoSpawnNPC(int wireHitX, int wireHitY, int spawnX, int spawnY, int npcType) => 
-            NPC.NewNPC(spawnX, spawnY, npcType);
+            NPC.NewNPC(Wiring.GetNPCSource(wireHitX, wireHitY), spawnX, spawnY, npcType);
 
         /// <summary>Called after <see cref="SpawnNPC"/>. Modifies the existing NPC by calling <see cref="GetNPCValue"/>, <see cref="GetNPCSlots"/> and <see cref="GetNPCSpawnedFromStatue"/>.</summary>
         /// <param name="npc"></param>
