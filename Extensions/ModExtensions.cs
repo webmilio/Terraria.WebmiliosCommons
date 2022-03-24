@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using WebmilioCommons.Helpers;
 using WebmilioCommons.Networking;
 using WebmilioCommons.Networking.Packets;
 
@@ -43,10 +44,10 @@ namespace WebmilioCommons.Extensions
 
             return filtered;
         }
-
+        
         public static LocalizedText GetText(this Mod mod, string key)
         {
-            return Language.GetText($"Mods.{mod.Name}.{key}");
+            return Language.GetText(LocalizedTextHelpers.GetModKey(mod, key));
         }
     }
 }

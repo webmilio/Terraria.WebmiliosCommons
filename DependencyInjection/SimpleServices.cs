@@ -116,7 +116,13 @@ public class SimpleServices : IServiceContainer
 
     public SimpleServices AddSingleton(Type serviceType)
     {
-        AddService(serviceType, (_, type) => Make(type));
+        AddService(serviceType, delegate(IServiceContainer _, Type type)
+        {
+            var service = Make(type);
+            instances.Add(type, service);
+
+            return service;
+        });
         return this;
     }
 
@@ -227,6 +233,8 @@ public class SimpleServices : IServiceContainer
     }
 
     // Making
+    public object Make<T>() => Make(typeof(T));
+
     public object Make(Type type)
     {
         var constructor = FindSuitableConstructor(type);
@@ -243,8 +251,6 @@ public class SimpleServices : IServiceContainer
         }
 
         var service = constructor.Invoke(services);
-        instances.Add(type, service);
-
         return service;
     }
 

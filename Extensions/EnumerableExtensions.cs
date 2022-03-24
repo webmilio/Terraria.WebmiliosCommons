@@ -199,5 +199,19 @@ namespace WebmilioCommons.Extensions
 
         // https://stackoverflow.com/questions/36147162/c-sharp-string-split-separate-string-by-uppercase
         public static string SplitEveryCapital(this string str) => String.Join(" ", Regex.Split(str, @"(?<!^)(?=[A-Z])"));
+
+        public static void Move<T>(this IList<T> list, int source, int destination)
+        {
+            var item = list[source];
+            int direction = source > destination ? -1 : 1;
+
+            for (int i = source; i != destination; i += direction)
+                list[i] = list[i + direction];
+
+            list[destination] = item;
+        }
+
+        public static void Move<T>(this IList<T> list, T element, int destination) =>
+            Move(list, list.IndexOf(element), destination);
     }
 }

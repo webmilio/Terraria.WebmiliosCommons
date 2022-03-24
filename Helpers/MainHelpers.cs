@@ -2,7 +2,7 @@
 
 namespace WebmilioCommons.Helpers;
 
-public static class MainHelper
+public static class MainHelpers
 {
     public const int Begin = 0,
         NightDuration = 32_400,

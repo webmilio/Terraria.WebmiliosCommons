@@ -21,13 +21,16 @@ namespace WebmilioCommons.Inputs
             DefaultBinding = defaultBinding;
         }
 
-        public static void RegisterKeybinds<T>(T mod) where T : Mod
-        {
-            RegisterKeybinds(mod, typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(p => p.PropertyType == typeof(ModKeybind)), (a, m, p) => a.RegisterKeybind(m, p));
+        public static void RegisterKeybinds<T>(T mod) where T : Mod => RegisterKeybinds(mod, mod);
+        public static void RegisterKeybinds(IModType instance) => RegisterKeybinds(instance, instance.Mod);
 
-            RegisterKeybinds(mod, typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public)
-                .Where(f => f.FieldType == typeof(ModKeybind)), (a, m, f) => a.RegisterKeybind(m, f));
+        public static void RegisterKeybinds(object instance, Mod mod)
+        {
+            RegisterKeybinds(mod, instance.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => p.PropertyType == typeof(ModKeybind)), (a, m, p) => a.RegisterKeybind(m, instance, p));
+
+            RegisterKeybinds(mod, instance.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public)
+                .Where(f => f.FieldType == typeof(ModKeybind)), (a, m, f) => a.RegisterKeybind(m, instance, f));
         }
 
         private static void RegisterKeybinds<T>(Mod mod, IEnumerable<T> members, Action<KeybindAttribute, Mod, T> registration) where T : MemberInfo
@@ -41,13 +44,13 @@ namespace WebmilioCommons.Inputs
             }
         }
 
-        public void RegisterKeybind(Mod mod, FieldInfo field) => RegisterKeybind(mod, field.SetValue);
-        public void RegisterKeybind(Mod mod, PropertyInfo property) => RegisterKeybind(mod, property.SetValue);
+        public void RegisterKeybind(Mod mod, object owner, FieldInfo field) => RegisterKeybind(mod, owner, field.SetValue);
+        public void RegisterKeybind(Mod mod, object owner, PropertyInfo property) => RegisterKeybind(mod, owner, property.SetValue);
 
-        public void RegisterKeybind(Mod mod, Action<Mod, ModKeybind> setter)
+        public void RegisterKeybind(Mod mod, object owner, Action<object, ModKeybind> setter)
         {
             var keybind = KeybindLoader.RegisterKeybind(mod, Name, DefaultBinding);
-            setter(mod, keybind);
+            setter(owner, keybind);
         }
 
         public string Name { get; set; }

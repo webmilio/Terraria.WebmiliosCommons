@@ -17,7 +17,7 @@ namespace WebmilioCommons.Inputs
                     if (!proxies[i].Member.TryGetCustomAttribute(out KeybindAttribute keybind))
                         continue;
 
-                    keybind.RegisterKeybind(mod, proxies[i].Set);
+                    keybind.RegisterKeybind(mod, mod, proxies[i].Set);
                 }
             });
         }

@@ -11,18 +11,18 @@ public class UIButton : UIPanel
 
     public UIButton(string text, float textScale = 1, bool large = false)
     {
-        UIText label = new(text, textScale, large);
-        SetDefaults(label);
+        Label = new(text, textScale, large);
+        SetDefaults(Label);
 
-        Append(label);
+        Append(Label);
     }
 
     public UIButton(LocalizedText text, float textScale = 1, bool large = false)
     {
-        UIText label = new(text, textScale, large);
-        SetDefaults(label);
+        Label = new(text, textScale, large);
+        SetDefaults(Label);
 
-        Append(label);
+        Append(Label);
     }
 
     private static void SetDefaults(UIElement label)
@@ -75,4 +75,6 @@ public class UIButton : UIPanel
     {
         return new Color(color.R + shift, color.G + shift, color.B + shift);
     }
+
+    public UIText Label { get; }
 }

@@ -30,6 +30,18 @@ namespace WebmilioCommons.Extensions
             tag.Add(key, container);
         }
 
+        public static TagCompound AddFluid(this TagCompound tag, string key, object value)
+        {
+            tag.Add(key, value);
+            return tag;
+        }
+
+        public static TagCompound AddFluid(this TagCompound tag, (string key, object value) data)
+        {
+            tag.Add(data.key, data.value);
+            return tag;
+        }
+
         /// <summary></summary>
         /// <typeparam name="K"></typeparam>
         /// <typeparam name="V"></typeparam>
