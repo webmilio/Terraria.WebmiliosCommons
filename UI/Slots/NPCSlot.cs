@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.UI.Elements;
+﻿using Terraria;
+using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
 namespace WebmilioCommons.UI.Slots;
@@ -37,4 +38,5 @@ public class NPCSlot : UIPanel
     }
 
     public NPCDisplay Display { get; }
+    public NPC NPC => Display.NPC;
 }

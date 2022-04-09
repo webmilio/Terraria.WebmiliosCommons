@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
+using WebmilioCommons.Commons;
 
 namespace WebmilioCommons.UI;
 
-public class UIButton : UIPanel
+public class UIButton : UIPanel, IHaveTags
 {
     private Color? _originalColor;
 
@@ -33,8 +36,37 @@ public class UIButton : UIPanel
         label.IgnoresMouseInteraction = true;
     }
 
+    protected override void DrawSelf(SpriteBatch spriteBatch)
+    {
+        if (_lastEnabled != Enabled)
+        {
+            if (_lastEnabled && !Enabled)
+            {
+                BackgroundColor = ShiftColor(BackgroundColor, -50);
+            }
+            else if (!_lastEnabled && Enabled)
+            {
+                BackgroundColor = ShiftColor(BackgroundColor, 50);
+            }
+        }
+
+        _lastEnabled = Enabled;
+        base.DrawSelf(spriteBatch);
+    }
+
+    public override void Click(UIMouseEvent evt)
+    {
+        if (!Enabled)
+            return;
+
+        base.Click(evt);
+    }
+
     public override void MouseOver(UIMouseEvent evt)
     {
+        if (!Enabled)
+            return;
+
         if (_originalColor == null)
         {
             _originalColor = BackgroundColor;
@@ -46,6 +78,9 @@ public class UIButton : UIPanel
 
     public override void MouseOut(UIMouseEvent evt)
     {
+        if (!Enabled)
+            return;
+
         if (_originalColor != null)
         {
             BackgroundColor = _originalColor.Value;
@@ -57,12 +92,18 @@ public class UIButton : UIPanel
 
     public override void MouseDown(UIMouseEvent evt)
     {
+        if (!Enabled)
+            return;
+
         BackgroundColor = ShiftColor(BackgroundColor, -50);
         base.MouseDown(evt);
     }
 
     public override void MouseUp(UIMouseEvent evt)
     {
+        if (!Enabled)
+            return;
+
         if (_originalColor != null)
         {
             BackgroundColor = ShiftColor(BackgroundColor, 50);
@@ -71,10 +112,15 @@ public class UIButton : UIPanel
         base.MouseUp(evt);
     }
 
-    private static Color ShiftColor(Color color, sbyte shift)
+    protected static Color ShiftColor(Color color, sbyte shift)
     {
         return new Color(color.R + shift, color.G + shift, color.B + shift);
     }
 
+    private bool _lastEnabled = true;
+    public bool Enabled { get; set; } = true;
+
     public UIText Label { get; }
+
+    public Dictionary<string, object> Tags { get; init; }
 }
