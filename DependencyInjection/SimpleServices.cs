@@ -233,7 +233,7 @@ public class SimpleServices : IServiceContainer
     }
 
     // Making
-    public object Make<T>() => Make(typeof(T));
+    public T Make<T>() => (T) Make(typeof(T));
 
     public object Make(Type type)
     {
