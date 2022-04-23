@@ -19,7 +19,7 @@ public static class AssetExtensions
     private static Asset<T> _GetAndLoad<T>(this Asset<T> asset) where T : class
     {
         if (!asset.IsLoaded && asset.State != AssetState.Loading)
-            Main.Assets.Request<T>(asset.Name, AssetRequestMode.ImmediateLoad);
+            return Main.Assets.Request<T>(asset.Name, AssetRequestMode.ImmediateLoad);
 
         return asset;
     }
