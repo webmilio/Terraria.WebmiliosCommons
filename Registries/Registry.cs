@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Registries;
 
@@ -13,7 +14,7 @@ public class Registry<T>
     }
 
     public virtual void Add(T item) => items.Add(item);
-    public virtual void AddRange(IEnumerable<T> source) => items.AddRange(source);
+    public virtual void AddRange(IEnumerable<T> source) => source.Do(Add);
 
     public ReadOnlyCollection<T> Items { get; }
 }
