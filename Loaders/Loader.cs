@@ -24,7 +24,7 @@ public abstract class Loader<T>
     }
 
     /// <summary>Finds and loads all instances of the specified type.</summary>
-    public void Load()
+    public virtual void Load()
     {
         PreLoad();
 
