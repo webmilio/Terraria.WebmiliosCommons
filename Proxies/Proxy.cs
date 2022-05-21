@@ -18,7 +18,7 @@ public abstract class Proxy<T> : ModSystem
         }
         catch
         {
-            Mod.Logger.ErrorFormat($"Error while fetching the internal list for {typeof(T).Name}. None of the additional player hooks will be triggered.");
+            Mod.Logger.ErrorFormat($"Error while fetching the internal list for {typeof(T).Name}. None of the additional hooks will be triggered.");
             Items = new List<T>();
         }
     }
