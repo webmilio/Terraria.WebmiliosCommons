@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Terraria.ModLoader;
+using MS = Terraria.ModLoader.ModSystem;
 
 namespace WebmilioCommons.Proxies;
 
-public class ModSystemsProxy : Proxy<ModSystem>
+public class ModSystemsProxy : Proxy<MS>
 {
-    protected override IList<ModSystem> GetSource()
+    protected override IList<MS> GetSource()
     {
-        return (IList<ModSystem>) typeof(SystemLoader).GetField("Systems", NormalFieldFlags).GetValue(null);
+        return (IList<MS>) typeof(SystemLoader).GetField("Systems", NormalFieldFlags).GetValue(null);
     }
 }
