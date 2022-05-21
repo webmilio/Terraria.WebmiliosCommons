@@ -5,7 +5,7 @@ using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Tiles
 {
-    public abstract class BetterGlobalTile : GlobalTile
+    public abstract class GlobalTile : Terraria.ModLoader.GlobalTile
     {
         public sealed override bool CanKillTile(int i, int j, int type, ref bool blockDamaged)
         {
