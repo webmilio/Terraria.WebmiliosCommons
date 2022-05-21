@@ -2,10 +2,11 @@
 using System.Reflection;
 using Terraria;
 using Terraria.ModLoader;
+using WebmilioCommons.Helpers;
 
-namespace WebmilioCommons.Helpers;
+namespace WebmilioCommons.Proxies;
 
-public class GlobalItemsProxy : ProxyHelper<GlobalItem, Item>
+public class GlobalItemsProxy : Proxy<GlobalItem, Item>
 {
     protected override IList<GlobalItem> GetSource()
     {

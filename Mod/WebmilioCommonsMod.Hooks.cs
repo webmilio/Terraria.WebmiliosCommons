@@ -1,6 +1,7 @@
 ﻿using On.Terraria;
 using WebmilioCommons.Helpers;
 using WebmilioCommons.Items;
+using WebmilioCommons.Proxies;
 using Recipe = Terraria.Recipe;
 
 namespace WebmilioCommons;

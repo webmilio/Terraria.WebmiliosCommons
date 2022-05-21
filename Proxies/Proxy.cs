@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
 
-namespace WebmilioCommons.Helpers;
+namespace WebmilioCommons.Proxies;
 
-public abstract class ProxyHelper<TGlobal, TBound> : ModSystem
+public abstract class Proxy<TGlobal, TBound> : ModSystem
 {
     public override void Load()
     {

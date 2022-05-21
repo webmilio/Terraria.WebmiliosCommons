@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using Terraria;
 using Terraria.ModLoader;
-using WebmilioCommons.Extensions;
 using WebmilioCommons.Players;
 using WebmilioCommons.Tinq;
 
-namespace WebmilioCommons.Helpers;
+namespace WebmilioCommons.Proxies;
 
-public class PlayersProxy : ProxyHelper<ModPlayer, Player>
+public class PlayersProxy : Proxy<ModPlayer, Player>
 {
     protected override IList<ModPlayer> GetSource()
     { 
