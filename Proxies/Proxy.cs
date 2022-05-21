@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.Proxies;
 
-public abstract class Proxy<TGlobal, TBound> : ModSystem
+public abstract class Proxy<T> : ModSystem
 {
+    protected const BindingFlags NormalFieldFlags = BindingFlags.NonPublic | BindingFlags.Static;
+
     public override void Load()
     {
         try
@@ -15,12 +18,12 @@ public abstract class Proxy<TGlobal, TBound> : ModSystem
         }
         catch
         {
-            Mod.Logger.ErrorFormat($"Error while fetching the internal list for {typeof(TGlobal).Name}. None of the additional player hooks will be triggered.");
-            Items = new List<TGlobal>();
+            Mod.Logger.ErrorFormat($"Error while fetching the internal list for {typeof(T).Name}. None of the additional player hooks will be triggered.");
+            Items = new List<T>();
         }
     }
 
-    protected abstract IList<TGlobal> GetSource();
+    protected abstract IList<T> GetSource();
 
     public override void Unload()
     {
@@ -34,9 +37,9 @@ public abstract class Proxy<TGlobal, TBound> : ModSystem
     {
         List<V> items = new(Items.Count);
 
-        Items.Do(delegate (TGlobal player)
+        Items.Do(delegate (T entry)
         {
-            if (player is V v)
+            if (entry is V v)
                 items.Add(v);
         });
 
@@ -44,7 +47,7 @@ public abstract class Proxy<TGlobal, TBound> : ModSystem
     }
 
     public static bool All<V>(Predicate<V> predicate) => All(item => item is not V v || predicate(v));
-    public static bool All(Predicate<TGlobal> predicate)
+    public static bool All(Predicate<T> predicate)
     {
         for (int i = 0; i < Items.Count; i++)
         {
@@ -56,7 +59,7 @@ public abstract class Proxy<TGlobal, TBound> : ModSystem
     }
 
     public static bool Any<V>(Predicate<V> predicate) => Any(item => item is V v && predicate(v));
-    public static bool Any(Predicate<TGlobal> predicate)
+    public static bool Any(Predicate<T> predicate)
     {
         for (int i = 0; i < Items.Count; i++)
         {
@@ -67,25 +70,25 @@ public abstract class Proxy<TGlobal, TBound> : ModSystem
         return false;
     }
 
-    public static void Do(Action<TGlobal> action) => Items.Do(action);
+    public static void Do(Action<T> action) => Items.Do(action);
     public static void Do<V>(Action<V> action)
     {
-        Items.Do(delegate (TGlobal player)
+        Items.Do(delegate (T entry)
         {
-            if (player is V v)
+            if (entry is V v)
                 action(v);
         });
     }
 
-    public void Add(TGlobal item)
+    public void Add(T item)
     {
         Items.Add(item);
     }
 
-    public bool Remove(TGlobal item)
+    public bool Remove(T item)
     {
         return Items.Remove(item);
     }
 
-    protected static IList<TGlobal> Items { get; set; }
+    protected static IList<T> Items { get; set; }
 }

@@ -8,11 +8,11 @@ using WebmilioCommons.Tinq;
 
 namespace WebmilioCommons.Proxies;
 
-public class PlayersProxy : Proxy<ModPlayer, Player>
+public class PlayersProxy : Proxy<ModPlayer>
 {
     protected override IList<ModPlayer> GetSource()
     { 
-        return (IList<ModPlayer>)typeof(PlayerLoader).GetField("players", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+        return (IList<ModPlayer>)typeof(PlayerLoader).GetField("players", NormalFieldFlags).GetValue(null);
     }
 
     public static void ForAllPlayers<V>(Action<V> action) where V : ModPlayer
