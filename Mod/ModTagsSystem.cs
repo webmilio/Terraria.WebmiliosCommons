@@ -10,7 +10,7 @@ using Terraria.Social.Base;
 using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons;
-
+/*
 internal class ModTagsSystem : ModSystem
 {
     private const string AddModTagName = "AddModTag";
@@ -83,4 +83,4 @@ internal class ModTagsSystem : ModSystem
     {
         get => SocialAPI.Workshop.SupportedTags;
     }
-}
+}*/
