@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using WebmilioCommons.Entities;
@@ -16,8 +17,8 @@ namespace WebmilioCommons.Statues
     public abstract class QuickSpawningStatueTile : StandardTile
     {
         public const int
-            NPC_SPAWN_DELAY = 30,
-            ITEM_SPAWN_DELAY = 60;
+            NPCSpawnDelay = 30,
+            ItemSpawnDelay = 60;
 
 
         protected QuickSpawningStatueTile(int droppedItemType) : this(droppedItemType, TileObjectData.Style2xX)
@@ -46,7 +47,7 @@ namespace WebmilioCommons.Statues
         }
 
 
-        public override bool HasSmartInteract()
+        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
         {
             return true;
         }
@@ -242,7 +243,7 @@ namespace WebmilioCommons.Statues
 
 
         /// <summary>The cooldown between each spawn for a given statue.</summary>
-        public virtual int SpawnDelay { get; } = NPC_SPAWN_DELAY;
+        public virtual int SpawnDelay { get; } = NPCSpawnDelay;
         
 
         /// <summary>Used in checks for max statue-spawned entities and default random implementation.</summary>
