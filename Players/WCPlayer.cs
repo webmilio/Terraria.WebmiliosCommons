@@ -15,11 +15,11 @@ using WebmilioCommons.NPCs;
 namespace WebmilioCommons.Players
 {
     [AutoNetworkMapping]
-    public sealed partial class WCPlayer : ModPlayer
+    public sealed partial class WCPlayer : Terraria.ModLoader.ModPlayer
     {
         public static WCPlayer Get() => Get(Main.LocalPlayer);
         public static WCPlayer Get(Player player) => player.GetModPlayer<WCPlayer>();
-        public static WCPlayer Get(ModPlayer modPlayer) => Get(modPlayer.Player);
+        public static WCPlayer Get(Terraria.ModLoader.ModPlayer modPlayer) => Get(modPlayer.Player);
 
 
         #region Hooks

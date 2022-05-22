@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebmilioCommons.Extensions;
 using WebmilioCommons.Players;
+using ModPlayer = WebmilioCommons.Players.ModPlayer;
 
 namespace WebmilioCommons.Saving;
 
@@ -19,16 +20,16 @@ public class AutoSaveHandler : ModSystem
         _playerProxies = InitializePlayers();
     }
 
-    public void Save(BetterModPlayer player, TagCompound tag) => ForPlayer(player, proxy => proxy.Serialize(player, tag));
-    public void Load(BetterModPlayer player, TagCompound tag) => ForPlayer(player, proxy => proxy.Deserialize(player, tag));
+    public void Save(ModPlayer player, TagCompound tag) => ForPlayer(player, proxy => proxy.Serialize(player, tag));
+    public void Load(ModPlayer player, TagCompound tag) => ForPlayer(player, proxy => proxy.Deserialize(player, tag));
 
-    private void ForPlayer(BetterModPlayer player, Action<SaveMemberProxy> action) => _playerProxies[player.GetType()].Do(action);
+    private void ForPlayer(ModPlayer player, Action<SaveMemberProxy> action) => _playerProxies[player.GetType()].Do(action);
 
     private static Dictionary<Type, SaveMemberProxy[]> InitializePlayers()
     {
         Dictionary<Type, SaveMemberProxy[]> proxies = new();
 
-        ModStore.ForTypes<BetterModPlayer>(delegate (Mod mod, TypeInfo type)
+        ModStore.ForTypes<ModPlayer>(delegate (Mod mod, TypeInfo type)
         {
             var saveProxies = GetProxies(type);
             proxies.Add(type, saveProxies);

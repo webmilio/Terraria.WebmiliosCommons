@@ -4,17 +4,18 @@ using Terraria;
 using Terraria.ModLoader;
 using WebmilioCommons.Players;
 using WebmilioCommons.Tinq;
+using ModPlayer = WebmilioCommons.Players.ModPlayer;
 
 namespace WebmilioCommons.Proxies;
 
-public class PlayersProxy : Proxy<ModPlayer>
+public class PlayersProxy : Proxy<Terraria.ModLoader.ModPlayer>
 {
-    protected override IList<ModPlayer> GetSource()
+    protected override IList<Terraria.ModLoader.ModPlayer> GetSource()
     { 
-        return (IList<ModPlayer>)typeof(PlayerLoader).GetField("players", NormalFieldFlags).GetValue(null);
+        return (IList<Terraria.ModLoader.ModPlayer>)typeof(PlayerLoader).GetField("players", NormalFieldFlags).GetValue(null);
     }
 
-    public static void ForAllPlayers<V>(Action<V> action) where V : ModPlayer
+    public static void ForAllPlayers<V>(Action<V> action) where V : Terraria.ModLoader.ModPlayer
     {
         ForAllPlayers<V>(player => player.GetModPlayer<V>(), action);
     }
@@ -28,6 +29,6 @@ public class PlayersProxy : Proxy<ModPlayer>
         });
     }
 
-    public static bool PreCraftItem(Recipe recipe) => All<BetterModPlayer>(player => player.PreCraftItem(recipe));
-    public static void CraftItem(Recipe recipe, Item item) => Do<BetterModPlayer>(player => player.CraftItem(recipe, item));
+    public static bool PreCraftItem(Recipe recipe) => All<ModPlayer>(player => player.PreCraftItem(recipe));
+    public static void CraftItem(Recipe recipe, Item item) => Do<ModPlayer>(player => player.CraftItem(recipe, item));
 }

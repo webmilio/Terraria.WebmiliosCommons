@@ -1,21 +1,19 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using WebmilioCommons.Commons;
-using WebmilioCommons.Effects.Shaders;
-using WebmilioCommons.Effects.Shaders.Entities;
 
 namespace WebmilioCommons.Extensions
 {
     public static class EntityExtensions
     {
         public const int
-            FULL_CIRCLE_DEGREES = 360,
-            HALF_CIRCLE_DEGREES = FULL_CIRCLE_DEGREES / 2;
+            FullCircleDegrees = 360,
+            HalfCircleDegrees = FullCircleDegrees / 2;
 
         public static readonly float
-            fullCircleRadians = MathHelper.ToRadians(FULL_CIRCLE_DEGREES),
+            fullCircleRadians = MathHelper.ToRadians(FullCircleDegrees),
             halfCircleRadians = fullCircleRadians / 2;
 
 
@@ -54,17 +52,6 @@ namespace WebmilioCommons.Extensions
         }
 
         public static Vector2 ScreenPosition(this Entity entity) => entity.Center - Main.screenPosition;
-
-
-        public static void Shade<T>(this Entity entity) where T : EntityMiscShaderEffect => Shade<T>(entity, Main.spriteBatch);
-
-        public static void Shade<T>(this Entity entity, SpriteBatch spriteBatch) where T : EntityMiscShaderEffect
-        {
-            var shaderEffect = ShaderEffectsLoader.Instance.Get<T>();
-
-            shaderEffect.Apply(spriteBatch, entity);
-        }
-
 
         public static float VelocityRotation(this Entity entity, bool degrees = false)
         {
