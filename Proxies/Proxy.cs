@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using MonoMod.RuntimeDetour;
 using Terraria.ModLoader;
 using WebmilioCommons.Extensions;
+using GlobalTile = WebmilioCommons.Tiles.GlobalTile;
 
 namespace WebmilioCommons.Proxies;
 
@@ -14,6 +16,7 @@ public abstract class Proxy<T> : ModSystem
     {
         try
         {
+            Mod.Logger.Info($"Initializing Proxy for type {typeof(T).Name}.");
             Items = GetSource();
         }
         catch
@@ -23,12 +26,12 @@ public abstract class Proxy<T> : ModSystem
         }
     }
 
-    protected abstract IList<T> GetSource();
-
     public override void Unload()
     {
         Items = null;
     }
+
+    protected abstract IList<T> GetSource();
 
     /// <summary>Not optimal for actions called often, see <see cref="Do"/></summary>
     /// <typeparam name="V"></typeparam>
@@ -91,4 +94,33 @@ public abstract class Proxy<T> : ModSystem
     }
 
     protected static IList<T> Items { get; set; }
+}
+
+public abstract class Proxy<TOriginal, TTransformed> : Proxy<TOriginal>
+{
+    private const BindingFlags HooksBindingFlags = BindingFlags.NonPublic | BindingFlags.Static;
+
+    private MethodInfo _hookMethod, _freeMethod;
+
+    public override void Load()
+    {
+        base.Load();
+
+        _hookMethod = typeof(TTransformed).GetMethod(nameof(GlobalTile.Hook), HooksBindingFlags);
+
+        if (_hookMethod != null)
+            _freeMethod = typeof(TTransformed).GetMethod(nameof(GlobalTile.Free), HooksBindingFlags);
+
+        if (_freeMethod == null)
+            _hookMethod = null;
+
+        _hookMethod?.Invoke(null, null);
+    }
+
+    public override void Unload()
+    {
+        base.Unload();
+
+        _freeMethod?.Invoke(null, null);
+    }
 }
