@@ -4,6 +4,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.UI;
 
 namespace WebmilioCommons.UI.Catalogs
@@ -107,7 +108,7 @@ namespace WebmilioCommons.UI.Catalogs
         public override void MouseOver(UIMouseEvent evt)
         {
             _fakeHover = true;
-            SoundEngine.PlaySound(12);
+            SoundEngine.PlaySound(SoundID.MenuTick);
 
             RemoveChild(borders);
             RemoveChild(bordersOverlay);

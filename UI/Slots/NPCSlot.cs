@@ -4,7 +4,7 @@ using Terraria.UI;
 
 namespace WebmilioCommons.UI.Slots;
 
-public class NPCSlot : UIPanel
+public class NPCSlot : Terraria.GameContent.UI.Elements.UIPanel
 {
     public NPCSlot()
     {

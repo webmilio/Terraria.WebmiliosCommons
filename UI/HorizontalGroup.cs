@@ -5,7 +5,7 @@ using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.UI;
 
-public class HorizontalGroup : UIPanel
+public class HorizontalGroup : Terraria.GameContent.UI.Elements.UIPanel
 {
     public HorizontalGroup AddElement(UIElement element)
     {

@@ -4,7 +4,7 @@ using Terraria.UI;
 
 namespace WebmilioCommons.UI
 {
-    public class UIDebugPanel : UIPanel
+    public class UIDebugPanel : Terraria.GameContent.UI.Elements.UIPanel
     {
         public UIDebugPanel()
         {

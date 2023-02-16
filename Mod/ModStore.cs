@@ -10,11 +10,11 @@ namespace WebmilioCommons
     {
         private static Mod[] _mods;
 
-        public static List<TypeInfo> OfType<T>()
+        public static List<ModObject<TypeInfo>> OfType<T>()
         {
-            List<TypeInfo> types = new();
+            List<ModObject<TypeInfo>> types = new();
 
-            ForTypes<T>((m, t) => types.Add(t));
+            ForTypes<T>((m, t) => types.Add(new(m, t)));
             return types;
         }
 

@@ -4,7 +4,6 @@ using System.Reflection;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebmilioCommons.Extensions;
-using WebmilioCommons.Players;
 using ModPlayer = WebmilioCommons.Players.ModPlayer;
 
 namespace WebmilioCommons.Saving;
@@ -38,7 +37,7 @@ public class AutoSaveHandler : ModSystem
         return proxies;
     }
 
-    private static void InitializeSerializers()
+    private void InitializeSerializers()
     {
         MethodInfo addSerializer = typeof(TagSerializer).GetMethod("AddSerializer", BindingFlags.Static | BindingFlags.NonPublic);
 

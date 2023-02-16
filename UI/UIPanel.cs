@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
 namespace WebmilioCommons.UI
 {
-    public class DragableUIPanel : UIPanel
+    public class DragableUIPanel : Terraria.GameContent.UI.Elements.UIPanel
     {
         // Stores the offset from the top left of the UIPanel while dragging.
         private Vector2 offset;
@@ -14,13 +15,14 @@ namespace WebmilioCommons.UI
         public override void MouseDown(UIMouseEvent evt)
         {
             base.MouseDown(evt);
-            DragStart(evt);
+            
+            if (Dragable) DragStart(evt);
         }
 
         public override void MouseUp(UIMouseEvent evt)
         {
             base.MouseUp(evt);
-            DragEnd(evt);
+            if (Dragable) DragEnd(evt);
         }
 
         private void DragStart(UIMouseEvent evt)
@@ -40,15 +42,20 @@ namespace WebmilioCommons.UI
             Recalculate();
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Update(gameTime); // don't remove.
+            base.Draw(spriteBatch);
 
             // Checking ContainsPoint and then setting mouseInterface to true is very common. This causes clicks on this UIElement to not cause the player to use current items. 
-            if (ContainsPoint(Main.MouseScreen))
+            if (SetsMouseInterface && ContainsPoint(Main.MouseScreen))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime); // don't remove.
 
             if (dragging)
             {
@@ -69,5 +76,9 @@ namespace WebmilioCommons.UI
                 Recalculate();
             }
         }
+
+        public bool SetsMouseInterface { get; set; } = true;
+
+        public bool Dragable { get; set; }
     }
 }

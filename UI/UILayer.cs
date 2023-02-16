@@ -57,8 +57,8 @@ public class UILayer : GameInterfaceLayer
     
     public UserInterface Interface { get; protected init; }
 
-    public Func<List<GameInterfaceLayer>, int> IndexProvider { get; init; } = list => VanillaLayers.Cursor_Id;
-    public Func<bool> ShouldUpdate => () => IsVisible;
+    public virtual Func<List<GameInterfaceLayer>, int> IndexProvider { get; init; } = _ => VanillaLayers.Cursor_Id;
+    public virtual Func<bool> ShouldUpdate => () => IsVisible;
 
     public static class VanillaLayers
     {

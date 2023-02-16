@@ -35,8 +35,9 @@ public class SimpleServices : IServiceContainer
             {
                 return service;
             }
-
+            
             service = creators[mappedType](this, mappedType);
+
             return service;
         }
 

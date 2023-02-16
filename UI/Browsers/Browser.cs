@@ -7,7 +7,7 @@ using WebmilioCommons.Extensions;
 
 namespace WebmilioCommons.UI.Browsers;
 
-public class Browser<TElement, TValue> : UIPanel where TElement : UIElement
+public class Browser<TElement, TValue> : Terraria.GameContent.UI.Elements.UIPanel where TElement : UIElement
 {
     private readonly IList<TElement> _elements;
     private readonly Func<TElement, TValue> _selector;

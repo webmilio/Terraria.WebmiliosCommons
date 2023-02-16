@@ -5,7 +5,7 @@ using Terraria.UI;
 
 namespace WebmilioCommons.UI.Catalogs
 {
-    public class CatalogEntryInfoPanel : UIPanel
+    public class CatalogEntryInfoPanel : Terraria.GameContent.UI.Elements.UIPanel
     {
         protected UIList list;
         protected UIScrollbar scrollbar;
@@ -51,7 +51,7 @@ namespace WebmilioCommons.UI.Catalogs
 
         private void AppendBorder()
         {
-            UIPanel panel = new()
+            Terraria.GameContent.UI.Elements.UIPanel panel = new()
             {
                 Width = new StyleDimension(0f, 1f),
                 Height = new StyleDimension(0f, 1f),

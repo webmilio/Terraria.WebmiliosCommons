@@ -44,7 +44,12 @@ public static class VectorExtensions
             a2 = new[] { points[0], position, points[2] }.TriangleArea(),
             a3 = new[] { points[0], points[1], position }.TriangleArea();
 
-        return Math.Abs(triangleArea - (a1 + a2 + a3)) < 0.1f;
+        return IsInTriangle(triangleArea, a1, a2, a3);
+    }
+
+    public static bool IsInTriangle(float area, params float[] slices)
+    {
+        return Math.Abs(area - (slices[0] + slices[1] + slices[2])) < 0.1f;
     }
 
     public static Vector2 ToTileDrawPosition(this Vector2 position, int xOffset = 12, int yOffset = 12)

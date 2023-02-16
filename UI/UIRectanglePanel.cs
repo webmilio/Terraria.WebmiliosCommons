@@ -4,7 +4,7 @@ using Terraria.GameContent.UI.Elements;
 
 namespace WebmilioCommons.UI;
 
-public class UIRectanglePanel : UIPanel
+public class UIRectanglePanel : Terraria.GameContent.UI.Elements.UIPanel
 {
     protected override void DrawSelf(SpriteBatch spriteBatch)
     {

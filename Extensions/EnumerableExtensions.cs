@@ -76,6 +76,15 @@ namespace WebmilioCommons.Extensions
             return default;
         }
 
+        public static TValue AddOrGet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> provider)
+        {
+            if (dictionary.TryGetValue(key, out var value))
+                return value;
+
+            dictionary.Add(key, value = provider(key));
+            return value;
+        }
+
         public static TValue AddOrGet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, out TValue value, Func<TValue> provider)
         {
             if (dictionary.TryGetValue(key, out value))

@@ -63,7 +63,7 @@ namespace WebmilioCommons.UI.Catalogs
                 minWidth = 600 + extraSize,
                 maxWidth = 800 + extraSize;
 
-            UIPanel mainPanel;
+            Terraria.GameContent.UI.Elements.UIPanel mainPanel;
             UIElement innerContainer;
 
             {
@@ -184,7 +184,7 @@ namespace WebmilioCommons.UI.Catalogs
 
         #region Navigation Buttons
 
-        public static (UIImageButton back, UIImageButton next, (UIPanel textPanel, UIText textRange)) AddNavigationButtons(UIElement container, CatalogEntryGrid grid)
+        public static (UIImageButton back, UIImageButton next, (Terraria.GameContent.UI.Elements.UIPanel textPanel, UIText textRange)) AddNavigationButtons(UIElement container, CatalogEntryGrid grid)
         {
             var hoverImage = Main.Assets.Request<Texture2D>(ButtonBorderPath);
 
@@ -217,9 +217,9 @@ namespace WebmilioCommons.UI.Catalogs
             grid.MakeButtonGoByOffset(button, direction);
         }
 
-        public static (UIPanel textPanel, UIText textRange) MakeRangeText(float xOffset)
+        public static (Terraria.GameContent.UI.Elements.UIPanel textPanel, UIText textRange) MakeRangeText(float xOffset)
         {
-            UIPanel panel = new()
+            Terraria.GameContent.UI.Elements.UIPanel panel = new()
             {
                 Left = new StyleDimension(xOffset, 0),
 
@@ -283,7 +283,7 @@ namespace WebmilioCommons.UI.Catalogs
 
         public static UIElement MakeSearchBar(UIElement searchButton, float xOffset)
         {
-            UIPanel panel = new()
+            Terraria.GameContent.UI.Elements.UIPanel panel = new()
             {
                 Left = new(xOffset + searchButton.Width.Pixels + 3, 1),
 
@@ -374,7 +374,7 @@ namespace WebmilioCommons.UI.Catalogs
 
         private static void ExitButton_Click(UIMouseEvent evt, UIElement element)
         {
-            SoundEngine.PlaySound(11);
+            SoundEngine.PlaySound(SoundID.MenuClose);
 
             if (Main.gameMenu)
                 Main.menuMode = 0;
@@ -384,8 +384,8 @@ namespace WebmilioCommons.UI.Catalogs
 
         private static void ExitButton_FadedMouseOver(UIMouseEvent evt, UIElement element)
         {
-            var panel = (UIPanel)evt.Target;
-            SoundEngine.PlaySound(12);
+            var panel = (Terraria.GameContent.UI.Elements.UIPanel)evt.Target;
+            SoundEngine.PlaySound(SoundID.MenuTick);
 
             // TODO Make moddable.
             panel.BackgroundColor = new Color(73, 94, 171);
@@ -394,7 +394,7 @@ namespace WebmilioCommons.UI.Catalogs
 
         private static void ExitButton_FadedMouseOut(UIMouseEvent evt, UIElement element)
         {
-            var panel = (UIPanel)evt.Target;
+            var panel = (Terraria.GameContent.UI.Elements.UIPanel)evt.Target;
 
             // TODO Make moddable.
             panel.BackgroundColor = new Color(63, 82, 151) * 0.8f;

@@ -222,12 +222,10 @@ namespace WebmilioCommons.Networking.Packets
             if (Main.netMode == NetmodeID.SinglePlayer)
                 return;
 
-
             ModPacket modPacket = MakePacket();
 
             PreAssignValues(ref fromWho, ref toWho);
             AssignInitialValues(ref fromWho, ref toWho);
-
 
             int
                 confirmedFromWho = fromWho.Value,
@@ -245,14 +243,11 @@ namespace WebmilioCommons.Networking.Packets
 
             PopulatePacket(modPacket, confirmedFromWho, confirmedToWho);
 
-
             if (!PreSend(modPacket, fromWho, toWho))
                 return;
 
-
             modPacket.Send(confirmedToWho, confirmedFromWho);
             NetworkPacketLoader.OnPacketSent(this);
-
 
             PostSend(modPacket, fromWho, toWho);
         }
@@ -299,7 +294,6 @@ namespace WebmilioCommons.Networking.Packets
 
             if (mappingBehavior == AutoNetworkMappingBehavior.DoNotMap)
                 return;
-
 
             List<PropertyInfo> propertyInfos = AddReflectedType(type);
 
