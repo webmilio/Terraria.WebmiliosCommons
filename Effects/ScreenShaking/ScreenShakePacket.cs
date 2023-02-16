@@ -1,11 +1,9 @@
 ﻿using System.IO;
 using Terraria;
-using WebCom.Networking.Packets;
-using WebCom.Players;
 
 namespace WebCom.Effects.ScreenShaking
 {
-    public class ScreenShakePacket : ModPlayerNetworkPacket<WCPlayer>
+    public class ScreenShakePacket : Packet
     {
         public ScreenShakePacket()
         {
@@ -18,13 +16,10 @@ namespace WebCom.Effects.ScreenShaking
             SlowsDown = screenShake.SlowsDown;
         }
 
-
-        protected override bool PostReceive(BinaryReader reader, int fromWho)
+        protected override void PostReceive(BinaryReader reader, int fromWho)
         {
             if (!Main.dedServ)
                 ScreenShake.ReceiveScreenShake(this);
-
-            return base.PostReceive(reader, fromWho);
         }
 
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WebCom.Networking;
 
 namespace WebCom.Effects.ScreenShaking
 {
@@ -11,16 +12,11 @@ namespace WebCom.Effects.ScreenShaking
             SlowsDown = slowsDown;
         }
 
-
         public int Intensity { get; set; }
-
         public int Duration { get; set; }
-
         public bool SlowsDown { get; }
 
-
         private static List<ScreenShake> _screenShakes = new List<ScreenShake>();
-
 
         internal static void Load() => _screenShakes = new List<ScreenShake>();
         internal static void Unload() => _screenShakes = null;
@@ -31,7 +27,7 @@ namespace WebCom.Effects.ScreenShaking
             ScreenShake screenShake = new ScreenShake(intensity, duration, slowsDown);
 
             if (synchronize)
-                new ScreenShakePacket(screenShake).Send();
+                WebComMod.Instance.PreparePacket(new ScreenShakePacket(screenShake)).Send();
 
             _screenShakes.Add(screenShake);
             return screenShake;
@@ -41,7 +37,6 @@ namespace WebCom.Effects.ScreenShaking
         {
             ShakeScreen(packet.Intensity, packet.Duration, packet.SlowsDown, false);
         }
-
 
         internal static void TickScreenShakes()
         {
@@ -55,7 +50,6 @@ namespace WebCom.Effects.ScreenShaking
 
             _screenShakes.RemoveAll(s => s.Duration <= 0);
         }
-
 
         public static ScreenShake[] Current => _screenShakes.ToArray();
     }
