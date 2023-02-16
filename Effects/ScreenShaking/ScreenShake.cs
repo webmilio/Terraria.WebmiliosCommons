@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebmilioCommons.Effects.ScreenShaking
+namespace WebCom.Effects.ScreenShaking
 {
     public class ScreenShake
     {

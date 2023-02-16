@@ -1,4 +1,4 @@
-namespace WebmilioCommons.Graphics;
+namespace WebCom.Graphics;
 
 public enum TagsIcon
 {

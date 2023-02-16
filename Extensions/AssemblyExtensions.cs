@@ -2,7 +2,7 @@
 using System.Reflection;
 using Terraria.ModLoader;
 
-namespace WebmilioCommons.Extensions
+namespace WebCom.Extensions
 {
     public static class AssemblyExtensions
     {

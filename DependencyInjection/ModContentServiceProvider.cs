@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Terraria.ModLoader;
 
-namespace WebmilioCommons.DependencyInjection;
+namespace WebCom.DependencyInjection;
 
 internal class ModContentServiceProvider : IServiceProvider
 {

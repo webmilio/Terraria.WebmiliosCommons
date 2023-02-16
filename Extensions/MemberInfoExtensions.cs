@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace WebmilioCommons.Extensions;
+namespace WebCom.Extensions;
 
 public static class MemberInfoExtensions
 {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using WebmilioCommons.Extensions;
+using WebCom.Extensions;
 
-namespace WebmilioCommons.Tinq
+namespace WebCom.Tinq
 {
     public static class EntityExtensions
     {

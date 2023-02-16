@@ -1,7 +1,7 @@
 ﻿using ReLogic.Content;
 using Terraria;
 
-namespace WebmilioCommons.Extensions;
+namespace WebCom.Extensions;
 
 public static class AssetExtensions
 {

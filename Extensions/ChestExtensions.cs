@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace WebmilioCommons.Extensions
+namespace WebCom.Extensions
 {
     public static class ChestExtensions
     {

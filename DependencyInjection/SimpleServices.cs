@@ -4,11 +4,11 @@ using System.ComponentModel.Design;
 using System.Reflection;
 using Terraria;
 using Terraria.ModLoader;
-using WebmilioCommons.Extensions;
+using WebCom.Extensions;
 
 #pragma warning disable CS1591
 
-namespace WebmilioCommons.DependencyInjection;
+namespace WebCom.DependencyInjection;
 
 public class SimpleServices : IServiceContainer
 {

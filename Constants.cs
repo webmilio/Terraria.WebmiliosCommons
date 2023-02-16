@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebmilioCommons
+namespace WebCom
 {
     public static class Constants
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebmilioCommons.DependencyInjection;
+namespace WebCom.DependencyInjection;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class ServiceAttribute : Attribute

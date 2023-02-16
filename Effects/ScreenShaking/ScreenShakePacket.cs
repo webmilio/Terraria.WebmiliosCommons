@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using Terraria;
-using WebmilioCommons.Networking.Packets;
-using WebmilioCommons.Players;
+using WebCom.Networking.Packets;
+using WebCom.Players;
 
-namespace WebmilioCommons.Effects.ScreenShaking
+namespace WebCom.Effects.ScreenShaking
 {
     public class ScreenShakePacket : ModPlayerNetworkPacket<WCPlayer>
     {

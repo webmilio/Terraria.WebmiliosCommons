@@ -1,4 +1,4 @@
-﻿namespace WebmilioCommons.Commons;
+﻿namespace WebCom.Commons;
 
 public interface IIdentifiable<out T>
 {

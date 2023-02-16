@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebmilioCommons.Extensions
+namespace WebCom.Extensions
 {
     public static class EnumerableExtensions
     {
