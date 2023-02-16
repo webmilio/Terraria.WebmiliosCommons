@@ -4,9 +4,6 @@ namespace WebmilioCommons
 {
     public static class Constants
     {
-        [Obsolete("Use " + nameof(TicksPerSecond) + ".", true)]
-        public const int TICKS_PER_SECOND = TicksPerSecond;
-
         public const int
             TicksPerSecond = 60,
 

@@ -10,10 +10,12 @@
     <BaseOutputPath></BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+    <Compile Remove="UI\**" />
+    <EmbeddedResource Remove="UI\**" />
+    <None Remove="UI\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\Browsers\" />
+    <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="ECHO Working in directory %25cd%25&#xD;&#xA;SET FileName=&quot;$(OutDir)\$(TargetName)&quot;&#xD;&#xA;&#xD;&#xA;SET DllFile=%25FileName%25$(TargetExt)&#xD;&#xA;ECHO Copying DLL %25DllFile%25&#xD;&#xA;COPY /Y &quot;%25DllFile%25&quot; &quot;..\WebmilioCommons-Releases\$(TargetName)$(TargetExt)&quot;&#xD;&#xA;&#xD;&#xA;SET PdbFile=%25FileName%25.pdb&#xD;&#xA;ECHO Copying PDB %25PdbFile%25&#xD;&#xA;COPY /Y &quot;%25PdbFile%25&quot; &quot;..\WebmilioCommons-Releases\$(TargetName).pdb&quot;&#xD;&#xA;&#xD;&#xA;SET XmlFile=%25FileName%25.xml&#xD;&#xA;ECHO Copying XML %25FileName%25.xml&#xD;&#xA;COPY /Y &quot;%25XmlFile%25&quot; &quot;..\WebmilioCommons-Releases\$(TargetName).xml&quot;&#xD;&#xA;&#xD;&#xA;SET TModFile=..\..\Mods\$(TargetName).tmod&#xD;&#xA;ECHO Copying TMOD %25TModFile%25&#xD;&#xA;COPY /Y %25TModFile%25 &quot;..\WebmilioCommons-Releases\$(TargetName).tmod&quot;" />
