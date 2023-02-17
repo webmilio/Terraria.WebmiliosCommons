@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace WebCom.Networking.Serialization;
 
@@ -72,7 +73,7 @@ public abstract class PacketSerializers
             { typeof(double),       new PacketSerializer(IOMethods.ReadDouble,      IOMethods.WriteDouble) },
             { typeof(decimal),      new PacketSerializer(IOMethods.ReadDecimal,     IOMethods.WriteDecimal) },
             { typeof(string),       new PacketSerializer(IOMethods.ReadString,      IOMethods.WriteString) },
-            // { typeof(Item), new NetworkTypeSerializer(IOMethods.ReadItem,        IOMethods.WriteItem) },
+            { typeof(Item),         new PacketSerializer(IOMethods.ReadItem,        IOMethods.WriteItem) },
             { typeof(Vector2),      new PacketSerializer(IOMethods.ReadVector2,     IOMethods.WriteVector2) },
             { typeof(Color),        new PacketSerializer(IOMethods.ReadRGB,         IOMethods.WriteRGB) },
             { typeof(BitsByte),     new PacketSerializer(IOMethods.ReadBitsByte,    IOMethods.WriteBitsByte) },
@@ -111,7 +112,7 @@ public abstract class PacketSerializers
         public static void WriteUInt(Packet packet, object value) => packet.ModPacket.Write((uint)value);
         public static void WriteULong(Packet packet, object value) => packet.ModPacket.Write((ulong)value);
         public static void WriteUShort(Packet packet, object value) => packet.ModPacket.Write((ushort)value);
-        //public static void WriteItem( Packet packet, object value) => ItemIO.Send((Item) value, true, true);
+        public static void WriteItem(Packet packet, object value) => ItemIO.Send((Item) value, packet.ModPacket, true, true);
         public static void WriteVector2(Packet packet, object value) => packet.ModPacket.WriteVector2((Vector2)value);
         public static void WriteRGB(Packet packet, object value) => packet.ModPacket.WriteRGB((Color)value);
 
@@ -162,7 +163,7 @@ public abstract class PacketSerializers
         public static object ReadUInt(Packet packet, BinaryReader reader) => reader.ReadUInt32();
         public static object ReadULong(Packet packet, BinaryReader reader) => reader.ReadUInt64();
         public static object ReadUShort(Packet packet, BinaryReader reader) => reader.ReadUInt16();
-        //public static object ReadItem(Packet packet, BinaryReader reader) => ItemIO.Receive(reader, true, true);
+        public static object ReadItem(Packet packet, BinaryReader reader) => ItemIO.Receive(reader, true, true);
         public static object ReadVector2(Packet packet, BinaryReader reader) => reader.ReadVector2();
         public static object ReadRGB(Packet packet, BinaryReader reader) => reader.ReadRGB();
 
