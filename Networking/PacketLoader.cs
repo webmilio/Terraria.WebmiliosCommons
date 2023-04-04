@@ -9,12 +9,12 @@ namespace WebCom.Networking;
 
 public class PacketLoader : ModSystem
 {
-    private readonly PacketSerializers _serializers = new PacketSerializers.DefaultPacketSerializers();
     private readonly Dictionary<Mod, LocalPacketLoader> _packetLoaders = new();
+    private readonly PacketSerializers _serializers = new PacketSerializers.DefaultPacketSerializers();
 
     public override void Load()
     {
-        var mods = ModLoader.Mods.GetNonNullAssemblies();
+        var mods = ModLoader.Mods.GetNonNullAssemblyMods();
 
         foreach (var mod in mods)
         {

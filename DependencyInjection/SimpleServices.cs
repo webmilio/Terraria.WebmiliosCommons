@@ -301,7 +301,7 @@ public class SimpleServices : IServiceContainer
         ConstructorInfo match = null;
         ParameterInfo[] parameters = Array.Empty<ParameterInfo>();
 
-        foreach (var constructor in serviceType.GetConstructors())
+        foreach (var constructor in serviceType.GetConstructors(ConstructorFlags))
         {
             var @params = constructor.GetParameters();
 
@@ -347,4 +347,6 @@ public class SimpleServices : IServiceContainer
 
         return true;
     }
+
+    public BindingFlags ConstructorFlags { get; init; } = BindingFlags.Instance | BindingFlags.Public;
 }

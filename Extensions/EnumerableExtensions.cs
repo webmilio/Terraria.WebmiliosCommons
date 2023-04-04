@@ -72,12 +72,12 @@ namespace WebCom.Extensions
 
         /// <summary>Get's a value from the provided dictionary. If the value doesn't exist, it adds it using the <paramref name="provider"/> function.</summary>
         /// <returns><c>false</c> if the value already existed; <c>true</c> if it was added.</returns>
-        public static bool GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, out TValue value, Func<TValue> provider)
+        public static bool TryGetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, out TValue value, Func<TKey, TValue> provider)
         {
             if (dictionary.TryGetValue(key, out value))
                 return false;
             
-            dictionary.Add(key, value = provider());
+            dictionary.Add(key, value = provider(key));
             return true;
         }
 
@@ -132,9 +132,9 @@ namespace WebCom.Extensions
         }
 
         /// <summary>Determines whether every element in the array of type <typeparamref name="T"/> matches the conditions defined by the specified predicate.</summary>
-        public static bool ForAll<T>(this T[] source, Predicate<T> predicate)
+        public static bool ForAll<T>(this IList<T> source, Predicate<T> predicate)
         {
-            for (int i = 0; i < source.Length; i++)
+            for (int i = 0; i < source.Count; i++)
                 if (!predicate(source[i]))
                     return false;
 

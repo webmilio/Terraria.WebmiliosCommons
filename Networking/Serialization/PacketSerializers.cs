@@ -5,56 +5,25 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using WebCom.Serializers;
 
 namespace WebCom.Networking.Serialization;
 
-public abstract class PacketSerializers
+/// <summary>Provides the methods for a specific datatype to be handled when received or sent.</summary>
+public class PacketSerializer : Serializer<PacketSerializer.DataReader, PacketSerializer.DataWriter>
 {
-    /// <summary>Check if there is a serializer defined for a type.</summary>
-    /// <param name="type">The property type.</param>
-    /// <returns><c>true</c> if there is a serializer for the type; otherwise false.</returns>
-    public abstract bool Has(Type type);
+    public delegate object DataReader(Packet packet, BinaryReader reader);
+    public delegate void DataWriter(Packet packet, object value);
 
-    /// <summary>Check if there is a serializer defined for a type.</summary>
-    /// <typeparam name="T">The property type.</typeparam>
-    /// <returns><c>true</c> if there is a serializer for the type; otherwise false.</returns>
-    public bool Has<T>() => Has(typeof(T));
-
-    /// <summary>Fetch a property serializer.</summary>
-    /// <param name="type">The property type.</param>
-    /// <returns>The <see cref="PacketSerializer"/> if found; otherwise <c>null</c>.</returns>
-    public abstract PacketSerializer Get(Type type);
-
-    /// <summary>Fetch a property serializer.</summary>
-    /// <typeparam name="T">The property type.</typeparam>
-    /// <returns>The <see cref="PacketSerializer"/> if found; otherwise <c>null</c>.</returns>
-    public PacketSerializer Get<T>() => Get(typeof(T));
-
-    /// <summary>Tries to get a serializer with the associated type.</summary>
-    /// <returns><c>true</c> if a serializer was found; otherwise <c>false</c>.</returns>
-    public bool TryGet(Type type, out PacketSerializer serializer)
+    public PacketSerializer(DataReader reader, DataWriter writer)
     {
-        serializer = default;
-
-        if (!Has(type))
-        {
-            return false;
-        }
-
-        serializer = Get(type);
-        return true;
+        Reader = reader;
+        Writer = writer;
     }
+}
 
-    /// <summary>Add a network property serializer for the given type. Must be called in your <see cref="Mod.Load"/> method.</summary>
-    /// <param name="type">The property type.</param>
-    /// <param name="serializer">The serializer (reader/writer) for the type.</param>
-    public abstract void Add(Type type, PacketSerializer serializer);
-
-    /// <summary>Add a network property serializer for the given type. Must be called in your <see cref="Mod.Load"/> method.</summary>
-    /// <typeparam name="T">The property type.</typeparam>
-    /// <param name="serializer">The serializer (reader/writer) for the type.</param>
-    public void Add<T>(PacketSerializer serializer) => Add(typeof(T), serializer);
-
+public abstract class PacketSerializers : Serializers<PacketSerializer>
+{
     internal class DefaultPacketSerializers : PacketSerializers
     {
         private readonly Dictionary<Type, PacketSerializer> _serializers = new()
@@ -79,21 +48,6 @@ public abstract class PacketSerializers
             { typeof(BitsByte),     new PacketSerializer(IOMethods.ReadBitsByte,    IOMethods.WriteBitsByte) },
             { typeof(Rectangle),    new PacketSerializer(IOMethods.ReadRectangle,   IOMethods.WriteRectangle) }
         };
-
-        public override bool Has(Type type)
-        {
-            return _serializers.ContainsKey(type);
-        }
-
-        public override PacketSerializer Get(Type type)
-        {
-            return _serializers[type];
-        }
-
-        public override void Add(Type type, PacketSerializer serializer)
-        {
-            _serializers.Add(type, serializer);
-        }
     }
 
     public class IOMethods
@@ -112,7 +66,7 @@ public abstract class PacketSerializers
         public static void WriteUInt(Packet packet, object value) => packet.ModPacket.Write((uint)value);
         public static void WriteULong(Packet packet, object value) => packet.ModPacket.Write((ulong)value);
         public static void WriteUShort(Packet packet, object value) => packet.ModPacket.Write((ushort)value);
-        public static void WriteItem(Packet packet, object value) => ItemIO.Send((Item) value, packet.ModPacket, true, true);
+        public static void WriteItem(Packet packet, object value) => ItemIO.Send((Item)value, packet.ModPacket, true, true);
         public static void WriteVector2(Packet packet, object value) => packet.ModPacket.WriteVector2((Vector2)value);
         public static void WriteRGB(Packet packet, object value) => packet.ModPacket.WriteRGB((Color)value);
 

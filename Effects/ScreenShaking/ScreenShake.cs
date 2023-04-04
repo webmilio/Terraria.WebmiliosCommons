@@ -27,7 +27,7 @@ namespace WebCom.Effects.ScreenShaking
             ScreenShake screenShake = new ScreenShake(intensity, duration, slowsDown);
 
             if (synchronize)
-                WebComMod.Instance.PreparePacket(new ScreenShakePacket(screenShake)).Send();
+                WebComMod.This.PreparePacket(new ScreenShakePacket(screenShake)).Send();
 
             _screenShakes.Add(screenShake);
             return screenShake;

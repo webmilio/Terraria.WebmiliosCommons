@@ -10,15 +10,13 @@ namespace WebCom.Networking;
 
 public class PacketMapper
 {
-    private readonly PacketSerializers _serializers;
+    public record MapEntry(PropertyInfo Property, PacketSerializer Serializer);
     private readonly Dictionary<Type, ReadOnlyCollection<MapEntry>> _entries = new();
 
     internal PacketMapper(PacketSerializers serializers)
     {
-        _serializers = serializers;
+        Serializers = serializers;
     }
-
-    public record MapEntry(PropertyInfo Property, PacketSerializer Serializer);
 
     internal void Map(Type type)
     {
@@ -33,7 +31,7 @@ public class PacketMapper
                 localType = localType.GetElementType();
             }
 
-            if (property.GetCustomAttribute<SkipAttribute>() != null || !_serializers.TryGet(localType, out var serializer))
+            if (property.GetCustomAttribute<SkipAttribute>() != null || !Serializers.TryGet(localType, out var serializer))
             {
                 continue;
             }
@@ -74,4 +72,6 @@ public class PacketMapper
     }
 
     public ReadOnlyCollection<MapEntry> Get(Type type) => _entries[type];
+
+    private PacketSerializers Serializers { get; }
 }

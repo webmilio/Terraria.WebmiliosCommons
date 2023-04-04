@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria.ModLoader;
 using WebCom.Extensions;
-using WebCom.Networking.Serialization;
 
 namespace WebCom.Networking;
 

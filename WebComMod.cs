@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Terraria.ModLoader;
+using WebCom.DependencyInjection;
 
 namespace WebCom;
 
@@ -7,13 +8,16 @@ public class WebComMod : Mod
 {
 	public WebComMod()
 	{
-		Instance = this;
+		This = this;
+        Services = new();
 	}
 
     public override void Unload()
     {
-        Instance = null;
+        This = null;
     }
 
-    internal static WebComMod Instance { get; private set; }
+    public SimpleServices Services { get; }
+
+    public static WebComMod This { get; private set; }
 }
