@@ -73,5 +73,5 @@ public class PacketMapper
 
     public ReadOnlyCollection<MapEntry> Get(Type type) => _entries[type];
 
-    private PacketSerializers Serializers { get; }
+    public PacketSerializers Serializers { get; }
 }

@@ -18,9 +18,13 @@ public abstract class Packet
 
     /// <summary>
     ///     Only override this if you know what you're doing and 
-    ///     intend to add a layer of data that is not mapped (using ModPacket writers).
+    ///     intend to add a layer of unmapped data using ModPacket writers.
+    ///     If you need to add data after the mappers have written to the packet, use <see cref="SendPostMap(int, int)"/>.
     /// </summary>
     protected virtual void SendPreMap(int toClient = -1, int ignoreClient = -1) { }
+
+    /// <summary>Override this to add unmapped data to the packet using ModPacket writers.</summary>
+    protected virtual void SendPostMap(int toClient = -1, int ignoreClient = -1) { }
 
     /// <summary>
     ///     Sends all the information you've written between client and server. If the <paramref name="toClient"/>
@@ -41,6 +45,8 @@ public abstract class Packet
         {
             Mappings[i].Serializer.Writer(this, Mappings[i].Property.GetValue(this));
         }
+
+        SendPostMap(toClient, ignoreClient);
 
         ModPacket.Send(toClient, ignoreClient);
         PostSend(toClient, ignoreClient);
@@ -76,5 +82,6 @@ public abstract class Packet
     [Skip] public Mod Mod { get; internal set; }
     [Skip] public ModPacket ModPacket { get; internal set; }
 
+    [Skip] public PacketMapper Mapper { get; internal set; }
     [Skip] public ReadOnlyCollection<PacketMapper.MapEntry> Mappings { get; internal set; }
 }

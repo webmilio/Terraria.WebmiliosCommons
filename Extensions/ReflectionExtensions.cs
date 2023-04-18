@@ -7,12 +7,17 @@ namespace WebCom.Extensions;
 
 public static class ReflectionExtensions
 {
+    public static T Create<T>(this Type type)
+    {
+        return (T) Activator.CreateInstance(type);
+    }
+
     /// <summary>Creates types from the provided types and casts them to <typeparamref name="T"/>.</summary>
     public static IEnumerable<T> Create<T>(this IEnumerable<Type> types)
     {
         foreach (var type in types)
         {
-            yield return (T) Activator.CreateInstance(type);
+            yield return Create<T>(type);
         }
     }
 
