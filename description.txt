@@ -1,26 +1,16 @@
-Webmilio's Commons Library adds a couple of things I use in all of my mods. You can extract the DLL from the Mod. 
+WebCom (formerly known as Webmilio's Commons Library) adds a couple of things I use in all of my mods. You can extract the DLL from the Mod. 
+Sample mod: https://github.com/webmilio/Terraria.WebmilioCommons.ExampleMod
 
-THE 1.4 IS A HEAVY ALPHA THAT HAS kinda been tested and it seems to work so far.
-Anything related to Worlds has been disabled.
-Had to remove the Network methods for Reading/Writing items since the good people at tMod thought it wise to remove the method ¯\_(^.^)_/¯.
+Update 1.0 breaks everything except ScreenShake. All namespaces have switched from WebmilioCommons. to WebCom.
 
-Things this adds:
-- Tags for Mods when uploading them.
-- Better Networking (in my opinion, at least).
-- Loaders (manual or singletons that handle loading all found classes within the Terraria assembly, including mods)
+Features:
+- Better Networking (in my opinion, at least)
+- Attribute-based Loading/Saving
 - A bunch of extensions
-- Keyboard Manager: get the state of any keys (NotPressed, JustPressed, Pressed, JustReleased), regardless of Mod Hotkey.
-- Effects: screenshake (multiplayer compatible), easy shaders
+- [WIP] Proxies for internal tMod classes
+- Effects: screenshake (multiplayer compatible)
 - Math/Vector stuffs: velocity vector to point/mouse, checking if a point is inside a triangle/rectangle (since you can't with normal rectangles)
 - Dependency Injection container: SimpleServices class coupled with [Service] attribute allows for simple class decoupling.
 
-Other Utilities:
-- Class which allows you to quickly create a tile-placing item once extended.
-
 Credits (Team Members)
-- Blockaroz3349:
-	* Easy shader code cause I suck at doing them
 - "Stupid person with good ideas" who sometimes came up with good ideas but also stupid ones
-
-Special Thanks
-- Kazzymodus: being a gamer and hand-holding me with shaders until I understood them.
