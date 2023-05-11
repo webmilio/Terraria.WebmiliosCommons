@@ -18,5 +18,5 @@ public abstract class PlayerPacket : Packet
         ModPacket.Write(Player.whoAmI);
     }
 
-    [Skip] public Player Player { get; set; }
+    [Skip] public virtual Player Player { get; set; }
 }

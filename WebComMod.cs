@@ -17,6 +17,8 @@ public class WebComMod : Mod
 
     public override void Load()
     {
+        ContentInstance.Register(new Saving.Saver());
+
         SharedServices.MapServices(this);
     }
 

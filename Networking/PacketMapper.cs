@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using WebCom.Annotations;
+using WebCom.Extensions;
 using WebCom.Networking.Serialization;
 
 namespace WebCom.Networking;
@@ -31,7 +32,8 @@ public class PacketMapper
                 localType = localType.GetElementType();
             }
 
-            if (property.GetCustomAttribute<SkipAttribute>() != null || !Serializers.TryGet(localType, out var serializer))
+            if (property.HasCustomAttribute<SkipAttribute>() || 
+                !Serializers.TryGet(localType, out var serializer))
             {
                 continue;
             }

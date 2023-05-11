@@ -36,6 +36,8 @@ public abstract class Packet
     /// <param name="ignoreClient"></param>
     public virtual void Send(int toClient = -1, int ignoreClient = -1) 
     {
+        // TODO This line is tied to LocalPacketLoader@PreparePacket(ushort typeId, Type type, Packet packet)
+        if (Main.netMode == NetmodeID.SinglePlayer) return;
         if (!PreSend(toClient, ignoreClient)) return;
 
         ModPacket.Write(PacketTypeId);

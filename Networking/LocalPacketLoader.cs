@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using WebCom.Extensions;
 
@@ -57,6 +59,13 @@ internal class LocalPacketLoader
 
 	internal Packet PreparePacket(ushort typeId, Type type, Packet packet)
 	{
+        // TODO Temporary fix until I figure out how to only send packets when connected to a server.
+		// Mod.GetPacket() crashes when called in singleplayer.
+        if (Main.netMode == NetmodeID.SinglePlayer) 
+		{
+			return packet;
+		}
+
         packet.PacketTypeId = typeId;
 
         packet.Mod = Mod;
