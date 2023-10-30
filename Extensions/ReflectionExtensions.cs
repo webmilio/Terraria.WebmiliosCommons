@@ -1,12 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using Terraria.ModLoader.Core;
 using WebCom.Reflection;
 
 namespace WebCom.Extensions;
 
 public static class ReflectionExtensions
 {
+    /// <summary>Translates the full type name (namespace.name) to a path while excluding the first level namespace.</summary>
+    public static string GetFullNameAsPath(this Type type)
+    {
+        var splitNamespace = type.Namespace.Split('.');
+        return $"{string.Join('/', splitNamespace, 1, splitNamespace.Length - 1)}/{type.Name}";
+    }
+
     public static T Create<T>(this Type type)
     {
         return (T) Activator.CreateInstance(type);
@@ -26,7 +35,7 @@ public static class ReflectionExtensions
     {
         foreach (var assembly in assemblies)
         {
-            foreach (var type in Concrete<T>(assembly.GetTypes()))
+            foreach (var type in Concrete<T>(AssemblyManager.GetLoadableTypes(assembly)))
             {
                 yield return type;
             }
@@ -36,6 +45,12 @@ public static class ReflectionExtensions
     /// <returns>List of all type which are subclasses of <typeparamref name="T"/> and are not abstract or interface.</returns>
     public static IEnumerable<Type> Concrete<T>(this IEnumerable<Type> source)
     {
+        return Concrete(source, typeof(T));
+    }
+
+    /// <returns>List of all type which are subclasses of <paramref name="superType"/> and are not abstract or interface.</returns>
+    public static IEnumerable<Type> Concrete(this IEnumerable<Type> source, Type superType)
+    {
         foreach (var type in source)
         {
             if (type.IsAbstract || type.IsInterface)
@@ -43,7 +58,6 @@ public static class ReflectionExtensions
                 continue;
             }
 
-            var superType = typeof(T);
             if (superType.IsAssignableFrom(type))
             {
                 yield return type;

@@ -57,6 +57,11 @@ public abstract class SaveSerializers : Serializers<SaveSerializer>
         private static TagSerializer MakeDictionary(Type key, Type value) => Activator.CreateInstance(typeof(DynamicDictionarySerializer<,,>)
                 .MakeGenericType(typeof(Dictionary<,>).MakeGenericType(key, value), key, value)) as TagSerializer;
 
+        public override SaveSerializer Get(Type type)
+        {
+            return serializers.GetOrDefault(type, CreateSerializer);
+        }
+
         internal class DynamicDictionarySerializer<D, K, V> : TagSerializer<D, TagCompound> where D : Dictionary<K, V>
         {
             public DynamicDictionarySerializer()

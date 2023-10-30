@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebCom.Extensions;
 using WebCom.Saving.Serializations;
@@ -33,5 +34,5 @@ public class Saver
         return new SaveMapper(type, _mapper);
     }
 
-    public static Saver This { get; private set; }
+    public static Saver This => ModContent.GetInstance<Saver>();
 }

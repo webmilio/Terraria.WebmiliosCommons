@@ -4,6 +4,7 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Core;
 using WebCom.Extensions;
 
 namespace WebCom.Networking;
@@ -25,7 +26,7 @@ internal class LocalPacketLoader
 
 	internal void Initialize()
 	{
-		foreach (var type in Mod.Code.GetTypes().Concrete<Packet>())
+		foreach (var type in AssemblyManager.GetLoadableTypes(Mod.Code).Concrete<Packet>())
 		{
 			_types.Add(_typeId, type);
 			_typeIds.Add(type, _typeId);

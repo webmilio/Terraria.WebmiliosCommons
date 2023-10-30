@@ -115,12 +115,18 @@ public class SimpleServices : IServiceContainer
         return this;
     }
 
+    /// <summary>Adds a service as a Singleton. When the service is created, it is registered in <see cref="ContentInstance"/>.</summary>
     public SimpleServices AddSingleton(Type serviceType)
     {
         AddService(serviceType, delegate(IServiceContainer _, Type type)
         {
             var service = Make(type);
             instances.Add(type, service);
+
+            if (PromoteToModContent)
+            {
+                ContentInstance.Register(service);
+            }
 
             return service;
         });
@@ -130,6 +136,12 @@ public class SimpleServices : IServiceContainer
     public SimpleServices AddSingleton(object instance)
     {
         AddService(instance.GetType(), instance);
+
+        if (PromoteToModContent)
+        {
+            ContentInstance.Register(instance);
+        }
+
         return this;
     }
 
@@ -347,6 +359,8 @@ public class SimpleServices : IServiceContainer
 
         return true;
     }
+
+    public bool PromoteToModContent { get; init; }
 
     public BindingFlags ConstructorFlags { get; init; } = BindingFlags.Instance | BindingFlags.Public;
 }

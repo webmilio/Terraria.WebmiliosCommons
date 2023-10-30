@@ -18,10 +18,10 @@ public class PacketLoader : ModSystem
 
         foreach (var mod in mods)
         {
-            var localLoader = new LocalPacketLoader(mod, new PacketMapper(_serializers));
-            localLoader.Initialize();
+            var local = new LocalPacketLoader(mod, new PacketMapper(_serializers));
+            local.Initialize();
 
-            _packetLoaders.Add(mod, localLoader);
+            _packetLoaders.Add(mod, local);
         }
     }
 

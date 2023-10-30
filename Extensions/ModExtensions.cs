@@ -18,13 +18,8 @@ public static class ModExtensions
         }
     }
 
-    public static IEnumerable<Type> Concrete<T>(this Mod mod)
-    {
-        foreach (var type in mod.Code.GetTypes().Concrete<T>())
-        {
-            yield return type;
-        }
-    }
+    public static IEnumerable<Type> Concrete<T>(this Mod mod) => mod.Code.GetTypes().Concrete<T>();
+    public static IEnumerable<Type> Concrete(this Mod mod, Type type) => mod.Code.GetTypes().Concrete(type);
 
     /// <param name="source"></param>
     /// <returns>List of <see cref="Mod"/> whose <see cref="Mod.Code"/> are not null.</returns>

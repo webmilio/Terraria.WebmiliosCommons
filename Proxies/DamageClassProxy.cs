@@ -12,7 +12,7 @@ public class DamageClassProxy
 {
     internal static string GetDamageName(DamageClass damage)
     {
-        return damage.ClassName?.Key ?? damage.Name;
+        return damage.DisplayName?.Key ?? damage.Name;
     }
 
     public class Loader : ModSystem

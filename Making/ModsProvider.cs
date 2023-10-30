@@ -5,12 +5,11 @@ using WebCom.Extensions;
 
 namespace WebCom.Resolvers;
 
-[Service]
-public class ModsResolver : Resolver<Mod>
+public class ModsProvider : IProvider<Mod>
 {
     private IEnumerable<Mod> _assemblies;
 
-    public override IEnumerable<Mod> Resolve()
+    public IEnumerable<Mod> Provide()
     {
         if (Cache)
         {

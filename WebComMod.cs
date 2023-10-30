@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel.Design;
-using Terraria.ModLoader;
+﻿using Terraria.ModLoader;
 using WebCom.DependencyInjection;
+using WebCom.Resolvers;
 
 namespace WebCom;
 
@@ -11,15 +10,25 @@ public class WebComMod : Mod
 	{
 		This = this;
 
-        SharedServices = new();
-        GlobalContainer = new();
+        GlobalContainers = new();
+        
+        Services = new()
+        {
+            PromoteToModContent = true
+        };
+        Services.MapServices(typeof(WebComMod).Assembly);
 	}
+
+    public void ChainServiceContainers(SimpleServices services)
+    {
+        services.AddContainer(Services);
+        GlobalContainers.AddContainer(services);
+    }
 
     public override void Load()
     {
-        ContentInstance.Register(new Saving.Saver());
-
-        SharedServices.MapServices(this);
+        Services.AddSingleton(new Saving.Saver());
+        Services.AddSingleton(new Resolvers.ModsProvider());
     }
 
     public override void Unload()
@@ -27,14 +36,11 @@ public class WebComMod : Mod
         This = null;
     }
 
-    /// <summary>
-    ///     Provides common instances to your services by adding this collection as a <see cref="IServiceProvider"/>/<see cref="IServiceContainer"/> to your own.
-    ///     Don't register anything on this! Add your service providers/containers to <see cref="GlobalContainer"/>.
-    /// </summary>
-    public SimpleServices SharedServices { get; }
+    /// <summary>Register your service containers here.</summary>
+    public SimpleServices GlobalContainers { get; }
 
-    /// <summary>Register your service collections here. For base services shared by individual collections, see <see cref="SharedServices"/>.</summary>
-    public SimpleServices GlobalContainer { get; }
+    /// <summary>WebCom's services. You can add this container to yours.</summary>
+    public SimpleServices Services { get; }
 
     public static WebComMod This { get; private set; }
 }
