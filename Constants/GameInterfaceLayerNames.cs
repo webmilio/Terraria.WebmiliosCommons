@@ -3,7 +3,7 @@
 namespace WebCom.Constants;
 
 /// <summary>Taken from <a href="https://github.com/tModLoader/tModLoader/wiki/Vanilla-Interface-layers-values">tModLoader's wiki</a>.</summary>
-internal class GameInterfaceLayerNames
+public class GameInterfaceLayerNames
 {
     public class Vanilla
     {
