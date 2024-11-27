@@ -1,6 +1,6 @@
 displayName = WebCom
 author = Webmilio
-version = 1.0.2
+version = 1.0.2.1
 homepage = https://forums.terraria.org/index.php?threads/webmilios-commons-library.84516/
 side = NoSync
 hideCode = false

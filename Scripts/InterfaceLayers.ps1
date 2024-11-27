@@ -1,7 +1,8 @@
-$template = @"
+$templateFull = @"
 ///<summary>{0}</summary>
 public static readonly string {1} = "{2}";
 "@
+$templateLnk = 'public static readonly string n{0:00}_{1} = {1};'
 
 $lines = Get-Content .\InterfaceNames.txt
 
@@ -11,6 +12,8 @@ $replace = @{
     '/' =        '';
 }
 
+$index = 0;
+
 foreach ($c in $lines) {
     $s = $c -Split '\t'
     $name = $s[0]
@@ -19,8 +22,12 @@ foreach ($c in $lines) {
         $name = $name.Replace($r, $replace[$r])
     }
 
-    $built = [string]::Format($template, $s[1], $name, $s[0])
-    
+    $built = [string]::Format($templateFull, $s[1], $name, $s[0])
+    $lnk = [string]::Format($templateLnk, $index, $name)
+
     Write-Host $built
+    Write-Host $lnk
+
     Write-Host
+    $index++
 }

@@ -93,6 +93,21 @@ public static class TooltipLines
         LineSpecialPrice, LinePrice
     };
 
+    public static void Insert(this List<TooltipLine> lines, TooltipLine line, params string[] names)
+    {
+        int i;
+        for (i = 0; i < lines.Count && !lines[i].Name.Equals(names[i]); i++) ;
+
+        if (i == lines.Count - 1)
+        {
+            lines.Add(line);
+        }
+        else
+        {
+            lines.Insert(line);
+        }
+    }
+
     public static int FindLineIndex(string name)
     {
         if (name.StartsWith("Tooltip"))
