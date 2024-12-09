@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -56,6 +57,13 @@ public abstract class Packet
 
     /// <returns><c>true</c> to keep receiving the packet; otherwise <c>false</c>.</returns>
     protected virtual bool PreReceive(BinaryReader reader, int fromWho) => true;
+
+    /// <summary>
+    ///     Called after the mapping has been done and the values have been set.
+    ///     This is where you want to define the logic to execute upon receiving a packet.
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <param name="fromWho"></param>
     protected virtual void PostReceive(BinaryReader reader, int fromWho) { }
 
     /// <summary>
@@ -78,12 +86,26 @@ public abstract class Packet
         PostReceive(reader, fromWho);
     }
 
-    [Skip] public bool IsServer => Main.netMode == NetmodeID.Server;
+    internal void SetInformation(Mod mod, ModPacket modPacket, ushort packetTypeId, PacketMapper mapper, 
+        ReadOnlyCollection<PacketMapper.MapEntry> mappings)
+    {
+        Mod = mod;
+        ModPacket = modPacket;
 
-    [Skip] public ushort PacketTypeId { get; internal set; }
-    [Skip] public Mod Mod { get; internal set; }
+        PacketTypeId = packetTypeId;
+
+        Mapper = mapper;
+        Mappings = mappings;
+    }
+
+    [Skip] protected static bool IsServer => Main.netMode == NetmodeID.Server;
+    
+    [Skip] protected Mod Mod { get; set; }
+
     [Skip] public ModPacket ModPacket { get; internal set; }
 
-    [Skip] public PacketMapper Mapper { get; internal set; }
-    [Skip] public ReadOnlyCollection<PacketMapper.MapEntry> Mappings { get; internal set; }
+    [Skip] protected ushort PacketTypeId { get; set; }
+
+    [Skip] protected PacketMapper Mapper { get; set; }
+    [Skip] protected ReadOnlyCollection<PacketMapper.MapEntry> Mappings { get; set; }
 }

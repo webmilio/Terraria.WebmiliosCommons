@@ -67,13 +67,7 @@ internal class LocalPacketLoader
 			return packet;
 		}
 
-        packet.PacketTypeId = typeId;
-
-        packet.Mod = Mod;
-        packet.ModPacket = Mod.GetPacket();
-
-		packet.Mapper = Mapper;
-        packet.Mappings = Mapper.Get(type);
+		packet.SetInformation(Mod, Mod.GetPacket(), typeId, Mapper, Mapper.Get(type));
 
         return packet;
     }

@@ -10,7 +10,7 @@ namespace WebCom.Saving;
 public class Saver
 {
     private readonly SaveSerializers _mapper = new SaveSerializers.DynamicSaveSerializers();
-    private readonly Dictionary<Type, SaveMapper> _savers = new();
+    private readonly Dictionary<Type, SaveMapper> _savers = [];
 
     public void Save(object obj, TagCompound data)
     {

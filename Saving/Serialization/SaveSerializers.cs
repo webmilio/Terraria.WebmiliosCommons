@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebCom.Extensions;
-using WebCom.Networking.Serialization;
 using WebCom.Proxies;
 using WebCom.Reflection;
 using WebCom.Serializers;
@@ -27,7 +28,7 @@ public abstract class SaveSerializers : Serializers<SaveSerializer>
             {
                 var types = type.GetGenericArguments();
 
-                var serializer = MakeDictionary(types[0], types[1]);
+                var serializer = MakeDictionarySerializer(types[0], types[1]);
                 ModContent.GetInstance<TagSerializerProxy>().AddSerializer(serializer);
             }
 
@@ -54,8 +55,12 @@ public abstract class SaveSerializers : Serializers<SaveSerializer>
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>);
         }
 
-        private static TagSerializer MakeDictionary(Type key, Type value) => Activator.CreateInstance(typeof(DynamicDictionarySerializer<,,>)
-                .MakeGenericType(typeof(Dictionary<,>).MakeGenericType(key, value), key, value)) as TagSerializer;
+        private static TagSerializer MakeDictionarySerializer(Type key, Type value)
+        {
+            return Activator.CreateInstance(typeof(DynamicDictionarySerializer<,,>)
+                .MakeGenericType(typeof(Dictionary<,>).MakeGenericType(key, value), 
+                key, value)) as TagSerializer;
+        }
 
         public override SaveSerializer Get(Type type)
         {
@@ -64,11 +69,13 @@ public abstract class SaveSerializers : Serializers<SaveSerializer>
 
         internal class DynamicDictionarySerializer<D, K, V> : TagSerializer<D, TagCompound> where D : Dictionary<K, V>
         {
-            public DynamicDictionarySerializer()
+            public JsonSerializerOptions JsonSerializerOptions { get; set; } = new()
             {
-                if (typeof(K).IsSubclassOf(typeof(IConvertible)))
-                    throw new InvalidCastException($"The key of the dictionary must implement {nameof(IConvertible)} to support auto-saving dictionaries.");
-            }
+                IncludeFields = true,
+
+                WriteIndented = false,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
 
             public override bool IsLoadingEnabled(Mod mod)
             {
@@ -81,19 +88,25 @@ public abstract class SaveSerializers : Serializers<SaveSerializer>
 
                 foreach (var entry in tag)
                 {
-                    dictionary.Add((K) Convert.ChangeType(entry.Key, typeof(K)), tag.Get<V>(entry.Key));
+                    var key = JsonSerializer.Deserialize<K>(entry.Key, JsonSerializerOptions);
+                    var value = TagIO.Deserialize<V>(entry.Value);
+
+                    dictionary.Add(key, value);
                 }
 
                 return dictionary;
             }
 
-            public override TagCompound Serialize(D value)
+            public override TagCompound Serialize(D dict)
             {
                 var tag = new TagCompound();
 
-                foreach ((K k, V v) in value)
+                foreach ((K k, V v) in dict)
                 {
-                    tag.Add(k.ToString(), v);
+                    var key = JsonSerializer.Serialize(k, JsonSerializerOptions);
+                    var value = TagIO.Serialize(v);
+
+                    tag.Add(key, value);
                 }
 
                 return tag;

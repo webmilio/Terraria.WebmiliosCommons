@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.UI;
-using WebCom.Constants;
 
 namespace WebCom.UI;
 

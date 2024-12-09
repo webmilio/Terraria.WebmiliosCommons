@@ -49,7 +49,8 @@ public abstract class PacketSerializers : Serializers<PacketSerializer>
                 { typeof(Vector2),      new PacketSerializer(IOMethods.ReadVector2, IOMethods.WriteVector2) },
                 { typeof(Color),        new PacketSerializer(IOMethods.ReadRGB, IOMethods.WriteRGB) },
                 { typeof(BitsByte),     new PacketSerializer(IOMethods.ReadBitsByte, IOMethods.WriteBitsByte) },
-                { typeof(Rectangle),    new PacketSerializer(IOMethods.ReadRectangle, IOMethods.WriteRectangle) }
+                { typeof(Rectangle),    new PacketSerializer(IOMethods.ReadRectangle, IOMethods.WriteRectangle) },
+                { typeof(Guid),         new PacketSerializer(IOMethods.ReadGuid, IOMethods.WriteGuid) }
             });
         }
     }
@@ -107,6 +108,8 @@ public abstract class PacketSerializers : Serializers<PacketSerializer>
 
         public static void WriteNetworkSerializable(Packet packet, object value) => ((INetworkSerializable)value).Send(packet);
 
+        public static void WriteGuid(Packet packet, object value) => packet.ModPacket.Write(((Guid)value).ToString());
+
         public static object ReadBool(Packet packet, BinaryReader reader) => reader.ReadBoolean();
         public static object ReadByte(Packet packet, BinaryReader reader) => reader.ReadByte();
         public static object ReadChar(Packet packet, BinaryReader reader) => reader.ReadChar();
@@ -137,5 +140,7 @@ public abstract class PacketSerializers : Serializers<PacketSerializer>
 
 
         public static void ReadNetworkSerializable(Packet packet, INetworkSerializable networkSerializable, BinaryReader reader) => networkSerializable.Receive(packet, reader);
+
+        public static object ReadGuid(Packet packet, BinaryReader reader) => Guid.Parse(reader.ReadString());
     }
 }

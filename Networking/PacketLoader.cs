@@ -33,6 +33,8 @@ public class PacketLoader : ModSystem
 
     public Packet GetPacket(Mod mod, Type type) => _packetLoaders[mod].GetPacket(type);
     public Packet PreparePacket(Mod mod, Packet packet) => _packetLoaders[mod].PreparePacket(packet);
+
+    public static PacketLoader This => ModContent.GetInstance<PacketLoader>();
 }
 
 public static class PacketLoaderExtensions
