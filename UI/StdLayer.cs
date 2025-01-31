@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.UI;
@@ -24,7 +25,10 @@ public class StdLayer : GameInterfaceLayer
         Interface.Update(gameTime);
     }
 
-    public void UpdateIfVisible(GameTime gameTime)
+    [Obsolete("Renamed to UpdateIfActive", true)]
+    public void UpdateIfVisible(GameTime gameTime) => UpdateIfActive(gameTime);
+
+    public void UpdateIfActive(GameTime gameTime)
     {
         if (Active)
         {
