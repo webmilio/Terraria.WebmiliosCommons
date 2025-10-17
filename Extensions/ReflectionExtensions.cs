@@ -65,7 +65,7 @@ public static class ReflectionExtensions
         }
     }
 
-    internal static List<MemberInfoWrapper> GetDataMembers(this Type type)
+    public static List<MemberInfoWrapper> GetDataMembers(this Type type)
     {
         var fields = type.GetFields();
         var properties = type.GetProperties();
@@ -85,9 +85,9 @@ public static class ReflectionExtensions
         return members;
     }
 
-    internal static List<MemberInfoWrapper> GetDataMembers(this Type type, BindingFlags bindingFlags) => GetDataMembers(type, bindingFlags, bindingFlags);
+    public static List<MemberInfoWrapper> GetDataMembers(this Type type, BindingFlags bindingFlags) => GetDataMembers(type, bindingFlags, bindingFlags);
 
-    internal static List<MemberInfoWrapper> GetDataMembers(this Type type, BindingFlags fieldFlags, BindingFlags propertyFlags)
+    public static List<MemberInfoWrapper> GetDataMembers(this Type type, BindingFlags fieldFlags, BindingFlags propertyFlags)
     {
         var fields = type.GetFields(fieldFlags);
         var properties = type.GetProperties(propertyFlags);
@@ -105,5 +105,14 @@ public static class ReflectionExtensions
         }
 
         return members;
+    }
+
+    public static List<MemberInfoWrapper> GetPublicPrivateDataMembers(this Type type, BindingFlags fieldFlags, BindingFlags propertyFlags)
+    {
+        var result = new List<MemberInfoWrapper>();
+        result.AddRange(GetDataMembers(type, fieldFlags | BindingFlags.NonPublic, propertyFlags | BindingFlags.NonPublic));
+        result.AddRange(GetDataMembers(type, fieldFlags | BindingFlags.Public, propertyFlags | BindingFlags.Public));
+
+        return result;
     }
 }

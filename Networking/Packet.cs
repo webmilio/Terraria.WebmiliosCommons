@@ -5,9 +5,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WebCom.Annotations;
-using WebCom.Networking;
 
-namespace WebCom;
+namespace WebCom.Networking;
 
 public abstract class Packet
 {

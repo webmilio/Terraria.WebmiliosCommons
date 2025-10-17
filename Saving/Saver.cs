@@ -12,6 +12,14 @@ public class Saver
     private readonly SaveSerializers _mapper = new SaveSerializers.DynamicSaveSerializers();
     private readonly Dictionary<Type, SaveMapper> _savers = [];
 
+    public TagCompound Save(object obj)
+    {
+        var tag = new TagCompound();
+        Save(obj, tag);
+
+        return tag;
+    }
+
     public void Save(object obj, TagCompound data)
     {
         var saver = Get(obj.GetType());
