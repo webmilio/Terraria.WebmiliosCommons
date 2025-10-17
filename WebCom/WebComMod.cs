@@ -1,5 +1,7 @@
-﻿using Terraria.ModLoader;
+﻿using System.IO;
+using Terraria.ModLoader;
 using WebCom.DependencyInjection;
+using WebCom.Networking;
 using WebCom.Resolvers;
 
 namespace WebCom;
@@ -29,6 +31,11 @@ public class WebComMod : Mod
     {
         Services.AddSingleton(new Saving.Saver());
         Services.AddSingleton(new Resolvers.ModsProvider());
+    }
+
+    public override void HandlePacket(BinaryReader reader, int whoAmI)
+    {
+        PacketLoader.This.HandlePacket(this, reader, whoAmI);
     }
 
     public override void Unload()

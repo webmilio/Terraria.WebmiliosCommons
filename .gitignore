@@ -1,9 +1,2 @@
-*.user
-*.suo
 .vs/
-bin/
-obj/
-.idea/
-packages/
-
-WebmilioCommons.xml
+[Oo]bj/

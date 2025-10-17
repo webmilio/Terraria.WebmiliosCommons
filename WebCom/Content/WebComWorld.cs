@@ -69,7 +69,7 @@ public class WebComWorld : ModSystem
         }
     }
 
-    internal class WorldSynchronizePacket : Packet
+    internal class WorldSynchronizePacket : Networking.Packet
     {
         protected override void PostReceive(BinaryReader reader, int fromWho)
         {

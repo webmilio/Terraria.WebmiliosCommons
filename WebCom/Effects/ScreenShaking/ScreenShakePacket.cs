@@ -3,7 +3,7 @@ using Terraria;
 
 namespace WebCom.Effects.ScreenShaking
 {
-    public class ScreenShakePacket : Packet
+    public class ScreenShakePacket : Networking.Packet
     {
         public ScreenShakePacket()
         {
