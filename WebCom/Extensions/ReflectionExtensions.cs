@@ -106,13 +106,4 @@ public static class ReflectionExtensions
 
         return members;
     }
-
-    public static List<MemberInfoWrapper> GetPublicPrivateDataMembers(this Type type, BindingFlags fieldFlags, BindingFlags propertyFlags)
-    {
-        var result = new List<MemberInfoWrapper>();
-        result.AddRange(GetDataMembers(type, fieldFlags | BindingFlags.NonPublic, propertyFlags | BindingFlags.NonPublic));
-        result.AddRange(GetDataMembers(type, fieldFlags | BindingFlags.Public, propertyFlags | BindingFlags.Public));
-
-        return result;
-    }
 }

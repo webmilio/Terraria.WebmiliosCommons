@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WebCom.Serializers;
 
@@ -31,26 +30,26 @@ public abstract class PacketSerializers : Serializers<PacketSerializer>
         {
             serializers.AddRange(new()
             {
-                { typeof(bool),         new PacketSerializer(IOMethods.ReadBool, IOMethods.WriteBool) },
-                { typeof(char),         new PacketSerializer(IOMethods.ReadChar, IOMethods.WriteChar) },
-                { typeof(byte),         new PacketSerializer(IOMethods.ReadByte, IOMethods.WriteByte) },
-                { typeof(sbyte),        new PacketSerializer(IOMethods.ReadSByte, IOMethods.WriteSByte) },
-                { typeof(short),        new PacketSerializer(IOMethods.ReadShort, IOMethods.WriteShort) },
-                { typeof(ushort),       new PacketSerializer(IOMethods.ReadUShort, IOMethods.WriteUShort) },
-                { typeof(int),          new PacketSerializer(IOMethods.ReadInt, IOMethods.WriteInt) },
-                { typeof(uint),         new PacketSerializer(IOMethods.ReadUInt, IOMethods.WriteUInt) },
-                { typeof(long),         new PacketSerializer(IOMethods.ReadLong, IOMethods.WriteLong) },
-                { typeof(ulong),        new PacketSerializer(IOMethods.ReadULong, IOMethods.WriteULong) },
-                { typeof(float),        new PacketSerializer(IOMethods.ReadFloat, IOMethods.WriteFloat) },
-                { typeof(double),       new PacketSerializer(IOMethods.ReadDouble, IOMethods.WriteDouble) },
-                { typeof(decimal),      new PacketSerializer(IOMethods.ReadDecimal, IOMethods.WriteDecimal) },
-                { typeof(string),       new PacketSerializer(IOMethods.ReadString, IOMethods.WriteString) },
-                { typeof(Item),         new PacketSerializer(IOMethods.ReadItem, IOMethods.WriteItem) },
-                { typeof(Vector2),      new PacketSerializer(IOMethods.ReadVector2, IOMethods.WriteVector2) },
-                { typeof(Color),        new PacketSerializer(IOMethods.ReadRGB, IOMethods.WriteRGB) },
-                { typeof(BitsByte),     new PacketSerializer(IOMethods.ReadBitsByte, IOMethods.WriteBitsByte) },
-                { typeof(Rectangle),    new PacketSerializer(IOMethods.ReadRectangle, IOMethods.WriteRectangle) },
-                { typeof(Guid),         new PacketSerializer(IOMethods.ReadGuid, IOMethods.WriteGuid) }
+                { typeof(bool),         new PacketSerializer(IOMethods.ReadBool,        IOMethods.WriteBool) },
+                { typeof(char),         new PacketSerializer(IOMethods.ReadChar,        IOMethods.WriteChar) },
+                { typeof(byte),         new PacketSerializer(IOMethods.ReadByte,        IOMethods.WriteByte) },
+                { typeof(sbyte),        new PacketSerializer(IOMethods.ReadSByte,       IOMethods.WriteSByte) },
+                { typeof(short),        new PacketSerializer(IOMethods.ReadShort,       IOMethods.WriteShort) },
+                { typeof(ushort),       new PacketSerializer(IOMethods.ReadUShort,      IOMethods.WriteUShort) },
+                { typeof(int),          new PacketSerializer(IOMethods.ReadInt,         IOMethods.WriteInt) },
+                { typeof(uint),         new PacketSerializer(IOMethods.ReadUInt,        IOMethods.WriteUInt) },
+                { typeof(long),         new PacketSerializer(IOMethods.ReadLong,        IOMethods.WriteLong) },
+                { typeof(ulong),        new PacketSerializer(IOMethods.ReadULong,       IOMethods.WriteULong) },
+                { typeof(float),        new PacketSerializer(IOMethods.ReadFloat,       IOMethods.WriteFloat) },
+                { typeof(double),       new PacketSerializer(IOMethods.ReadDouble,      IOMethods.WriteDouble) },
+                { typeof(decimal),      new PacketSerializer(IOMethods.ReadDecimal,     IOMethods.WriteDecimal) },
+                { typeof(string),       new PacketSerializer(IOMethods.ReadString,      IOMethods.WriteString) },
+                { typeof(Item),         new PacketSerializer(IOMethods.ReadItem,        IOMethods.WriteItem) },
+                { typeof(Vector2),      new PacketSerializer(IOMethods.ReadVector2,     IOMethods.WriteVector2) },
+                { typeof(Color),        new PacketSerializer(IOMethods.ReadRGB,         IOMethods.WriteRGB) },
+                { typeof(BitsByte),     new PacketSerializer(IOMethods.ReadBitsByte,    IOMethods.WriteBitsByte) },
+                { typeof(Rectangle),    new PacketSerializer(IOMethods.ReadRectangle,   IOMethods.WriteRectangle) },
+                { typeof(Guid),         new PacketSerializer(IOMethods.ReadGuid,        IOMethods.WriteGuid) }
             });
         }
     }

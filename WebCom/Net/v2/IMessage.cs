@@ -1,10 +1,12 @@
-﻿namespace WebCom.Net.v2;
+﻿using System.IO;
+
+namespace WebCom.Net.v2;
 
 public interface IMessage
 {
     bool PreSend();
 
-    bool PreReceive();
+    bool PreReceive(BinaryReader reader, int fromWho);
 
-    void Receive();
+    void Receive(BinaryReader reader, int fromWho);
 }

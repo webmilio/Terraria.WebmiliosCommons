@@ -4,7 +4,7 @@ using WebCom.Net.v2;
 namespace WebCom.Tests.Net.v2;
 
 [TestClass]
-public class ModMessageLoaderTests
+public class MessageLoaderTests
 {
     public class XMessage
     {
@@ -17,15 +17,21 @@ public class ModMessageLoaderTests
         public YMessage(int x) { }
     }
 
+    [TestMethod]
+    public void SendingMessage_WritesToStream()
+    {
+
+    }
+
     [TestMethod("Validating a class with no parameterless constructor should throw.")]
     public void ValidateType_ShouldThrowOnNoParameterlessCtor()
     {
-        Assert.ThrowsException<NotSupportedException>(() => ModMessageLoader.ValidateMessageType(typeof(XMessage)));
+        Assert.ThrowsException<NotSupportedException>(() => MessageLoader.ValidateMessageType(typeof(XMessage)));
     }
 
     [TestMethod("Validating a class with a parameterless constructor shouldn't throw.")]
     public void ValidateType_ShouldntThrowOnParameterlessCtor()
     {
-        ModMessageLoader.ValidateMessageType(typeof(YMessage));
+        MessageLoader.ValidateMessageType(typeof(YMessage));
     }
 }

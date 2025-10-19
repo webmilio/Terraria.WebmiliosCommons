@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using WebCom.Annotations;
 using WebCom.Extensions;
+using WebCom.Net.v2.Serialization;
 using WebCom.Networking.Serialization;
 
 namespace WebCom.Networking;
