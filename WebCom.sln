@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31717.71
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCom", "WebCom\WebCom.csproj", "{F1730389-6905-44EC-AC1C-3F5F5BE47C54}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCom - Example Mod", "WCExampleMod\WebCom - Example Mod.csproj", "{BDD7AE0B-31C6-416A-BEFD-95B2642ED3AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCom.Tests", "WebCom.Tests\WebCom.Tests.csproj", "{8059E750-AF47-472A-B2C5-F64477B5225D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terraria", "..\..\tModLoader\src\tModLoader\Terraria\Terraria.csproj", "{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,25 @@ Global
 		{8059E750-AF47-472A-B2C5-F64477B5225D}.WindowsServerDebug|Any CPU.Build.0 = Release|Any CPU
 		{8059E750-AF47-472A-B2C5-F64477B5225D}.WindowsServerRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{8059E750-AF47-472A-B2C5-F64477B5225D}.WindowsServerRelease|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.LinuxServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.LinuxServerRelease|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.MacRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.MacRelease|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.MacServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.MacServerRelease|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.WindowsDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.WindowsDebug|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.WindowsRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.WindowsRelease|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.WindowsServerDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.WindowsServerDebug|Any CPU.Build.0 = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.WindowsServerRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD2A8EE-CC1E-3695-E52E-403F3AECA25F}.WindowsServerRelease|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

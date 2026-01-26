@@ -3,7 +3,6 @@
   <Import Project="..\tModLoader.targets" />
 	
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -30,6 +29,21 @@
 
   <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="C:\SteamLibrary\steamapps\common\tModLoader\Libraries\FNA\1.0.0\FNA.dll">
+      <Private>True</Private>
+    </Reference>
+    <Reference Update="C:\SteamLibrary\steamapps\common\tModLoader\Libraries\monomod.utils\25.0.10\lib\net8.0\MonoMod.Utils.dll">
+      <Private>True</Private>
+    </Reference>
+    <Reference Update="C:\SteamLibrary\steamapps\common\tModLoader\Libraries\ReLogic\1.0.0\ReLogic.dll">
+      <Private>True</Private>
+    </Reference>
+    <Reference Update="C:\SteamLibrary\steamapps\common\tModLoader\tModLoader.dll">
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
 
 </Project>

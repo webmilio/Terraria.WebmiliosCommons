@@ -1,34 +1,58 @@
-﻿using WebCom.Annotations;
+﻿using Terraria.ModLoader;
+using WebCom.Annotations;
 using WebCom.Net.v2;
 
 namespace WebCom.Tests.Net.v2;
 
-internal class XMessage : IMessage
+public class XMessageHandler : IMessageHandler<XMessage>
 {
-    [Skip] internal Func<BinaryReader, int, bool> OverridePreReceive { get; init; } = (reader, fromWho) => true;
-    [Skip] internal Func<bool> OverridePreSend { get; init; } = () => true;
-    [Skip] internal Action<BinaryReader, int> OverrideReceive { get; init; } = (reader, fromWho) => { };
+  public Mod Mod { get; set; }
 
-    public XMessage()
-    { 
-    }
+  public bool PreReceive(BinaryReader reader, int fromWho, XMessage message)
+  {
+    return true;
+  }
 
-    public string? AProperty { get; set; }
+  public bool PreSend(BinaryWriter writer, XMessage message)
+  {
+    return true;
+  }
 
-    public int NumericalProperty { get; set; }
+  public void Receive(BinaryReader reader, int fromWho, XMessage message)
+  {
+  }
 
-    public bool PreReceive(BinaryReader reader, int fromWho)
-    {
-        return OverridePreReceive(reader, fromWho);
-    }
+  public void Send(BinaryWriter writer, XMessage message)
+  {
+  }
+}
 
-    public bool PreSend()
-    {
-        return OverridePreSend();
-    }
+public class XMessage : IMessage
+{
+  [Skip] internal Func<BinaryWriter, bool> OverridePreSend { get; init; } = (writer) => true;
+  [Skip] internal Func<BinaryReader, int, bool> OverridePreReceive { get; init; } = (reader, fromWho) => true;
+  [Skip] internal Action<BinaryReader, int> OverrideReceive { get; init; } = (reader, fromWho) => { };
 
-    public void Receive(BinaryReader reader, int fromWho)
-    {
-        OverrideReceive(reader, fromWho);
-    }
+  public string AProperty 
+  { 
+    get; 
+    set; 
+  } = string.Empty;
+
+  public int NumericalProperty { get; set; }
+
+  public virtual bool PreSend(BinaryWriter writer)
+  {
+    return OverridePreSend(writer);
+  }
+
+  public virtual bool PreReceive(BinaryReader reader, int fromWho)
+  {
+    return OverridePreReceive(reader, fromWho);
+  }
+
+  public virtual void Receive(BinaryReader reader, int fromWho)
+  {
+    OverrideReceive(reader, fromWho);
+  }
 }
