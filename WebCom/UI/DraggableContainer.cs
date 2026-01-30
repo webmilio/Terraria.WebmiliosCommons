@@ -56,9 +56,27 @@ public class DraggableContainer : UIElement
 
     base.RightMouseUp(evt);
   }
+
+  public static DraggableContainer Fill(UIElement element)
+  {
+    return new(element)
+    {
+      Width = StyleDimension.Fill,
+      Height = StyleDimension.Fill,
+    };
+  }
 }
 
 public class DraggableContainer<T>(T element) : DraggableContainer(element) where T : UIElement
 {
   public T Child { get; }
+
+  public static DraggableContainer<T> Fill(T element)
+  {
+    return new(element)
+    {
+      Width = StyleDimension.Fill,
+      Height = StyleDimension.Fill
+    };
+  }
 }

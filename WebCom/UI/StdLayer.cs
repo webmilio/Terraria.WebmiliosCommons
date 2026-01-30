@@ -56,3 +56,8 @@ public class StdLayer : GameInterfaceLayer
         return true;
     }
 }
+
+public class StdLayer<T>(T state) : StdLayer(state) where T : UIState
+{
+  public new T State { get; } = state;
+}
