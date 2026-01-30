@@ -1,63 +1,64 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.UI;
 
 namespace WebCom.UI;
 
 public class DraggableContainer : UIElement
 {
-    private bool _dragging = false;
-    private Vector2 _dragOffset;
+  private bool _dragging = false;
+  private Vector2 _dragOffset;
 
-    public DraggableContainer(params UIElement[] elements)
+  public DraggableContainer(UIElement element)
+  {
+    Append(element);
+  }
+
+  protected override void DrawSelf(SpriteBatch spriteBatch)
+  {
+    base.DrawSelf(spriteBatch);
+
+    // spriteBatch.Draw(TextureAssets.MagicPixel.Value, GetDimensions().ToRectangle(), Color.Red);
+
+    if (ContainsPoint(Main.MouseScreen))
     {
-        for (int i = 0; i < elements.Length; i++)
-        {
-            Append(elements[i]);
-        }
+      Main.LocalPlayer.mouseInterface = true;
     }
 
-    protected override void DrawSelf(SpriteBatch spriteBatch)
+    if (_dragging)
     {
-        base.DrawSelf(spriteBatch);
+      var position = Main.MouseScreen - _dragOffset;
 
-        // spriteBatch.Draw(TextureAssets.MagicPixel.Value, GetDimensions().ToRectangle(), Color.Red);
+      Left.Set(position.X, 0);
+      Top.Set(position.Y, 0);
 
-        if (ContainsPoint(Main.MouseScreen))
-        {
-            Main.LocalPlayer.mouseInterface = true;
-        }
+      HAlign = 0;
+      VAlign = 0;
 
-        if (_dragging)
-        {
-            var position = Main.MouseScreen - _dragOffset;
-
-            Left.Set(position.X, 0);
-            Top.Set(position.Y, 0);
-
-            HAlign = 0;
-            VAlign = 0;
-
-            Recalculate();
-        }
+      Recalculate();
     }
+  }
 
-    public override void RightMouseDown(UIMouseEvent evt)
-    {
-        base.RightMouseDown(evt);
-        _dragging = true;
+  public override void RightMouseDown(UIMouseEvent evt)
+  {
+    base.RightMouseDown(evt);
+    _dragging = true;
 
-        var dimensions = GetDimensions();
-        _dragOffset = Main.MouseScreen - dimensions.Position();
-    }
+    var dimensions = GetDimensions();
+    _dragOffset = Main.MouseScreen - dimensions.Position();
+  }
 
-    public override void RightMouseUp(UIMouseEvent evt)
-    {
-        _dragging = false;
-        _dragOffset = Vector2.Zero;
+  public override void RightMouseUp(UIMouseEvent evt)
+  {
+    _dragging = false;
+    _dragOffset = Vector2.Zero;
 
-        base.RightMouseUp(evt);
-    }
+    base.RightMouseUp(evt);
+  }
+}
+
+public class DraggableContainer<T>(T element) : DraggableContainer(element) where T : UIElement
+{
+  public T Child { get; }
 }
