@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Reflection;
-using Terraria;
 using Terraria.ModLoader;
 using WebCom.Extensions;
 
@@ -12,12 +11,12 @@ namespace WebCom.DependencyInjection;
 
 public class SimpleServices : IServiceContainer
 {
-    protected Dictionary<Type, Type> map = new();
-    protected Dictionary<Type, ServiceCreatorCallback> creators = new();
-    protected Dictionary<Type, object> instances = new();
+    protected Dictionary<Type, Type> map = [];
+    protected Dictionary<Type, ServiceCreatorCallback> creators = [];
+    protected Dictionary<Type, object> instances = [];
 
-    protected List<IServiceProvider> providers = new();
-    protected List<IServiceContainer> containers = new();
+    protected List<IServiceProvider> providers = [];
+    protected List<IServiceContainer> containers = [];
 
     public SimpleServices()
     {

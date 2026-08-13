@@ -5,7 +5,7 @@ using Terraria.UI;
 
 namespace WebCom.UI;
 
-public class DraggableContainer : UIElement
+public class DraggableContainer : UIState
 {
   private bool _dragging = false;
   private Vector2 _dragOffset;
